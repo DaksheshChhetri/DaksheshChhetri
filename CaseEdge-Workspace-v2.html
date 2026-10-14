@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CaseEdge Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..500&display=swap">
+<style>
+:root{
+  /* Layout: flat warm-white sidebar + white work surface; one accent (sky) marks only what needs attention or is selected */
+  color-scheme:light;
+  --canvas:#FAFAF9;
+  --paper:#FFFFFF;
+  --ink:#0D1016;
+  --ink-2:#3C3B38;
+  --muted:#68655E;
+  --faint:#8A8780;
+  --line:#E6E5E1;
+  --line-soft:#F0EFEC;
+  --fill:#F4F3F0;
+  --fill-2:#EEEDEA;
+  --stone:#D6D5D1;
+  --accent:#0EA5E9;
+  --accent-ink:#0369A1;
+  --accent-soft:rgba(14,165,233,.08);
+  --accent-mid:rgba(14,165,233,.5);
+  --mark:linear-gradient(180deg,rgba(14,165,233,0) 58%,rgba(14,165,233,.3) 58%);
+  --font:"Inter",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 13px/1.45 var(--font);font-optical-sizing:auto;letter-spacing:-.006em;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+button{background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.num{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.ic{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic.sm{width:13px;height:13px}
+.hl{background:var(--mark);-webkit-box-decoration-break:clone;box-decoration-break:clone}
+
+/* Frame */
+.app{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100%}
+
+/* Sidebar */
+.sidebar{position:sticky;top:0;height:100dvh;background:var(--canvas);border-right:1px solid var(--line);padding:14px 10px;display:flex;flex-direction:column;gap:18px;overflow:auto}
+.wordmark{font-size:16px;font-weight:500;letter-spacing:-.01em;padding:4px 8px}
+.search{display:flex;align-items:center;gap:8px;height:30px;padding:0 8px;border-radius:6px;background:var(--fill-2);color:var(--faint)}
+.search input{border:0;background:none;outline:none;flex:1;min-width:0;font-size:12.5px;color:var(--ink)}
+.search input::placeholder{color:var(--faint)}
+kbd{font:400 10.5px var(--font);color:var(--faint)}
+.group{display:flex;flex-direction:column;gap:1px}
+.group-label{font-size:11.5px;color:var(--faint);padding:0 8px 6px;display:flex;justify-content:space-between;gap:8px}
+.nav-item{display:flex;align-items:center;gap:10px;height:30px;padding:0 8px;border-radius:6px;color:var(--ink-2);width:100%;font-size:13px}
+.nav-item .ic{color:var(--faint)}
+.nav-item:hover{background:var(--fill)}
+.nav-item.on{background:var(--fill-2);color:var(--ink)}
+.nav-item.on .ic{color:var(--ink)}
+.nav-item .count{margin-left:auto;font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums}
+.nav-item .count.attn{color:var(--accent-ink)}
+.case-link{display:flex;align-items:baseline;gap:8px;padding:5px 8px;border-radius:6px;width:100%;font-size:12.5px;color:var(--ink-2)}
+.case-link:hover{background:var(--fill)}
+.case-link span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.case-link small{font-size:11px;color:var(--faint);white-space:nowrap}
+.case-link.on{color:var(--ink)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px 8px 2px;border-top:1px solid var(--line)}
+.avatar{width:24px;height:24px;border-radius:50%;background:var(--fill-2);display:grid;place-items:center;font-size:10.5px;font-weight:500;color:var(--ink-2)}
+.side-foot b{font-weight:500;font-size:12.5px;display:block}
+.side-foot span{font-size:11.5px;color:var(--faint)}
+
+/* Mobile bar + menu */
+.mbar{display:none;align-items:center;justify-content:space-between;gap:12px;padding-inline:16px;padding-block:12px;border-bottom:1px solid var(--line);background:var(--canvas);position:sticky;top:env(safe-area-inset-top,0px);z-index:30}
+.menu-btn{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 12px 0 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.7);font-size:12px}
+.scrim{position:fixed;inset:0;background:rgba(13,16,22,.18);z-index:40}
+
+/* Main */
+.main{min-width:0;display:flex;flex-direction:column}
+.head{padding-inline:32px;padding-block:22px 0;display:flex;flex-direction:column;gap:16px}
+.crumbs{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--faint)}
+.crumbs .ic{width:11px;height:11px}
+.title-row{display:flex;align-items:flex-end;justify-content:space-between;gap:16px 24px;flex-wrap:wrap}
+h1{margin:0;font-size:26px;line-height:1.1;letter-spacing:-.03em;font-weight:400;text-wrap:balance}
+h2{margin:0;font-size:18px;line-height:1.2;letter-spacing:-.02em;font-weight:400;text-wrap:balance}
+h3{margin:0;font-size:13px;font-weight:500;letter-spacing:-.01em}
+.meta-line{margin:6px 0 0;color:var(--muted);font-size:13px;max-width:72ch}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 13px;border-radius:6px;background:var(--fill-2);font-size:12.5px;font-weight:500;white-space:nowrap;color:var(--ink)}
+.btn:hover{background:#E6E5E1}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.primary:hover{background:#0B97D6}
+.btn.quiet{background:none;color:var(--ink-2);padding:0 8px}
+.btn.quiet:hover{background:var(--fill)}
+.btn.sm{height:26px;padding:0 10px;font-size:12px}
+.tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;position:sticky;top:0;background:var(--paper);z-index:10;padding-inline:32px;padding-block:12px 10px;margin-inline:-32px}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{padding:2px 1px;font-size:13.5px;letter-spacing:-.01em;white-space:nowrap;color:var(--faint)}
+.tabs button:hover{color:var(--ink-2)}
+.tabs button.on{background:var(--mark);color:var(--ink)}
+.tabs button .n{font-size:11.5px;color:var(--faint);margin-left:5px;font-variant-numeric:tabular-nums}
+.view{padding-inline:32px;padding-block:24px 64px;display:flex;flex-direction:column;gap:28px;min-width:0}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.section-head .note{font-size:12px;color:var(--faint)}
+.box{border:1px solid var(--line);border-radius:6px;background:var(--paper);min-width:0}
+
+/* State dots: ink = settled, accent = needs attention */
+.st{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-2);white-space:nowrap}
+.st::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ink);flex:none}
+.st.attn{color:var(--ink)}
+.st.attn::before{background:var(--accent)}
+.st.watch::before{background:transparent;box-shadow:inset 0 0 0 1.5px var(--accent)}
+.st.open::before{background:transparent;box-shadow:inset 0 0 0 1.5px var(--stone)}
+.st.open{color:var(--faint)}
+.cite{display:inline;font:400 11.5px var(--font);color:var(--accent-ink);background:var(--accent-soft);border-radius:3px;padding:1px 4px;white-space:nowrap;font-variant-numeric:tabular-nums}
+button.cite:hover{background:rgba(14,165,233,.16)}
+span.cite{color:var(--muted);background:var(--fill)}
+
+/* Overview */
+.ask{border:1px solid var(--line);border-radius:8px;background:var(--paper);box-shadow:0 1px 2px rgba(13,16,22,.04);display:flex;flex-direction:column}
+.ask textarea{border:0;outline:none;resize:none;font:400 14px/1.5 var(--font);letter-spacing:-.01em;padding:14px 16px 6px;min-height:58px;color:var(--ink);background:none}
+.ask textarea::placeholder{color:var(--faint)}
+.ask-foot{display:flex;align-items:center;gap:8px;padding:8px 10px 10px 16px;flex-wrap:wrap}
+.src{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:999px;background:var(--fill);font-size:11.5px;color:var(--ink-2)}
+.src .ic{width:12px;height:12px;color:var(--faint)}
+.ask-foot .btn{margin-left:auto}
+.reply{border-top:1px solid var(--line-soft);padding:12px 16px;font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.facts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.fact{padding:14px 16px 14px 0;display:flex;flex-direction:column;gap:3px;min-width:0}
+.fact + .fact{padding-left:16px;border-left:1px solid var(--line-soft)}
+.fact label{font-size:11.5px;color:var(--faint)}
+.fact b{font-size:15px;font-weight:400;letter-spacing:-.015em;font-variant-numeric:tabular-nums}
+.fact small{font-size:11.5px;color:var(--muted)}
+.ov-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:32px;align-items:start}
+.prod-row{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 120px 16px;align-items:center;gap:16px;padding:14px 16px;width:100%}
+.prod-row + .prod-row{border-top:1px solid var(--line-soft)}
+.prod-row:hover{background:var(--canvas)}
+.prod-row .name{font-size:13.5px;letter-spacing:-.01em}
+.prod-row .desc{font-size:12px;color:var(--muted);margin-top:2px}
+.prod-row .fig{font-size:13px;font-variant-numeric:tabular-nums}
+.prod-row .fig small{display:block;font-size:11.5px;color:var(--faint)}
+.prod-row > .ic{color:var(--faint)}
+.queue-row{display:flex;gap:12px;padding:12px 14px;width:100%;align-items:flex-start}
+.queue-row + .queue-row{border-top:1px solid var(--line-soft)}
+button.queue-row:hover{background:var(--canvas)}
+.queue-row .t{flex:1;min-width:0}
+.queue-row b{display:block;font-weight:400;font-size:13px}
+.queue-row span.why{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.queue-row .tag{font-size:11px;color:var(--faint);white-space:nowrap;margin-top:2px}
+.queue-row .st{margin-top:5px}
+.activity{display:flex;flex-direction:column;margin-top:4px}
+.act{display:flex;justify-content:space-between;gap:12px;padding:8px 0;font-size:12.5px;color:var(--ink-2)}
+.act + .act{border-top:1px solid var(--line-soft)}
+.act time{color:var(--faint);font-size:11.5px;white-space:nowrap}
+
+/* Timeline */
+.tl-box{padding:14px 18px 8px}
+.tl{position:relative;height:56px}
+.tl-track{position:absolute;left:0;right:0;top:20px;height:1px;background:var(--line)}
+.tl-gap{position:absolute;top:12px;height:17px;border-radius:3px;background:repeating-linear-gradient(135deg,rgba(14,165,233,.16) 0 3px,rgba(14,165,233,.04) 3px 7px)}
+.tl-gap span{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--accent-ink);white-space:nowrap}
+.tl-dot{position:absolute;top:16px;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 2px var(--paper)}
+.tl-dot:hover{transform:scale(1.25)}
+.tl-dot.sel{background:var(--accent);box-shadow:0 0 0 2px var(--paper),0 0 0 3.5px var(--accent-mid)}
+.tl-month{position:absolute;top:34px;font-size:11px;color:var(--faint)}
+.tl-month::before{content:"";position:absolute;left:0;top:-11px;height:5px;width:1px;background:var(--line)}
+
+/* Tables */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font:inherit;color:inherit}
+th{font-size:11.5px;font-weight:400;color:var(--faint);text-align:left;padding:9px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+.r{text-align:right;font-variant-numeric:tabular-nums}
+.filters{display:flex;gap:18px;flex-wrap:wrap;padding:11px 14px;border-bottom:1px solid var(--line);align-items:center}
+.filters button{font-size:12.5px;color:var(--faint);padding:1px 1px}
+.filters button:hover{color:var(--ink-2)}
+.filters button.on{color:var(--ink);background:var(--mark)}
+.filters .n{font-size:11px;margin-left:4px;font-variant-numeric:tabular-nums}
+
+/* Chronology */
+.chrono-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
+.chrono{min-width:760px}
+.chrono tbody tr{cursor:pointer}
+.chrono tbody tr:hover td{background:var(--canvas)}
+.chrono tbody tr.sel td{background:var(--accent-soft)}
+.chrono tbody tr.sel td:first-child{box-shadow:inset 2px 0 0 var(--accent)}
+.c-date{white-space:nowrap;font-variant-numeric:tabular-nums}
+.c-prov{min-width:170px}
+.c-prov span{display:block;font-size:11.5px;color:var(--faint)}
+.c-sum{color:var(--ink-2);min-width:260px;max-width:48ch}
+.gap-row td{padding:7px 14px;color:var(--accent-ink);font-size:12px;background:repeating-linear-gradient(135deg,rgba(14,165,233,.06) 0 5px,transparent 5px 10px)}
+.empty td{color:var(--faint);text-align:center;padding:28px}
+.viewer{position:sticky;top:56px;background:var(--canvas)}
+.viewer-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.viewer-head span{font-size:11.5px;color:var(--faint)}
+.page{margin:14px;background:#fff;border-radius:3px;padding:18px 18px 40px;box-shadow:0 0 0 1px var(--line),0 8px 20px -14px rgba(13,16,22,.25);font-size:12px;line-height:1.65;color:var(--ink-2);position:relative}
+.page-hd{display:flex;justify-content:space-between;gap:8px;font-size:10.5px;color:var(--faint);border-bottom:1px solid var(--line-soft);padding-bottom:7px;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em}
+.skel{height:5px;border-radius:3px;background:var(--fill-2);margin:8px 0}
+mark{background:var(--mark);color:var(--ink);padding:0 1px}
+.pill-glass{position:absolute;right:10px;bottom:10px;display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;background:rgba(255,255,255,.62);-webkit-backdrop-filter:blur(24px) saturate(1.8);backdrop-filter:blur(24px) saturate(1.8);border:1px solid rgba(255,255,255,.72);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 10px 24px -14px rgba(0,0,0,.3),0 0 0 1px var(--line-soft);font-size:11px;color:var(--ink)}
+.pill-glass::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ink)}
+.pill-glass.attn::before{background:var(--accent)}
+.kv{display:grid;grid-template-columns:100px 1fr;gap:7px 12px;padding:2px 14px 14px;font-size:12px}
+.kv dt{color:var(--faint)}
+.kv dd{margin:0;min-width:0}
+.viewer-actions{display:flex;gap:8px;padding:0 14px 14px}
+
+/* Insights */
+.scores{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.score{padding:14px 16px 16px 0;display:flex;flex-direction:column;gap:8px}
+.score + .score{padding-left:16px;border-left:1px solid var(--line-soft)}
+.score label{font-size:11.5px;color:var(--faint)}
+.score b{font-size:22px;font-weight:400;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.score b small{font-size:12px;color:var(--faint);letter-spacing:0;margin-left:3px}
+.bar{height:3px;border-radius:2px;background:var(--fill-2);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink)}
+.score p{margin:0;font-size:12px;color:var(--muted)}
+.ins{min-width:760px}
+.ins td:nth-child(2){min-width:220px}
+.ins td:nth-child(3){color:var(--ink-2);max-width:52ch;min-width:260px}
+.ins .find{font-size:13px}
+.ins .cat{display:block;font-size:11.5px;color:var(--faint);margin-top:2px}
+
+/* Billing */
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.kpi{padding:14px 16px 14px 0;min-width:0}
+.kpi + .kpi{padding-left:16px;border-left:1px solid var(--line-soft)}
+.kpi label{font-size:11.5px;color:var(--faint);display:flex;align-items:center;gap:6px}
+.kpi b{display:block;font-size:17px;font-weight:400;letter-spacing:-.02em;margin-top:3px;font-variant-numeric:tabular-nums}
+.kpi small{font-size:11.5px;color:var(--muted)}
+.sw{display:inline-block;width:8px;height:8px;border-radius:2px;flex:none}
+.sw.paid{background:var(--ink)} .sw.adj{background:var(--stone)} .sw.open{background:var(--accent-mid)}
+.led-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
+.ledger{min-width:820px}
+.ledger td,.ledger th{white-space:nowrap}
+.ledger tfoot td{border-top:1px solid var(--line);border-bottom:0;font-weight:500}
+.stack{display:flex;height:4px;width:96px;margin:6px 0 0 auto;border-radius:2px;overflow:hidden;gap:1px}
+.stack i{display:block;height:100%}
+.side-stack{display:flex;flex-direction:column;gap:24px}
+.sum-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;font-variant-numeric:tabular-nums;font-size:12.5px}
+.sum-row + .sum-row{border-top:1px solid var(--line-soft)}
+.sum-row span{color:var(--muted)}
+.sum-row b{font-weight:400}
+.sum-row.total{border-top:1px solid var(--ink)!important}
+.sum-row.total span,.sum-row.total b{color:var(--ink);font-weight:500}
+.calc-note{font-size:11.5px;color:var(--faint);margin:8px 0 0}
+
+/* Demand */
+.dem-layout{display:grid;grid-template-columns:200px minmax(0,1fr) 280px;gap:28px;align-items:start}
+.outline{position:sticky;top:56px;display:flex;flex-direction:column}
+.o-item{display:flex;align-items:center;gap:10px;width:100%;padding:6px 8px;border-radius:6px;font-size:12.5px;color:var(--ink-2)}
+.o-item:hover{background:var(--fill)}
+.o-item.on{background:var(--fill-2);color:var(--ink)}
+.o-item .n{width:18px;color:var(--faint);font-size:11px;font-variant-numeric:tabular-nums}
+.o-item .st{margin-left:auto;font-size:0;gap:0}
+.o-key{display:flex;flex-direction:column;gap:5px;padding:14px 8px 0}
+.o-key .st{font-size:11.5px;color:var(--faint)}
+.paper-col{display:flex;flex-direction:column;gap:10px;min-width:0}
+.paper-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--faint)}
+.paper-bar .spacer{flex:1}
+.paper{padding:48px 56px 56px;font-size:13.5px;line-height:1.7;color:var(--ink-2);background:#fff}
+.paper .lh{display:flex;justify-content:space-between;gap:16px;font-size:11.5px;color:var(--muted);line-height:1.55;padding-bottom:18px;border-bottom:1px solid var(--line-soft);margin-bottom:24px;flex-wrap:wrap}
+.paper .lh b{color:var(--ink);font-weight:500}
+.paper h4{margin:28px 0 10px;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.paper h4:first-of-type{margin-top:0}
+.paper p{margin:0 0 13px;max-width:66ch}
+.sug{background:var(--mark);color:var(--ink);-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.sug-tag{display:inline-block;font-size:10.5px;color:var(--accent-ink);margin-left:6px;white-space:nowrap}
+.spec{width:100%;max-width:440px;margin:4px 0 14px;font-size:13px}
+.spec td{padding:7px 0;border-bottom:1px solid var(--line-soft)}
+.spec td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.spec tr:last-child td{border-bottom:0;border-top:1px solid var(--ink);color:var(--ink);font-weight:500}
+.rail{position:sticky;top:56px;display:flex;flex-direction:column;gap:22px}
+.rail-sec{display:flex;flex-direction:column;gap:8px}
+.rail-sec > label{font-size:11.5px;color:var(--faint)}
+.seg{display:flex;gap:16px}
+.seg button{font-size:12.5px;color:var(--faint);padding:1px}
+.seg button.on{color:var(--ink);background:var(--mark)}
+.val{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px solid var(--line-soft);font-size:12.5px}
+.val span{color:var(--muted)}
+.val b{font-weight:400;font-variant-numeric:tabular-nums;text-align:right}
+.sugg{padding:12px;border:1px solid var(--line);border-radius:6px;font-size:12.5px;color:var(--ink-2);display:flex;flex-direction:column;gap:10px}
+.sugg .row{display:flex;gap:6px;flex-wrap:wrap}
+.composer{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:6px;padding:4px 4px 4px 10px;background:#fff}
+.composer input{flex:1;border:0;outline:none;background:none;font-size:12.5px;min-width:0}
+.composer input::placeholder{color:var(--faint)}
+.send{width:26px;height:26px;border-radius:4px;background:var(--accent);color:#fff;display:grid;place-items:center}
+.send .ic{width:13px;height:13px;stroke-width:2}
+.thread{display:flex;flex-direction:column;gap:6px;font-size:12px}
+.thread:empty{display:none}
+.thread .me{color:var(--ink)}
+.thread .sys{color:var(--muted)}
+
+/* Toast (glass, as on the landing page) */
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;border-radius:999px;padding:9px 16px;font-size:12.5px;display:flex;gap:8px;align-items:center;max-width:calc(100% - 32px);background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(24px) saturate(1.8);backdrop-filter:blur(24px) saturate(1.8);border:1px solid rgba(255,255,255,.8);box-shadow:inset 0 1px 0 #fff,0 14px 34px -14px rgba(0,0,0,.3),0 0 0 1px var(--line)}
+.toast::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
+
+
+@media (max-width:1240px){
+  .ov-grid,.led-layout{grid-template-columns:minmax(0,1fr)}
+  .chrono-layout{grid-template-columns:minmax(0,1fr)}
+  .viewer{position:static}
+  .dem-layout{grid-template-columns:180px minmax(0,1fr)}
+  .rail{grid-column:1/-1;position:static;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+}
+@media (max-width:980px){
+  .facts,.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .fact:nth-child(4),.kpi:nth-child(4){padding-left:0;border-left:0}
+  .fact:nth-child(n+4),.kpi:nth-child(n+4){border-top:1px solid var(--line-soft)}
+}
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .mbar{display:flex}
+  .sidebar{position:fixed;left:0;top:0;bottom:0;width:min(280px,86vw);z-index:50;height:100%;transform:translateX(-102%);transition:transform .25s ease;box-shadow:0 20px 60px -20px rgba(0,0,0,.35)}
+  .sidebar.open{transform:none}
+  .head{padding-inline:16px}
+  .tabs{padding-inline:16px;margin-inline:-16px;top:calc(55px + env(safe-area-inset-top,0px))}
+  .view{padding-inline:16px}
+  .dem-layout{grid-template-columns:minmax(0,1fr)}
+  .outline{position:static}
+  .paper{padding:28px 20px 32px}
+}
+@media (max-width:600px){
+  .facts,.kpis,.scores{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fact,.kpi,.score{padding-left:0!important;border-left:0!important;border-top:1px solid var(--line-soft)}
+  .fact:nth-child(-n+2),.kpi:nth-child(-n+2),.score:nth-child(-n+2){border-top:0}
+  .fact:nth-child(even),.kpi:nth-child(even),.score:nth-child(even){padding-left:16px!important;border-left:1px solid var(--line-soft)!important}
+  .fact:last-child,.kpi:last-child,.score:last-child{grid-column:1/-1;padding-left:0!important;border-left:0!important}
+  .prod-row{grid-template-columns:minmax(0,1fr) 16px}
+  .prod-row .fig,.prod-row .st-cell{display:none}
+  h1{font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-cases" viewBox="0 0 24 24"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-review" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="m8.8 12.2 2.2 2.2 4.2-4.6"/></symbol>
+  <symbol id="i-vault" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 9.5h16M9 4v16"/></symbol>
+  <symbol id="i-chrono" viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></symbol>
+  <symbol id="i-insight" viewBox="0 0 24 24"><path d="M5 19v-4M10 19v-8M15 19V8M20 19V5"/></symbol>
+  <symbol id="i-bill" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-3-1.8-3 1.8-3-1.8-3 1.8z"/><path d="M9 8.5h6M9 12h6M9 15.5h3"/></symbol>
+  <symbol id="i-demand" viewBox="0 0 24 24"><path d="M14 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8.5z"/><path d="M14 3.5v5h5M9 13h6M9 16.5h4"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5.5M6.5 11 12 5.5l5.5 5.5"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8.5z"/><path d="M14 3.5v5h5"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></symbol>
+</svg>
+
+<div class="app" id="app">
+  <aside class="sidebar" id="sidebar" aria-label="Navigation">
+    <div class="wordmark">CaseEdge</div>
+    <label class="search">
+      <svg class="ic sm"><use href="#i-search"/></svg>
+      <input id="q" type="search" placeholder="Search this case" autocomplete="off">
+      <kbd>⌘K</kbd>
+    </label>
+
+    <nav class="group" aria-label="Workspace">
+      <button class="nav-item" data-toast="Home isn't part of this preview."><svg class="ic"><use href="#i-home"/></svg>Home</button>
+      <button class="nav-item" data-toast="Only the Alvarez case is loaded in this preview."><svg class="ic"><use href="#i-cases"/></svg>Cases<span class="count">42</span></button>
+      <button class="nav-item" data-go="overview" data-anchor="queue"><svg class="ic"><use href="#i-review"/></svg>Review queue<span class="count attn">4</span></button>
+      <button class="nav-item" data-toast="The records vault isn't part of this preview."><svg class="ic"><use href="#i-vault"/></svg>Records<span class="count">312</span></button>
+    </nav>
+
+    <nav class="group nav" aria-label="This case">
+      <div class="group-label"><span>Alvarez v. Sunline Freight</span></div>
+      <button class="nav-item" data-go="chronology"><svg class="ic"><use href="#i-chrono"/></svg>Medical Chronology</button>
+      <button class="nav-item" data-go="insights"><svg class="ic"><use href="#i-insight"/></svg>Case Insights<span class="count attn">2</span></button>
+      <button class="nav-item" data-go="billing"><svg class="ic"><use href="#i-bill"/></svg>Billing &amp; Liens</button>
+      <button class="nav-item" data-go="demand"><svg class="ic"><use href="#i-demand"/></svg>Demand Drafts</button>
+    </nav>
+
+    <div class="group">
+      <div class="group-label"><span>Recent cases</span></div>
+      <button class="case-link on" data-go="overview"><span>Alvarez v. Sunline Freight</span><small>Demand</small></button>
+      <button class="case-link" data-matter><span>Okonkwo v. Metro Transit</span><small>Treating</small></button>
+      <button class="case-link" data-matter><span>Brennan v. Harlow Markets</span><small>Negotiation</small></button>
+      <button class="case-link" data-matter><span>Tran v. Delgado</span><small>Intake</small></button>
+    </div>
+
+    <div class="side-foot">
+      <div class="avatar">DR</div>
+      <div><b>Daniel Reyes</b><span>Reyes &amp; Lin LLP</span></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="mbar">
+      <span class="wordmark" style="padding:0">CaseEdge</span>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false"><svg class="ic sm"><use href="#i-menu"/></svg>Menu</button>
+    </div>
+
+    <div class="head">
+      <div class="crumbs"><span>Cases</span><svg class="ic"><use href="#i-chev"/></svg><span>2026-0147</span><span>· Sample case</span></div>
+      <div class="title-row">
+        <div>
+          <h1>Alvarez v. Sunline Freight, LLC</h1>
+          <p class="meta-line">Rear-end collision with a tractor-trailer, I-215 N, Riverside, CA · Client Maria Alvarez, 38 · Pre-litigation</p>
+        </div>
+        <div class="actions">
+          <button class="btn" data-toast="Uploads are off in this preview.">Upload records</button>
+          <button class="btn primary" data-go="demand">Open demand →</button>
+        </div>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Products">
+        <button data-go="overview">Overview</button>
+        <button data-go="chronology">Medical Chronology<span class="n">47</span></button>
+        <button data-go="insights">Case Insights<span class="n">8</span></button>
+        <button data-go="billing">Billing &amp; Liens<span class="n">5</span></button>
+        <button data-go="demand">Demand Drafts<span class="n">v3</span></button>
+      </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <section class="view" id="v-overview">
+      <form class="ask" id="askForm">
+        <label for="askBox" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">Ask about this case</label>
+        <textarea id="askBox" rows="2" placeholder="Ask about this case. Every answer cites the page it came from."></textarea>
+        <div class="ask-foot">
+          <span class="src"><svg class="ic"><use href="#i-doc"/></svg>Medical records · 312 pages</span>
+          <span class="src"><svg class="ic"><use href="#i-bill"/></svg>Bills · 5 providers</span>
+          <span class="src"><svg class="ic"><use href="#i-doc"/></svg>Police report</span>
+          <button class="btn primary sm" type="submit">Ask →</button>
+        </div>
+        <div class="reply" id="askReply" hidden></div>
+      </form>
+
+      <div class="facts">
+        <div class="fact"><label>Date of incident</label><b>Mar 14, 2026</b><small>Riverside County</small></div>
+        <div class="fact"><label>Statute of limitations</label><b>Mar 14, 2028</b><small id="solDays">CCP §335.1</small></div>
+        <div class="fact"><label>Policy limits</label><b>$1,000,000</b><small>Westbridge Indemnity</small></div>
+        <div class="fact"><label>Specials to date</label><b>$200,950.00</b><small>Medical, future care, wages</small></div>
+        <div class="fact"><label>Stage</label><b>Demand drafting</b><small>Step 3 of 4</small></div>
+      </div>
+
+      <div class="ov-grid">
+        <div>
+          <div class="section-head"><h2>Products</h2><span class="note">Built on the same verified record</span></div>
+          <div class="box">
+            <button class="prod-row" data-go="chronology">
+              <div><div class="name">Medical Chronology</div><div class="desc">47 encounters from 312 pages, each cited to its page</div></div>
+              <div class="st-cell"><span class="st">Current · re-run 2h ago</span></div>
+              <div class="fig">5 providers<small>Mar 14 – Sep 30</small></div>
+              <svg class="ic"><use href="#i-chev"/></svg>
+            </button>
+            <button class="prod-row" data-go="insights">
+              <div><div class="name">Case Insights</div><div class="desc">Treatment gap and a prior complaint to address</div></div>
+              <div class="st-cell"><span class="st attn">2 risks to review</span></div>
+              <div class="fig">4 strengths<small>8 findings</small></div>
+              <svg class="ic"><use href="#i-chev"/></svg>
+            </button>
+            <button class="prod-row" data-go="billing">
+              <div><div class="name">Billing &amp; Liens</div><div class="desc">Charges, payments and liens by provider</div></div>
+              <div class="st-cell"><span class="st attn">1 bill missing</span></div>
+              <div class="fig">$88,350.00<small>billed, past medical</small></div>
+              <svg class="ic"><use href="#i-chev"/></svg>
+            </button>
+            <button class="prod-row" data-go="demand">
+              <div><div class="name">Demand Drafts</div><div class="desc">Policy-limits demand, 31 citations</div></div>
+              <div class="st-cell"><span class="st watch">In attorney review</span></div>
+              <div class="fig">7 of 9<small>sections drafted</small></div>
+              <svg class="ic"><use href="#i-chev"/></svg>
+            </button>
+          </div>
+
+          <div class="section-head" style="margin-top:28px"><h2>Activity</h2></div>
+          <div class="activity">
+            <div class="act"><span>Chronology re-run with 12 new pages from Pacific Pain Management</span><time>2h</time></div>
+            <div class="act"><span>Missing cervical MRI bill flagged in Billing &amp; Liens</span><time>5h</time></div>
+            <div class="act"><span>Priya Shah approved the Liability section</span><time>Oct 13</time></div>
+            <div class="act"><span>Marco Vela matched Coastline PT payments to EOBs</span><time>Oct 12</time></div>
+          </div>
+        </div>
+
+        <div id="queue" style="scroll-margin-top:64px">
+          <div class="section-head"><h2>Review queue</h2><span class="note">Uncertain items, never guessed</span></div>
+          <div class="box">
+            <button class="queue-row" data-go="demand"><span class="st attn" aria-hidden="true"></span><span class="t"><b>Approve treatment-gap language</b><span class="why">New sentence explains the 41-day gap from the May 2 PT note.</span></span><span class="tag">Demand</span></button>
+            <button class="queue-row" data-go="billing"><span class="st attn" aria-hidden="true"></span><span class="t"><b>Cervical MRI bill not received</b><span class="why">Records list two studies on Apr 2; only one is billed.</span></span><span class="tag">Billing</span></button>
+            <button class="queue-row" data-go="insights"><span class="st attn" aria-hidden="true"></span><span class="t"><b>Confirm 2019 visit is unrelated</b><span class="why">Urgent care note says "history of low back pain."</span></span><span class="tag">Insights</span></button>
+            <button class="queue-row" data-row="7"><span class="st attn" aria-hidden="true"></span><span class="t"><b>Handwritten relief duration</b><span class="why">"&lt; 2 weeks" on Ex. 6, p. 29 is partly illegible.</span></span><span class="tag">Chronology</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHRONOLOGY -->
+    <section class="view" id="v-chronology" hidden>
+      <div class="section-head" style="margin:0"><h2>Mar 14 – Sep 30, 2026 · <span class="hl">10 key encounters</span></h2><div class="actions"><button class="btn sm" data-toast="Exports are off in this preview.">Export</button><button class="btn sm" data-toast="Re-run queued. This preview doesn't process records.">Re-run</button></div></div>
+      <div class="box tl-box"><div class="tl" id="tl"></div></div>
+      <div class="chrono-layout">
+        <div class="box" style="overflow:hidden">
+          <div class="filters" id="chips"></div>
+          <div class="table-wrap">
+            <table class="chrono">
+              <thead><tr><th>Date</th><th>Provider</th><th>Findings</th><th>Diagnoses</th><th>Source</th></tr></thead>
+              <tbody id="chronoRows"></tbody>
+            </table>
+          </div>
+        </div>
+        <aside class="box viewer" id="viewer" aria-live="polite"></aside>
+      </div>
+    </section>
+
+    <!-- INSIGHTS -->
+    <section class="view" id="v-insights" hidden>
+      <div class="section-head" style="margin:0"><h2>Strong liability. <span class="hl">Two damages risks to address.</span></h2><span class="note">Found before the adjuster finds them</span></div>
+      <div class="scores">
+        <div class="score"><label>Liability</label><b>92<small>/100</small></b><div class="bar"><i style="width:92%"></i></div><p>Police report faults the defendant driver.</p></div>
+        <div class="score"><label>Damages</label><b>81<small>/100</small></b><div class="bar"><i style="width:81%"></i></div><p>Objective MRI finding and surgical recommendation.</p></div>
+        <div class="score"><label>Collectability</label><b>95<small>/100</small></b><div class="bar"><i style="width:95%"></i></div><p>Commercial policy, $1,000,000 limits confirmed.</p></div>
+      </div>
+      <div class="box" style="overflow:hidden">
+        <div class="filters" id="insFilter"></div>
+        <div class="table-wrap">
+          <table class="ins">
+            <thead><tr><th>Type</th><th>Finding</th><th>Evidence</th><th>Source</th><th></th></tr></thead>
+            <tbody id="insRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- BILLING -->
+    <section class="view" id="v-billing" hidden>
+      <div class="section-head" style="margin:0"><h2>Past medical through Sep 30, 2026</h2><div class="actions"><button class="btn sm" data-toast="Bill requests are off in this preview.">Request bills</button><button class="btn sm" data-toast="Exports are off in this preview.">Export</button></div></div>
+      <div class="kpis" id="kpis"></div>
+      <div class="led-layout">
+        <div>
+          <div class="box" style="overflow:hidden">
+            <div class="table-wrap">
+              <table class="ledger">
+                <thead><tr><th>Provider</th><th>Dates of service</th><th class="r">Visits</th><th class="r">Billed</th><th class="r">Paid</th><th class="r">Adjusted</th><th class="r">Balance</th><th>Status</th></tr></thead>
+                <tbody id="ledRows"></tbody>
+                <tfoot id="ledFoot"></tfoot>
+              </table>
+            </div>
+          </div>
+          <p class="calc-note">Every amount is calculated by code from the bills and EOBs, not by AI.</p>
+        </div>
+        <div class="side-stack">
+          <div>
+            <div class="section-head"><h3>Specials</h3><span class="note">Feeds demand §V</span></div>
+            <div class="sum-row"><span>Past medical</span><b>$88,350.00</b></div>
+            <div class="sum-row"><span>Future medical</span><b>$98,000.00</b></div>
+            <div class="sum-row"><span>Wage loss, 16 weeks</span><b>$14,600.00</b></div>
+            <div class="sum-row total"><span>Total specials</span><b>$200,950.00</b></div>
+          </div>
+          <div>
+            <div class="section-head"><h3>Liens</h3><span class="note num">$49,050.00</span></div>
+            <div class="sum-row"><span>Desert Spine &amp; Orthopedics</span><b>$28,640.00</b></div>
+            <div class="sum-row"><span>Health plan reimbursement</span><b>$20,410.00</b></div>
+          </div>
+          <div>
+            <div class="section-head"><h3>Missing</h3></div>
+            <div class="queue-row" style="padding:0"><span class="st attn" aria-hidden="true"></span><span class="t"><b>Inland Imaging · cervical MRI, Apr 2</b><span class="why">Records received, bill not. Requested Sep 28.</span></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEMAND -->
+    <section class="view" id="v-demand" hidden>
+      <div class="dem-layout">
+        <nav class="outline" aria-label="Demand sections">
+          <div class="group-label" style="padding-left:8px"><span>Sections</span><span class="num">7 of 9</span></div>
+          <button class="o-item"><span class="n">I</span>Introduction<span class="st"></span></button>
+          <button class="o-item"><span class="n">II</span>Facts of loss<span class="st"></span></button>
+          <button class="o-item"><span class="n">III</span>Liability<span class="st"></span></button>
+          <button class="o-item on"><span class="n">IV</span>Injuries &amp; treatment<span class="st attn"></span></button>
+          <button class="o-item"><span class="n">V</span>Medical specials<span class="st watch"></span></button>
+          <button class="o-item"><span class="n">VI</span>Future care<span class="st watch"></span></button>
+          <button class="o-item"><span class="n">VII</span>Wage loss<span class="st watch"></span></button>
+          <button class="o-item"><span class="n">VIII</span>General damages<span class="st open"></span></button>
+          <button class="o-item"><span class="n">IX</span>Demand &amp; time limit<span class="st open"></span></button>
+          <div class="o-key">
+            <span class="st">Approved</span>
+            <span class="st attn">Needs your review</span>
+            <span class="st watch">Drafted</span>
+            <span class="st open">Not started</span>
+          </div>
+        </nav>
+
+        <div class="paper-col">
+          <div class="paper-bar">
+            <span>Draft v3 · saved 18m ago by Daniel Reyes</span>
+            <span class="spacer"></span>
+            <button class="btn sm" data-toast="All 31 citations resolve to a source page.">Check citations</button>
+            <button class="btn sm" data-toast="Exports are off in this preview.">Export .docx</button>
+          </div>
+          <article class="paper box">
+            <div class="lh">
+              <div><b>Westbridge Indemnity Company</b><br>Attn: R. Okafor, Senior Claims Adjuster<br>Claim No. <span class="num">WB-26-0418832</span></div>
+              <div style="text-align:right">October 14, 2026<br>Via email and certified mail<br>Re: Maria Alvarez · Insured: Sunline Freight, LLC</div>
+            </div>
+            <h4>IV. Injuries and treatment</h4>
+            <p>Ms. Alvarez was taken by ambulance from the scene to Riverside Community Hospital, where she reported neck and low back pain rated 7/10 with tingling down her left leg <button class="cite" data-row="0">Ex. 2, p. 14</button>. A CT of the cervical spine ruled out fracture, and she was discharged with cervical and lumbar strain <button class="cite" data-row="0">Ex. 2, p. 21</button>.</p>
+            <p>Four days later, orthopedic surgeon Dr. James Rhee found a positive straight-leg raise at 40 degrees on the left and ordered MRI studies <button class="cite" data-row="1">Ex. 4, p. 103</button>. The April 2 lumbar MRI showed a 5 mm posterior disc protrusion at L4-L5 pressing on the left L5 nerve root <button class="cite" data-row="3">Ex. 3, p. 42</button>. This is an objective structural injury, consistent with a high-energy rear impact.</p>
+            <p>Ms. Alvarez completed 36 sessions of physical therapy and two transforaminal epidural steroid injections <button class="cite" data-row="9">Ex. 5, p. 140</button> <button class="cite" data-row="4">Ex. 6, p. 12</button>. <span class="sug">Her care paused between May 2 and June 12 while she arranged childcare for her two children, a reason her therapist recorded at the time</span> <button class="cite" data-row="5">Ex. 5, p. 61</button>.<span class="sug-tag">Proposed · needs review</span> When she returned, her leg symptoms had not resolved <button class="cite" data-row="6">Ex. 4, p. 119</button>.</p>
+            <p>On August 20, after five months of failed conservative care, Dr. Rhee recommended a left L4-L5 microdiscectomy at an estimated cost of $98,000 <button class="cite" data-row="8">Ex. 4, p. 135</button>.</p>
+            <h4>V. Medical specials</h4>
+            <table class="spec">
+              <tr><td>Past medical expenses</td><td>$88,350.00</td></tr>
+              <tr><td>Future medical expenses</td><td>$98,000.00</td></tr>
+              <tr><td>Lost wages, 16 weeks at $912.50</td><td>$14,600.00</td></tr>
+              <tr><td>Total economic damages</td><td>$200,950.00</td></tr>
+            </table>
+            <p style="color:var(--faint)">Itemized bills by provider are attached as Exhibit 10.</p>
+          </article>
+        </div>
+
+        <aside class="rail">
+          <div class="rail-sec">
+            <label>Proposed change</label>
+            <div class="sugg">
+              <span>Adds one sentence explaining the 41-day treatment gap, sourced to the May 2 PT note.</span>
+              <div class="row"><button class="btn primary sm" data-toast="Approved. Section IV moves to Approved.">Approve</button><button class="btn sm" data-toast="Rejected. The sentence is removed.">Reject</button><button class="btn quiet sm" data-row="5">View source</button></div>
+            </div>
+          </div>
+          <div class="rail-sec">
+            <label>Tone</label>
+            <div class="seg" id="tone"><button>Measured</button><button class="on">Firm</button><button>Assertive</button></div>
+          </div>
+          <div class="rail-sec">
+            <label>Terms</label>
+            <div>
+              <div class="val"><span>Demand</span><b>$1,000,000 · policy limits</b></div>
+              <div class="val"><span>Response window</span><b>30 days</b></div>
+              <div class="val"><span>Statute</span><b>CCP §999 et seq.</b></div>
+            </div>
+          </div>
+          <div class="rail-sec">
+            <label>Ask about this draft</label>
+            <div class="thread" id="thread"></div>
+            <form class="composer" id="composer">
+              <input id="ask" type="text" placeholder="e.g. Where is the 2019 visit addressed?" autocomplete="off">
+              <button class="send" type="submit" aria-label="Send"><svg class="ic"><use href="#i-up"/></svg></button>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="scrim" id="scrim" hidden></div>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+const TYPES={er:'Emergency',ortho:'Orthopedics',img:'Imaging',pt:'Physical therapy',pain:'Pain management'};
+const CHRONO=[
+  {d:'2026-03-14',prov:'Riverside Community Hospital',t:'er',sum:'Arrived by ambulance. Neck and low back pain 7/10 with left-leg tingling. CT cervical spine negative for fracture. Discharged on cyclobenzaprine.',dx:['S13.4XXA','S39.012A'],cite:'Ex. 2, p. 14–22',doc:'ED physician note',
+   src:'38 y/o F, restrained driver, rear-ended by a tractor-trailer while stopped in traffic. <mark>Reports neck and low back pain 7/10 with tingling down the left leg.</mark> No loss of consciousness.',kv:[['Pain','7/10'],['Imaging','CT C-spine, negative']]},
+  {d:'2026-03-18',prov:'Desert Spine & Orthopedics',t:'ortho',sum:'Dr. Rhee: low back pain radiating to the left calf. Positive straight-leg raise at 40°. Ordered lumbar and cervical MRI; referred to PT.',dx:['M54.16','M54.2'],cite:'Ex. 4, p. 101–106',doc:'Orthopedic consult',
+   src:'Persistent low back pain radiating to the left calf since MVC 03/14. <mark>Straight-leg raise positive on the left at 40°.</mark> Plan: MRI lumbar and cervical spine; PT 3x/week.',kv:[['Clinician','James Rhee, MD'],['Exam','SLR positive L 40°']]},
+  {d:'2026-03-24',prov:'Coastline Physical Therapy',t:'pt',sum:'Initial evaluation. Oswestry Disability Index 46% (severe). Plan of care 3x/week for 12 weeks.',dx:['M54.50'],cite:'Ex. 5, p. 3–9',doc:'PT initial evaluation',
+   src:'Oswestry Disability Index 46% (severe disability). <mark>Patient unable to sit longer than 20 minutes or lift a laundry basket.</mark> Plan of care: 3x/week for 12 weeks.',kv:[['ODI','46%'],['Plan','3x/week, 12 weeks']]},
+  {d:'2026-04-02',prov:'Inland Imaging Center',t:'img',sum:'Lumbar MRI: 5 mm L4-L5 posterior protrusion impinging the left L5 nerve root. Cervical MRI: 2 mm C5-C6 bulge.',dx:['M51.16','M50.20'],cite:'Ex. 3, p. 41–44',doc:'MRI report',
+   src:'L4-L5: <mark>5 mm posterior disc protrusion with mass effect on the traversing left L5 nerve root.</mark> C5-C6: 2 mm disc bulge without stenosis.',kv:[['Studies','MRI lumbar, cervical'],['Billing','Cervical bill missing']]},
+  {d:'2026-04-21',prov:'Pacific Pain Management',t:'pain',sum:'Left L4-L5 transforaminal epidural steroid injection. About 50% relief at two weeks.',dx:['M51.16'],cite:'Ex. 6, p. 12–15',doc:'Procedure note',
+   src:'Procedure: left L4-L5 transforaminal epidural steroid injection under fluoroscopy. <mark>Two-week follow-up: approximately 50% relief of radicular pain.</mark>',kv:[['Procedure','TFESI L4-L5, left'],['Relief','~50% at 2 weeks']]},
+  {d:'2026-05-02',prov:'Coastline Physical Therapy',t:'pt',sum:'Visit 18. ODI improved to 38%. Patient expects to miss visits because she has no childcare.',dx:['M54.50'],cite:'Ex. 5, p. 61',doc:'PT progress note',
+   src:'Visit 18. ODI improved to 38%. <mark>Patient reports she will miss upcoming visits because she has no childcare for her two children.</mark>',kv:[['ODI','38%'],['Note','Explains treatment gap']]},
+  {d:'2026-06-12',prov:'Desert Spine & Orthopedics',t:'ortho',sum:'Returns after six weeks without care. Pain 6/10; left L5 radicular symptoms persist. Surgical options discussed.',dx:['M51.16'],cite:'Ex. 4, p. 118–121',doc:'Orthopedic follow-up',
+   src:'Returns after six weeks without care. <mark>Low back pain 6/10, left L5 radicular symptoms persist.</mark> Discussed surgical and non-surgical options.',kv:[['Pain','6/10'],['Plan','Repeat ESI, surgical consult']]},
+  {d:'2026-07-09',prov:'Pacific Pain Management',t:'pain',sum:'Repeat left L4-L5 TFESI. Relief lasted less than two weeks.',dx:['M51.16'],cite:'Ex. 6, p. 27–30',doc:'Procedure note',review:true,
+   src:'Repeat left L4-L5 TFESI. <mark>Relief lasted less than two weeks.</mark> Not a candidate for further injections.',kv:[['Procedure','TFESI L4-L5, left'],['Relief','< 2 weeks (handwritten)']]},
+  {d:'2026-08-20',prov:'Desert Spine & Orthopedics',t:'ortho',sum:'Surgical consult after failed conservative care. Recommends left L4-L5 microdiscectomy; estimated cost $98,000.',dx:['M51.16'],cite:'Ex. 4, p. 133–137',doc:'Surgical consult',
+   src:'Failed five months of conservative care including PT and two ESIs. <mark>Recommend left L4-L5 microdiscectomy. Estimated cost $98,000.</mark>',kv:[['Recommendation','Microdiscectomy L4-L5'],['Estimate','$98,000']]},
+  {d:'2026-09-30',prov:'Coastline Physical Therapy',t:'pt',sum:'Discharged after 36 visits; progress plateaued. ODI 34%.',dx:['M54.50'],cite:'Ex. 5, p. 140–144',doc:'PT discharge summary',
+   src:'Discharged after 36 visits; progress has plateaued. <mark>ODI 34%. Patient continues to require assistance with lifting.</mark>',kv:[['Visits','36'],['ODI','34% at discharge']]}
+];
+const GAP={from:'2026-05-02',to:'2026-06-12',after:5};
+const INS=[
+  {k:'strength',cat:'Liability',title:'Police report places fault on the defendant driver',detail:'The traffic collision report cites CVC §21703 (following too closely). The driver told officers he was looking at his dispatch tablet.',cite:'Ex. 1, p. 3'},
+  {k:'strength',cat:'Damages',title:'Objective injury on MRI',detail:'5 mm L4-L5 protrusion pressing on the left L5 nerve root, matching the leg findings at the first orthopedic visit.',cite:'Ex. 3, p. 42',row:3},
+  {k:'strength',cat:'Damages',title:'Surgery recommended after failed conservative care',detail:'Dr. Rhee recommends L4-L5 microdiscectomy after five months of PT and two injections. Estimated cost $98,000.',cite:'Ex. 4, p. 135',row:8},
+  {k:'strength',cat:'Collectability',title:'Commercial policy with $1,000,000 limits',detail:'Westbridge Indemnity confirmed limits in writing on July 22, 2026.',cite:'Ex. 9, p. 1'},
+  {k:'risk',cat:'Damages',title:'41-day gap in treatment',detail:'No care between May 2 and June 12. The May 2 PT note records a childcare conflict; a sentence explaining it is proposed in the demand.',cite:'Ex. 5, p. 61',row:5,go:'demand',goLabel:'Review in demand'},
+  {k:'risk',cat:'Causation',title:'Prior low back complaint in 2019',detail:'Urgent care visit for lumbar strain, resolved in three visits with no imaging and no leg symptoms. Distinguish it in the causation section.',cite:'Ex. 8, p. 4'},
+  {k:'watch',cat:'Specials',title:'Cervical MRI bill not received',detail:'Inland Imaging sent records for both April 2 studies but billed only the lumbar MRI. Request sent September 28.',cite:'Billing',go:'billing',goLabel:'Open billing'},
+  {k:'info',cat:'Deadline',title:'Statute of limitations: March 14, 2028',detail:'Two years from the date of injury under CCP §335.1.',cite:'CCP §335.1',sol:true}
+];
+const KIND={strength:['','Strength'],risk:['attn','Risk'],watch:['watch','Watch'],info:['open','Info']};
+const LEDGER=[
+  {prov:'Riverside Community Hospital',type:'Emergency',dos:'03/14/26',visits:1,billed:14820,paid:4210,adj:3100,status:['','Verified']},
+  {prov:'Inland Imaging Center',type:'Imaging',dos:'04/02/26',visits:2,billed:6450,paid:1180,adj:900,status:['attn','1 bill missing']},
+  {prov:'Desert Spine & Orthopedics',type:'Orthopedics',dos:'03/18 – 08/20/26',visits:6,billed:28640,paid:0,adj:0,status:['watch','Lien']},
+  {prov:'Coastline Physical Therapy',type:'Physical therapy',dos:'03/24 – 09/30/26',visits:36,billed:15840,paid:6120,adj:2400,status:['','Verified']},
+  {prov:'Pacific Pain Management',type:'Pain management',dos:'04/21 – 07/09/26',visits:2,billed:22600,paid:8900,adj:4300,status:['','Verified']}
+];
+
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const day=s=>new Date(s+'T12:00:00');
+const VIEWS=['overview','chronology','insights','billing','demand'];
+const state={type:'all',sel:0,kind:'all',q:''};
+const solDays=Math.ceil((day('2028-03-14')-new Date())/864e5);
+
+let toastT;
+function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2600)}
+
+function closeMenu(){$('#sidebar').classList.remove('open');$('#scrim').hidden=true;$('#menuBtn').setAttribute('aria-expanded','false')}
+function go(v,anchor){
+  if(!VIEWS.includes(v)) v='overview';
+  $$('.view').forEach(s=>s.hidden=s.id!=='v-'+v);
+  $$('.tabs [data-go], .nav [data-go]').forEach(b=>{const on=b.dataset.go===v;b.classList.toggle('on',on);on?b.setAttribute('aria-selected','true'):b.removeAttribute('aria-selected')});
+  try{localStorage.setItem('ce-view',v)}catch(e){}
+  closeMenu();
+  if(anchor){const a=document.getElementById(anchor);a&&a.scrollIntoView({block:'start',behavior:'smooth'})} else window.scrollTo({top:0});
+}
+
+function timeline(){
+  const start=day('2026-03-01'),end=day('2026-10-12'),span=end-start;
+  const pct=s=>((day(s)-start)/span*100).toFixed(2)+'%';
+  let h='<div class="tl-track"></div>';
+  h+=`<div class="tl-gap" style="left:${pct(GAP.from)};width:${((day(GAP.to)-day(GAP.from))/span*100).toFixed(2)}%"><span>41-day gap</span></div>`;
+  ['03','04','05','06','07','08','09','10'].forEach(m=>{const s=`2026-${m}-01`;h+=`<span class="tl-month" style="left:${pct(s)}">${day(s).toLocaleDateString('en-US',{month:'short'})}</span>`});
+  CHRONO.forEach((c,i)=>{const tip=`${day(c.d).toLocaleDateString('en-US',{month:'short',day:'numeric'})} · ${c.prov}`;
+    h+=`<button class="tl-dot${i===state.sel?' sel':''}" style="left:${pct(c.d)}" data-sel="${i}" title="${esc(tip)}" aria-label="${esc(tip)}"></button>`});
+  $('#tl').innerHTML=h;
+}
+function chips(){
+  const counts={};CHRONO.forEach(c=>counts[c.t]=(counts[c.t]||0)+1);
+  $('#chips').innerHTML=`<button class="${state.type==='all'?'on':''}" data-type="all">All<span class="n">${CHRONO.length}</span></button>`+
+    Object.entries(TYPES).map(([k,v])=>`<button class="${state.type===k?'on':''}" data-type="${k}">${v}<span class="n">${counts[k]||0}</span></button>`).join('');
+}
+function matches(c){
+  if(state.type!=='all'&&c.t!==state.type) return false;
+  return !state.q||[c.prov,c.sum,c.dx.join(' '),c.cite,TYPES[c.t]].join(' ').toLowerCase().includes(state.q);
+}
+function rows(){
+  let h='',n=0;
+  CHRONO.forEach((c,i)=>{
+    if(!matches(c)) return; n++;
+    h+=`<tr data-sel="${i}" class="${i===state.sel?'sel':''}">
+      <td class="c-date">${day(c.d).toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'})}</td>
+      <td class="c-prov">${esc(c.prov)}<span>${TYPES[c.t]}</span></td>
+      <td class="c-sum">${esc(c.sum)}${c.review?' <span class="st attn" style="font-size:11.5px;margin-left:4px">Needs review</span>':''}</td>
+      <td class="mono">${c.dx.map(esc).join('<br>')}</td>
+      <td><span class="cite" style="color:var(--accent-ink);background:var(--accent-soft)">${esc(c.cite)}</span></td></tr>`;
+    if(i===GAP.after&&state.type==='all'&&!state.q) h+=`<tr class="gap-row"><td colspan="5">No treatment for 41 days · May 2 – Jun 12, 2026</td></tr>`;
+  });
+  $('#chronoRows').innerHTML=n?h:`<tr class="empty"><td colspan="5">No encounters match.</td></tr>`;
+}
+function viewer(){
+  const c=CHRONO[state.sel];
+  $('#viewer').innerHTML=`
+    <div class="viewer-head"><h3>${esc(c.doc)}</h3><span>${esc(c.cite)}</span></div>
+    <div class="page">
+      <div class="page-hd"><span>${esc(c.prov)}</span><span class="num">${esc(c.cite.replace(/^Ex\. \d+, /,''))}</span></div>
+      <div class="skel" style="width:62%"></div><div class="skel" style="width:88%"></div>
+      <p style="margin:10px 0">${c.src}</p>
+      <div class="skel" style="width:94%"></div><div class="skel" style="width:71%"></div><div class="skel" style="width:83%"></div>
+      <span class="pill-glass${c.review?' attn':''}">${c.review?'Needs review':'Verified against page'}</span>
+    </div>
+    <dl class="kv"><dt>Date</dt><dd class="num">${day(c.d).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</dd><dt>Provider</dt><dd>${esc(c.prov)}</dd>${c.kv.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}<dt>Diagnoses</dt><dd class="mono">${c.dx.map(esc).join(', ')}</dd></dl>
+    <div class="viewer-actions"><button class="btn sm" data-toast="The PDF viewer isn't part of this preview.">Open page</button><button class="btn sm" id="copyCite">Copy citation</button></div>`;
+}
+function select(i,scroll){state.sel=i;rows();viewer();timeline();
+  if(scroll){const r=$(`#chronoRows tr[data-sel="${i}"]`);r&&r.scrollIntoView({block:'center',behavior:'smooth'})}}
+
+function insights(){
+  const counts={all:INS.length,strength:0,risk:0,watch:0};INS.forEach(s=>{if(counts[s.k]!=null)counts[s.k]++});
+  $('#insFilter').innerHTML=[['all','All'],['strength','Strengths'],['risk','Risks'],['watch','Watch']].map(([k,l])=>`<button class="${state.kind===k?'on':''}" data-kind="${k}">${l}<span class="n">${counts[k]}</span></button>`).join('');
+  const list=INS.filter(s=>(state.kind==='all'||s.k===state.kind)&&(!state.q||[s.title,s.detail,s.cat,s.cite].join(' ').toLowerCase().includes(state.q)));
+  $('#insRows').innerHTML=list.length?list.map(s=>`<tr>
+    <td><span class="st ${KIND[s.k][0]}">${KIND[s.k][1]}</span></td>
+    <td><span class="find">${esc(s.title)}</span><span class="cat">${s.cat}</span></td>
+    <td>${esc(s.detail)}${s.sol?` <span style="color:var(--ink)">${solDays} days remain.</span>`:''}</td>
+    <td>${s.row!=null?`<button class="cite" data-row="${s.row}">${esc(s.cite)}</button>`:`<span class="cite">${esc(s.cite)}</span>`}</td>
+    <td style="text-align:right">${s.go?`<button class="btn quiet sm" data-go="${s.go}">${s.goLabel} →</button>`:''}</td></tr>`).join('')
+    :`<tr class="empty"><td colspan="5">No findings match.</td></tr>`;
+}
+
+function billing(){
+  const T={billed:0,paid:0,adj:0,bal:0,visits:0};
+  $('#ledRows').innerHTML=LEDGER.map(r=>{
+    const bal=r.billed-r.paid-r.adj;T.billed+=r.billed;T.paid+=r.paid;T.adj+=r.adj;T.bal+=bal;T.visits+=r.visits;
+    if(state.q&&![r.prov,r.type,r.status[1]].join(' ').toLowerCase().includes(state.q)) return '';
+    return `<tr><td>${esc(r.prov)}<div style="font-size:11.5px;color:var(--faint)">${r.type}</div></td>
+      <td class="num">${r.dos}</td><td class="r">${r.visits}</td>
+      <td class="r">${money(r.billed)}<div class="stack"><i style="flex:${r.paid};background:var(--ink)"></i><i style="flex:${r.adj};background:var(--stone)"></i><i style="flex:${bal};background:var(--accent-mid)"></i></div></td>
+      <td class="r">${money(r.paid)}</td><td class="r">${money(r.adj)}</td><td class="r">${money(bal)}</td>
+      <td><span class="st ${r.status[0]}">${r.status[1]}</span></td></tr>`;
+  }).join('')||`<tr class="empty"><td colspan="8">No providers match.</td></tr>`;
+  $('#ledFoot').innerHTML=`<tr><td>Total</td><td></td><td class="r">${T.visits}</td><td class="r">${money(T.billed)}</td><td class="r">${money(T.paid)}</td><td class="r">${money(T.adj)}</td><td class="r">${money(T.bal)}</td><td></td></tr>`;
+  $('#kpis').innerHTML=[
+    ['','Billed',money(T.billed),'5 providers'],
+    ['paid','Paid',money(T.paid),Math.round(T.paid/T.billed*100)+'% of billed'],
+    ['adj','Adjusted',money(T.adj),'Contractual write-offs'],
+    ['open','Open balance',money(T.bal),'Owed to providers'],
+    ['','Liens','$49,050.00','2 lienholders']
+  ].map(([sw,l,v,s])=>`<div class="kpi"><label>${sw?`<i class="sw ${sw}"></i>`:''}${l}</label><b>${v}</b><small>${s}</small></div>`).join('');
+}
+function renderAll(){rows();insights();billing()}
+
+document.addEventListener('click',e=>{
+  const t=e.target;
+  const c=t.closest('[data-row]');
+  if(c){go('chronology');state.type='all';chips();select(+c.dataset.row,true);return}
+  const g=t.closest('[data-go]');
+  if(g){go(g.dataset.go,g.dataset.anchor);return}
+  const s=t.closest('[data-sel]');
+  if(s){select(+s.dataset.sel);return}
+  const ty=t.closest('[data-type]');
+  if(ty){state.type=ty.dataset.type;chips();rows();return}
+  const k=t.closest('[data-kind]');
+  if(k){state.kind=k.dataset.kind;insights();return}
+  const tn=t.closest('#tone button');
+  if(tn){$$('#tone button').forEach(b=>b.classList.toggle('on',b===tn));return}
+  const ts=t.closest('[data-toast]');
+  if(ts){toast(ts.dataset.toast);return}
+  if(t.closest('[data-matter]')){toast('Only the Alvarez case is loaded in this preview.');return}
+  if(t.closest('#copyCite')){
+    const r=CHRONO[state.sel],txt=`${r.cite} (${r.prov}, ${day(r.d).toLocaleDateString('en-US')})`;
+    try{navigator.clipboard.writeText(txt).then(()=>toast('Citation copied'),()=>toast(txt))}catch(err){toast(txt)}
+    return;
+  }
+  if(t.closest('#menuBtn')){$('#sidebar').classList.add('open');$('#scrim').hidden=false;$('#menuBtn').setAttribute('aria-expanded','true');return}
+  if(t.closest('#scrim')){closeMenu();return}
+});
+$('#q').addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();renderAll()});
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#q').focus()}
+  if(e.key==='Escape') closeMenu();
+});
+$('#askForm').addEventListener('submit',e=>{
+  e.preventDefault();const v=$('#askBox').value.trim();if(!v) return;
+  const r=$('#askReply');r.hidden=false;
+  r.innerHTML=`<span style="color:var(--ink)">“${esc(v)}”</span><span>This preview isn't connected to a model. In CaseEdge, the answer cites the pages it came from.</span>`;
+});
+$('#askBox').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('#askForm').requestSubmit()}});
+$('#composer').addEventListener('submit',e=>{
+  e.preventDefault();const v=$('#ask').value.trim();if(!v) return;
+  $('#thread').insertAdjacentHTML('beforeend',`<span class="me">${esc(v)}</span><span class="sys">Not connected in this preview. Answers here cite the draft and the record.</span>`);
+  $('#ask').value='';
+});
+
+(function(){
+  $('#solDays').textContent=`${solDays} days remaining`;
+  chips();timeline();renderAll();viewer();
+  let v=(location.hash||'').slice(1);
+  if(!VIEWS.includes(v)){try{v=localStorage.getItem('ce-view')||'overview'}catch(e){v='overview'}}
+  if(!VIEWS.includes(v)) v='overview';
+  go(v);
+})();
+</script>
+
+</html>
