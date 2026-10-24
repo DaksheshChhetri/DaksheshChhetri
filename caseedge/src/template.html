@@ -579,9 +579,34 @@ tr.grp .g-meta,.gap-row td,.score p,.tl-facts span,.box-f,.facts dd small,.golin
 .tm-lane-l span{font-size:12px}
 .stack{display:flex;flex-direction:column;gap:4px}
 
-/* Straight edges everywhere. Only data marks whose shape carries meaning stay round. */
-*,*::before,*::after{border-radius:0!important}
-.mk.c,.mk.ring,.lg.c,.lg.ring{border-radius:50%!important}
+/* Soft pass, after Legora and Wisedocs: a warm off-white canvas with white panels that sit on it,
+   rounded corners (12 panels, 8 controls, 6 small marks), fainter rules and soft shadows.
+   Layout, type and colour are unchanged. */
+:root{--canvas:#F7F7F5;--line:#E2E0DB;--line-soft:#EDEBE7;--r-box:12px;--r-ctl:8px;--r-sm:6px;
+  --lift:0 1px 2px rgba(13,16,22,.04),0 4px 14px -6px rgba(13,16,22,.06)}
+body,.main{background:var(--canvas)}
+.sidebar{border-right-color:transparent}
+.tabbar{background:var(--canvas);border-top:0}
+.box{border-color:var(--line);border-radius:var(--r-box);box-shadow:var(--lift)}
+.box > :first-child{border-top-left-radius:calc(var(--r-box) - 1px);border-top-right-radius:calc(var(--r-box) - 1px)}
+.box > :last-child{border-bottom-left-radius:calc(var(--r-box) - 1px);border-bottom-right-radius:calc(var(--r-box) - 1px)}
+.nav-item,.search,.side-toggle,.btn,.tgl,.lnk,.x,.tb button,.menu-btn,.csearch,.pop-search,.pop-item,.mseg,.plus,.sug-act button{border-radius:var(--r-ctl)}
+.mseg button{border-radius:calc(var(--r-ctl) - 2px)}
+.nav-item.on{box-shadow:0 0 0 1px var(--line-soft),0 1px 3px rgba(13,16,22,.06)}
+.pop,.sheet-card{border-radius:10px;box-shadow:0 18px 40px -18px rgba(13,16,22,.24),0 0 0 1px rgba(13,16,22,.02)}
+.pop{border-color:var(--line-soft)}
+.tip,.toast{border-radius:var(--r-ctl)}
+.cite,.crumbs .tag,.keys kbd,.tm-gap-l,.tm-band,.pdf-page{border-radius:var(--r-sm)}
+.case-av,.avatar{border-radius:50%}
+.tgl i,.tgl i::after,.bar,.bar i{border-radius:99px}
+.st::before,.nav-item .meta.attn::before,.tabs .n::before,.case-row.has-attn .case-txt b::after,.exec dt.attn::after,.tl-facts .attn b::before,.toast::before,.saved::before,html.nav-rail .nav-item.has-attn::after{border-radius:50%}
+.mk.c,.mk.ring,.lg.c,.lg.ring{border-radius:50%}
+.gap-row td{background:rgba(14,165,233,.05)}
+.enc-q{border-left:0;padding-left:0}
+.enc-q blockquote{padding:10px 14px;background:var(--canvas);border-radius:var(--r-ctl);box-shadow:inset 2px 0 0 var(--signal)}
+.cpane{border-left-color:var(--line-soft)}
+.cp-doc{padding:24px}
+.pdf-page{overflow:hidden;box-shadow:0 0 0 1px rgba(13,16,22,.04),0 6px 20px -8px rgba(13,16,22,.16)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
 

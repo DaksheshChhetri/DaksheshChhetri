@@ -4,8 +4,8 @@ A single-page workspace for plaintiff personal injury firms with four products:
 **Medical Chronology, Case Insights, Bills & Ledger and Demand Draft**, plus a Review queue.
 Every citation opens the real source PDF in a pane beside the work.
 
-- Live artifact: https://claude.ai/artifact/NdpGhNPPrM4p4a7LBuUvMo (private; latest published is v18)
-- Saved snapshots: `../CaseEdge-Workspace-v*.html` at the repo root (v18 is the current one)
+- Live artifact: https://claude.ai/artifact/NdpGhNPPrM4p4a7LBuUvMo (private; latest published is v19)
+- Saved snapshots: `../CaseEdge-Workspace-v*.html` at the repo root (v19 is the current one)
 
 ## Layout of this folder
 
@@ -48,7 +48,7 @@ Run each test as `NODE_PATH=$(npm root -g) node tests/<name>.js "$PWD" "$PWD/dis
 
 - **One colour.** Deep sky `#0369A1` for actions and links; bright sky `#0EA5E9` only for attention marks and highlights. Everything else is ink and greys, darkened to AA contrast or better.
 - **Inter only. All body text 13px**, secondary text differs only in colour. Labels 12px, section titles 15px semibold, page title 24px. No monospace; codes use tabular figures.
-- **Zero border radius everywhere**, straight lines; only meaningful data marks (round timeline markers) stay round.
+- **Corners:** v18 and earlier use zero border radius everywhere. v19 is a softer pass after Legora and Wisedocs: a warm off-white canvas with white panels on it, 12px panel corners, 8px controls, 6px citations, round status dots, fainter rules and soft shadows. It is one block at the end of the CSS in `src/template.html`, so it is easy to remove.
 - **Mostly white, structured, Harvey/Legora-like**, not iOS-style bubbles. Nothing extra beyond what is asked.
 - **Layout:** sidebar 240px (folds to a 60px rail). Content is full width and left-aligned, with no centring and no empty space on the right. Each section is a box with its title at the top left and a short description beside it.
 - **Text** is left to right, never justified or centred. Content is narrative and descriptive (full sentences), written for paralegals and attorneys.
