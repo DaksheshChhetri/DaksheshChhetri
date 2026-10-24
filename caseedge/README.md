@@ -4,9 +4,9 @@ A single-page workspace for plaintiff personal injury firms with four products p
 **Medical chronology, Case insights, Bills & liens and Demand draft**, plus a firm-level Review queue.
 Every citation opens the real source PDF in a pane beside the work.
 
-- Live artifact: https://claude.ai/artifact/NdpGhNPPrM4p4a7LBuUvMo (private; latest published is v22)
+- Live artifact: https://claude.ai/artifact/NdpGhNPPrM4p4a7LBuUvMo (private; latest published is v23)
 - v21 layout B (centred column in a sheet, not chosen): https://claude.ai/artifact/3bJKW3LjgvhA7ufii9hy2m
-- Saved snapshots: `../CaseEdge-Workspace-v*.html` at the repo root (v22 is the current one)
+- Saved snapshots: `../CaseEdge-Workspace-v*.html` at the repo root (v23 is the current one)
 
 ## Layout of this folder
 
@@ -61,6 +61,8 @@ Run each test as `NODE_PATH=$(npm root -g) node tests/<name>.js "$PWD" "$PWD/dis
   with the screen (24px on a laptop, up to 64px on a wide monitor), equal on both sides. v21 tried a framed white sheet,
   left-aligned (A) and with a centred 1,320px column (B); the owner found both too boxed in.
   Contrast is raised on structure only (rules, tab labels, crumbs).
+- **v23, after EvenUp's Prep Sheet:** a document-style case header (a 600-weight title over one line of case facts
+  separated by dots), tables with a soft grey header row, and Case insights' strengths and risks as two columns of tiles.
 - **Structure:** every case page shares one header (crumbs and actions, a 28px title, facts with a stage stepper) and one tab bar.
   Each product opens with summary tiles, then stacked panels; long pages add an "On this page" row. Status is a soft pill with its dot.
   Charts are drawn in ink greys with the one accent for the figure that matters most.

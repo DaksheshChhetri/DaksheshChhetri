@@ -777,6 +777,42 @@ td{padding:14px 12px}
 .app.split .kpi{padding:14px 16px 16px}
 .app.split .kpi b{font-size:22px}
 .app.split .csearch{width:184px}
+
+/* v23, after EvenUp's Prep Sheet: a document-style case header (a strong title over one line of
+   case facts), tables with a soft grey header row, and strengths and risks as two columns of tiles. */
+.head h1{font-weight:600;letter-spacing:-.028em}
+.meta-line.docmeta{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin-top:8px;color:var(--muted)}
+.meta-line.docmeta span:first-child{color:var(--ink);font-weight:500}
+.meta-line.docmeta .dot{width:3px;height:3px;border-radius:50%;background:var(--stone);flex:none}
+thead th{background:#F6F5F2;border-bottom-color:var(--line)}
+.ledger thead th,.chrono thead th{background:#F6F5F2}
+.sw-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:18px var(--in) 20px}
+.app.split .sw-cols{grid-template-columns:minmax(0,1fr)}
+@media (max-width:860px){.sw-cols{grid-template-columns:minmax(0,1fr)}}
+.sw-col{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:12px;background:#F6F5F2;min-width:0}
+.sw-h{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;padding:2px 4px 6px}
+.sw-h b{font-weight:600}
+.sw-h .n{color:var(--muted);font-variant-numeric:tabular-nums}
+.sw-sub{flex-basis:100%;color:var(--muted);padding-left:30px}
+.sw-mark{width:20px;height:20px;border-radius:50%;flex:none;display:grid;place-items:center;position:relative}
+.sw-mark::after{content:"";width:6px;height:6px;border:solid currentColor;border-width:1.6px 1.6px 0 0}
+.sw-mark.up{background:var(--ink);color:#fff}
+.sw-mark.up::after{transform:translateY(1.5px) rotate(-45deg)}
+.sw-mark.down{background:var(--signal);color:#fff}
+.sw-mark.down::after{transform:translateY(-1.5px) rotate(135deg)}
+.sw-mark.open{background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--signal);color:var(--signal)}
+.sw-mark.open::after{width:2px;height:7px;border:0;background:currentColor;border-radius:1px;transform:translateY(-1px)}
+.sw-mark.note{background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--stone);color:var(--muted)}
+.sw-mark.note::after{width:6px;height:6px;border:1.5px solid currentColor;border-width:0 0 1.5px 1.5px;border-radius:0 0 0 1px;transform:translate(1px,-1px)}
+.tile{background:var(--paper);border:1px solid var(--line-soft);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0;transition:border-color .15s,box-shadow .15s}
+.tile:hover{border-color:var(--line);box-shadow:0 2px 10px -6px rgba(13,16,22,.18)}
+.tile-h{display:flex;align-items:flex-start;gap:10px}
+.tile-h .sw-mark{width:18px;height:18px;margin-top:1px}
+.tile-h b{font-weight:500;color:var(--ink)}
+.tile p{margin:0;color:var(--ink-2);padding-left:28px;line-height:1.6}
+.tile-f{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-left:28px;margin-top:2px}
+.tile-cat{color:var(--muted)}
+.sw-empty{margin:0;color:var(--muted);padding:8px 4px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
 
@@ -1104,14 +1140,8 @@ td{padding:14px 12px}
         </div>
       </div>
       <div class="box">
-        <div class="box-h"><h3>Findings</h3><span class="note">Strengths, risks and outstanding items, each cited to the record</span></div>
-        <div class="box-t"><div class="chips" id="sigFilter"></div></div>
-        <div class="table-wrap scroll">
-          <table class="items">
-            <thead><tr><th class="w-type c-type">Type</th><th>Finding</th><th class="w-act">Open in</th><th class="w-src">Source</th></tr></thead>
-            <tbody id="sigRows"></tbody>
-          </table>
-        </div>
+        <div class="box-h"><h3>Strengths and risks</h3><span class="note">What helps the case and what the adjuster will raise, each cited to the record</span></div>
+        <div class="sw-cols" id="sigCols"></div>
       </div>
     </section>
 
@@ -1393,7 +1423,8 @@ function setRail(on,persist=true){
 function closeMenu(){$('#sidebar').classList.remove('open');$('#scrim').hidden=true;$('#menuBtn').setAttribute('aria-expanded','false')}
 $('#sideToggle').addEventListener('click',e=>{e.stopPropagation();hideTip();if(!mqWide.matches){closeMenu();return}setRail(!isRail())});
 if(document.documentElement.classList.contains('nav-rail')) setRail(true,false);
-const CASE_SUB='Rear-end collision with a commercial tractor-trailer on I-215 North, Riverside, California · Client: Maria Alvarez, 38 · Pre-litigation';
+const CASE_META=['Maria Alvarez, 38','March 14, 2026','Rear-end collision, commercial truck','Riverside, California','Pre-litigation'];
+const CASE_SUB=CASE_META.join(' · ');
 function caseList(){
   const q=($('#cq').value||'').trim().toLowerCase();
   $('#caseList').innerHTML=CASES.filter(c=>c[1].toLowerCase().includes(q)).map(c=>`<button class="nav-item case-row${c[3]?' cur':''}${c[4]?' has-attn':''}" ${c[3]?'data-opencase':'data-matter'} data-tip="${esc(c[1])} · ${c[2]}"><span class="case-av">${c[0]}</span><span class="case-txt"><b>${esc(c[1])}</b><small>${esc(c[2])}</small></span></button>`).join('')||'<div class="side-empty">No cases match your search.</div>';
@@ -1412,7 +1443,7 @@ function go(v,opts={}){
   const ws=WS.includes(v);if(!ws) state.lastProd=v;
   $('#tabbar').hidden=ws;$('#facts').hidden=ws;$('.crumbs .tag').hidden=ws;$('#csearch').hidden=ws;
   $('#crumbA').textContent=ws?'Firm':'Cases';$('#crumbB').textContent=ws?PAGES[v][0]:'Alvarez v. Sunline Freight, LLC';
-  $('#pTitle').textContent=ws?PAGES[v][0]:'Alvarez v. Sunline Freight, LLC';$('#pSub').textContent=ws?PAGES[v][1]:CASE_SUB;
+  $('#pTitle').textContent=ws?PAGES[v][0]:'Alvarez v. Sunline Freight, LLC';if(ws) $('#pSub').textContent=PAGES[v][1];else $('#pSub').innerHTML=CASE_META.map(x=>`<span>${esc(x)}</span>`).join('<i class="dot" aria-hidden="true"></i>');$('#pSub').classList.toggle('docmeta',!ws);
   $$('.head-tools .actions').forEach(a=>a.hidden=a.dataset.for!==v);
   markCase();
   try{localStorage.setItem('ce-view',v)}catch(e){}
@@ -1567,12 +1598,12 @@ function itemRow(type,cls,sub,title,desc,src,link){
     <td>${link}</td><td>${src}</td></tr>`;
 }
 function signals(){
-  const counts={all:SIGNALS.length,strength:0,risk:0,watch:0};SIGNALS.forEach(s=>{if(counts[s.k]!=null)counts[s.k]++});
-  $('#sigFilter').innerHTML=[['all','All'],['strength','Strengths'],['risk','Risks'],['watch','Outstanding']].map(([k,l])=>`<button class="${state.kind===k?'on':''}" data-kind="${k}">${l}<span class="n">${counts[k]}</span></button>`).join('');
-  const list=SIGNALS.filter(s=>(state.kind==='all'||s.k===state.kind)&&(!state.q||[s.title,s.detail,s.cat].join(' ').toLowerCase().includes(state.q)));
-  $('#sigRows').innerHTML=list.length?list.map(s=>itemRow(KIND[s.k][1],KIND[s.k][0],s.cat,s.title,esc(s.detail)+(s.sol?` ${solDays} days remaining.`:''),
-    s.key?chip(s.key):`<span class="cite plain">${esc(s.plain)}</span>`,s.go?`<button class="golink" data-go="${s.go}">${PRODUCT[s.go]} →</button>`:'')).join('')
-    :`<tr class="empty"><td colspan="4">No findings match.</td></tr>`;
+  const match=x=>!state.q||[x.title,x.detail,x.cat].join(' ').toLowerCase().includes(state.q);
+  const col=(label,sub,mark,list)=>`<div class="sw-col"><div class="sw-h"><span class="sw-mark ${mark}" aria-hidden="true"></span><b>${label}</b><span class="n">${list.length}</span><span class="sw-sub">${sub}</span></div>
+    ${list.length?list.map(x=>`<article class="tile"><div class="tile-h"><span class="sw-mark ${x.k==='strength'?'up':x.k==='risk'?'down':x.k==='watch'?'open':'note'}" aria-label="${KIND[x.k][1]}"></span><b>${esc(x.title)}</b></div>
+      <p>${esc(x.detail)}${x.sol?` ${solDays} days remaining.`:''}</p>
+      <div class="tile-f"><span class="tile-cat">${KIND[x.k][1]} · ${esc(x.cat)}</span><span class="spacer"></span>${x.go?`<button class="golink" data-go="${x.go}">${PRODUCT[x.go]} →</button>`:''}${x.key?chip(x.key):`<span class="cite plain">${esc(x.plain)}</span>`}</div></article>`).join(''):'<p class="sw-empty">Nothing matches your search.</p>'}</div>`;
+  $('#sigCols').innerHTML=col('Strengths','Evidence that raises the value','up',SIGNALS.filter(x=>x.k==='strength'&&match(x)))+col('Risks and open items','What the adjuster will raise, and what is still missing','down',SIGNALS.filter(x=>x.k!=='strength'&&match(x)));
   markChips();
 }
 
@@ -2134,7 +2165,6 @@ document.addEventListener('click',e=>{
   if(t.closest('#ledExpand')){const all=state.ledOpen.size>=LEDGER.length+1;state.ledOpen=all?new Set():new Set([...LEDGER.map((_,i)=>i),'ems']);ledger();updateStep();return}
   if(t.closest('[data-opencase]')){go(state.lastProd||'chronology');return}
   const ty=t.closest('[data-type]');if(ty){state.type=ty.dataset.type;chips();rows();updateStep();return}
-  const k=t.closest('[data-kind]');if(k){state.kind=k.dataset.kind;signals();updateStep();return}
   const so=t.closest('[data-sort]');if(so){state.sort=so.dataset.sort;$('#sortPop').hidden=true;$('#sortBtn').setAttribute('aria-expanded','false');rows();updateStep();return}
   if(t.closest('#sortBtn')){const p=$('#sortPop');sortPop();p.hidden=!p.hidden;$('#sortBtn').setAttribute('aria-expanded',String(!p.hidden));return}
   if(t.closest('#groupBtn')){state.group=!state.group;$('#groupBtn').setAttribute('aria-pressed',String(state.group));rows();updateStep();return}
