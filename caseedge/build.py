@@ -28,9 +28,12 @@ assert t.count('/*__DATA__*/') == 1
 t = t.replace('/*__DATA__*/', 'const PDF=' + json.dumps(idx, separators=(',', ':')) + ';\nconst PDF_B64="' + b64 + '";')
 
 os.makedirs(p('dist'), exist_ok=True)
-open(p('dist', 'casework.html'), 'w').write(t)
-open(p('dist', 'CaseEdge-Workspace.html'), 'w').write(
-    '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
-    '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
-    '<style>html,body{margin:0}</style>\n' + t + '\n</html>\n')
+# Two layouts from one template: A is left-aligned in the sheet, B centres a modest 1,320px column.
+for suffix, js in (('', ''), ('-b', 'document.documentElement.classList.add("v-center");')):
+    v = t.replace('/*__VARIANT__*/', js)
+    open(p('dist', f'casework{suffix}.html'), 'w').write(v)
+    open(p('dist', f'CaseEdge-Workspace{suffix}.html'), 'w').write(
+        '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+        '<style>html,body{margin:0}</style>\n' + v + '\n</html>\n')
 print('built', len(t), 'bytes')
