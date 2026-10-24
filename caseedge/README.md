@@ -4,9 +4,9 @@ A single-page workspace for plaintiff personal injury firms with four products p
 **Medical chronology, Case insights, Bills & liens and Demand draft**, plus a firm-level Review queue.
 Every citation opens the real source PDF in a pane beside the work.
 
-- Live artifact: https://claude.ai/artifact/NdpGhNPPrM4p4a7LBuUvMo (private; latest published is v21, layout A)
-- Layout B artifact: https://claude.ai/artifact/3bJKW3LjgvhA7ufii9hy2m (publish `dist/casework-b.html` here)
-- Saved snapshots: `../CaseEdge-Workspace-v*.html` at the repo root (v21a and v21b are the current ones)
+- Live artifact: https://claude.ai/artifact/NdpGhNPPrM4p4a7LBuUvMo (private; latest published is v22)
+- v21 layout B (centred column in a sheet, not chosen): https://claude.ai/artifact/3bJKW3LjgvhA7ufii9hy2m
+- Saved snapshots: `../CaseEdge-Workspace-v*.html` at the repo root (v22 is the current one)
 
 ## Layout of this folder
 
@@ -16,7 +16,7 @@ Every citation opens the real source PDF in a pane beside the work.
 | `src/index2.json` | Citation index for the case file: highlight rectangles per citation key, page metadata, itemized bills. |
 | `src/make_pdf2.py` | Generates the fictional case file PDF and its index: `python3 src/make_pdf2.py assets/casefile.pdf src/index2.json` (reportlab, Liberation fonts). |
 | `assets/casefile.pdf` | The 27-page fictional case file (exhibits 1 to 13, including pharmacy records, lien notices and the preservation letter) that citations open. |
-| `build.py` | Embeds the index and PDF and writes two layouts: A, left-aligned (`dist/casework.html`, standalone `dist/CaseEdge-Workspace.html`) and B, a modest centred column (`dist/casework-b.html`, `dist/CaseEdge-Workspace-b.html`). |
+| `build.py` | Embeds the index and PDF, writes `dist/casework.html` (publish this as the artifact) and `dist/CaseEdge-Workspace.html` (standalone). |
 | `tests/*.js` | Playwright checks (see below). |
 
 ## Build, publish, test
@@ -38,10 +38,10 @@ mkdir -p vendor /tmp/pdfjs && cd /tmp/pdfjs && npm pack pdfjs-dist@3.11.174 && t
 Run each test as `NODE_PATH=$(npm root -g) node tests/<name>.js "$PWD" "$PWD/dist/casework.html"`
 (Chromium is at `/opt/pw-browsers/chromium`):
 
-- `smoke.js` loads the page, opens a citation, reports errors and the PDF pane width (expect 588 at 1440: two equal sheets).
+- `smoke.js` loads the page, opens a citation, reports errors and the PDF pane width (expect 600 at 1440).
 - `interactions.js` opens an encounter, groups by provider, accepts the suggested demand edit (review count 5 to 4, survives reload), jumps from the review queue, opens a citation.
 - `widths.js` checks for sideways scrolling in every view (all ten, read from `VIEWS`) at 1280, 1440, 1728 and 1920, sidebar open and collapsed (expect all 0).
-- `split.js` checks the 50/50 source view and phone width (main 588 / pane 588, no page scroll).
+- `split.js` checks the 50/50 source view and phone width (main 600 / pane 600, no page scroll).
 - `typescan.js` lists the font size and family of all body text in every view (expect only `13px Inter`).
 - `shoot.js <dir> <file> <name> <width> <views>` writes full-page screenshots to `<dir>/shots/`.
 
@@ -57,9 +57,10 @@ Run each test as `NODE_PATH=$(npm root -g) node tests/<name>.js "$PWD" "$PWD/dis
 - **Source PDF pane** takes exactly 50% of the space right of the sidebar, with a left shadow, and opens directly on the cited page with the passage highlighted. Every citation in every product opens it.
 - **Demand Draft** has a premium editor; the original, the draft and the citations can all be on screen together.
 
-- **Sheet (v21):** the work sits on one white sheet, inset 8px from the window and framed by the warm canvas; the source
-  pane opens as a second sheet beside it, the same width. Layout B (`.v-center`) holds the page to a 1,320px column centred
-  in the sheet on wide screens; layout A stays left-aligned. Contrast is raised on structure only (rules, tab labels, crumbs).
+- **Open layout (v22):** no frame around the work. White panels sit on the light canvas, and the side margins grow
+  with the screen (24px on a laptop, up to 64px on a wide monitor), equal on both sides. v21 tried a framed white sheet,
+  left-aligned (A) and with a centred 1,320px column (B); the owner found both too boxed in.
+  Contrast is raised on structure only (rules, tab labels, crumbs).
 - **Structure:** every case page shares one header (crumbs and actions, a 28px title, facts with a stage stepper) and one tab bar.
   Each product opens with summary tiles, then stacked panels; long pages add an "On this page" row. Status is a soft pill with its dot.
   Charts are drawn in ink greys with the one accent for the figure that matters most.
