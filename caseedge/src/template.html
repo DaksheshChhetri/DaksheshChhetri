@@ -607,6 +607,177 @@ body,.main{background:var(--canvas)}
 .cpane{border-left-color:var(--line-soft)}
 .cp-doc{padding:24px}
 .pdf-page{overflow:hidden;box-shadow:0 0 0 1px rgba(13,16,22,.04),0 6px 20px -8px rgba(13,16,22,.16)}
+
+/* Workspace pass (v20): one header for every page, a summary strip opening each product,
+   soft status pills, and charts drawn in ink with the one accent for what matters most. */
+:root{--s1:#2A2925;--s2:#77736B;--s3:#A9A59D;--s4:#D3D0C9;--accent-tint:rgba(3,105,161,.07)}
+.head{padding:20px var(--px) 18px;gap:0}
+.head-top{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;min-height:28px}
+.head-top .crumbs{flex:1 1 auto;min-width:0}
+.head-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto}
+.head h1{margin-top:10px}
+.facts{margin-top:18px;padding:14px 0 0;border-top:1px solid var(--line-soft)}
+.stage-dd{display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+.stage-dd .steps{order:2;margin-top:2px}
+.facts dd small{display:block;margin:2px 0 0!important;white-space:normal}
+.tbl td.r,.ledger td.r{white-space:nowrap}
+.steps{display:inline-flex;gap:3px;flex:none}
+.steps i{width:12px;height:4px;border-radius:2px;background:var(--line)}
+.steps i.done{background:var(--s1)}
+.steps i.cur{background:var(--accent)}
+.tabbar{border-bottom:1px solid var(--line);min-height:46px}
+.tabs{gap:22px;align-items:stretch}
+.tabs button{min-height:46px;position:relative}
+.tabs button.on .t{background:none}
+.tabs button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:2px 2px 0 0;background:var(--ink)}
+.tab-sep{width:1px;align-self:center;height:16px;background:var(--line);flex:none}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.primary:hover{background:var(--accent-hover)}
+
+/* Summary strip */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(176px,1fr));background:var(--paper);border:1px solid var(--line);border-radius:var(--r-box);box-shadow:var(--lift);overflow:hidden}
+.kpi{display:flex;flex-direction:column;gap:6px;padding:16px var(--in) 18px;min-width:0;box-shadow:1px 0 0 var(--line-soft),0 1px 0 var(--line-soft)}
+.kpi label{font-size:12px;color:var(--muted)}
+.kpi b{font-size:24px;font-weight:400;letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.kpi.attn b::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--signal);flex:none}
+.kpi span{color:var(--muted)}
+.meterbar{display:block;height:6px;border-radius:99px;background:var(--fill-2);overflow:hidden;margin-top:6px}
+.meterbar i{display:block;height:100%;border-radius:99px;background:var(--accent)}
+.jump{display:flex;align-items:center;gap:6px 6px;flex-wrap:wrap;margin:-8px 0 -4px}
+.jump > span{color:var(--muted);margin-right:6px}
+.jump button{height:28px;padding:0 12px;border-radius:99px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);transition:background .15s,border-color .15s}
+.jump button:hover{background:var(--fill);border-color:var(--stone)}
+
+/* Status pills: the dot keeps its meaning, the pill makes it scannable */
+.st{align-items:flex-start;padding:1px 10px 1px 8px;border-radius:11px;background:var(--fill);line-height:20px;white-space:normal;max-width:100%}
+.st::before{margin-top:7px!important}
+.st.dot::before{margin-top:0!important}
+.st::before{margin-top:0}
+.st.attn{background:var(--accent-soft)}
+.st.watch{background:transparent;box-shadow:inset 0 0 0 1px var(--line)}
+.st.open{background:transparent;box-shadow:inset 0 0 0 1px var(--line-soft)}
+.st.dot{padding:0;background:none;box-shadow:none;width:auto}
+.stack{align-items:flex-start}
+.sub .st{margin-top:4px}
+.enc-flag .st{white-space:normal;border-radius:var(--r-ctl);padding:8px 12px;align-items:flex-start;line-height:1.5}
+.enc-flag .st::before{margin-top:7px}
+.seglegend .st,.in-st .st{background:none;box-shadow:none;padding:0}
+
+/* Controls inside panels */
+.box-t .mseg{flex:none}
+.ctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ctl-l{color:var(--muted)}
+.mseg{height:30px;padding:3px;border-radius:var(--r-ctl);gap:2px}
+.mseg button{height:24px;border-radius:6px;white-space:nowrap}
+.readbtn{height:26px;padding:0 10px;border-radius:99px;border:1px solid var(--line);color:var(--ink-2);background:var(--paper);white-space:nowrap}
+.readbtn:hover{background:var(--fill)}
+.readbtn.on{border-color:transparent;background:var(--fill);color:var(--muted)}
+.readbtn.on::before{content:"✓";margin-right:6px;color:var(--accent)}
+tr.vrow td{color:var(--ink-2)}
+tr.vrow .c-sum{color:var(--muted)}
+
+/* Settlement arithmetic */
+.wf{padding:20px var(--in) 18px;border-bottom:1px solid var(--line-soft);display:flex;flex-direction:column;gap:14px}
+.wf-bar{display:flex;gap:2px;height:30px}
+.wf-bar i{min-width:4px;border-radius:2px;transition:flex-grow .35s var(--ease)}
+.wf-bar i:first-child{border-radius:6px 2px 2px 6px}
+.wf-bar i:last-child{border-radius:2px 6px 6px 2px}
+.s1{background:var(--s1)}.s2{background:var(--s2)}.s3{background:var(--s3)}.s4{background:var(--s4)}.s5{background:var(--accent)}
+.wf-leg{display:flex;flex-wrap:wrap;gap:8px 28px}
+.wf-leg > span{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.wf-leg .sw{width:10px;height:10px;border-radius:3px;flex:none}
+.wf-leg .wl{color:var(--muted)}
+.wf-leg b{font-weight:500}
+
+/* Valuation */
+.val{position:relative;height:150px;margin:8px 0 0;overflow:hidden}
+.v-track{position:absolute;height:2px;margin-top:-1px;border-radius:2px;background:var(--line)}
+.v-tick{position:absolute;width:1px;height:8px;margin-top:-4px;background:var(--stone)}
+.v-ax{position:absolute;transform:translateX(-50%);font-size:12px;color:var(--muted);white-space:nowrap}
+.v-band{position:absolute;height:18px;border-radius:9px;background:var(--accent-soft);box-shadow:inset 0 0 0 1.5px var(--accent-mid)}
+.v-bl{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;white-space:nowrap}
+.v-bl b,.v-lab b{font-weight:500}
+.v-bl span,.v-lab span{color:var(--muted)}
+.v-mk{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 3px var(--paper)}
+.v-line{position:absolute;width:0;border-left:1.5px solid var(--ink)}
+.v-lab{position:absolute;display:flex;flex-direction:column;padding-left:8px;white-space:nowrap}
+.v-lab.rt{transform:translateX(-100%);padding:0 8px 0 0;align-items:flex-end;text-align:right}
+.drivers{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));border-top:1px solid var(--line-soft)}
+.drivers > div{padding:14px var(--in) 18px;min-width:0}
+.drivers > div + div{box-shadow:-1px 0 0 var(--line-soft)}
+.drivers h5{margin:0 0 8px;font-size:13px;font-weight:600}
+.drivers ul{margin:0;padding:0 0 0 18px;display:flex;flex-direction:column;gap:6px;color:var(--ink-2)}
+
+/* Medications */
+.md-sup{position:absolute;height:10px;border-radius:5px;background:rgba(13,16,22,.13)}
+.md-sup.on{background:var(--accent-mid)}
+.mk.md-fill{width:8px;height:8px;margin:-4px 0 0 -4px;background:var(--ink);box-shadow:0 0 0 2px var(--paper)}
+.mmap{margin-top:0}
+
+/* Demand sections */
+.segrow{gap:10px 20px}
+.segbar{display:flex;gap:3px;flex:1 1 320px;min-width:0}
+.seg{flex:1 1 0;min-width:0;height:26px;border-radius:6px;display:grid;place-items:center;font-size:12px;color:var(--muted);background:var(--fill);transition:box-shadow .15s}
+.seg span{font-size:12px;font-variant-numeric:tabular-nums;overflow:hidden}
+.seg.final{background:var(--s1);color:#fff}
+.seg.review{background:var(--signal);color:#fff}
+.seg.draft{background:var(--fill-2);color:var(--ink-2)}
+.seg.todo{background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);color:var(--muted)}
+.seg.here{box-shadow:0 0 0 2px var(--paper),0 0 0 3.5px var(--ink)}
+.seg:hover{filter:brightness(.96)}
+.seglegend{display:flex;gap:4px 14px;flex-wrap:wrap;color:var(--muted)}
+.seglegend .st{color:var(--muted)}
+.seglegend .st::before{border-radius:2px}
+.doc .hint,.doc .decide{display:flex;flex-direction:column;gap:6px;margin:0 0 14px;padding:12px 14px;border-radius:var(--r-ctl);font-size:13px;line-height:1.55;-webkit-user-select:none;user-select:none}
+.doc .hint{background:var(--canvas);color:var(--ink-2)}
+.doc .decide{background:var(--accent-tint);box-shadow:inset 0 0 0 1px rgba(3,105,161,.22);color:var(--ink-2)}
+.doc .hint b,.doc .decide b{font-weight:600;color:var(--ink)}
+.doc .hint span::before,.doc .decide span::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--stone);margin:0 9px 2px 1px}
+.doc .decide span::before{background:var(--accent)}
+.doc ul[data-b]{padding-left:20px}
+
+/* Case chat */
+.chat-box{display:flex;flex-direction:column}
+.thread{display:flex;flex-direction:column;gap:22px;padding:22px var(--in);max-height:min(62vh,640px);overflow-y:auto}
+.msg{display:flex;gap:12px;max-width:84ch;animation:encIn .24s var(--ease)}
+.who-av{width:28px;height:28px;border-radius:50%;background:var(--fill-2);color:var(--ink-2);display:grid;place-items:center;font-size:11px;font-weight:500;flex:none}
+.who-av.ce{background:var(--ink);color:#fff}
+.msg-b{min-width:0;display:flex;flex-direction:column;gap:6px}
+.msg-h{display:flex;gap:10px;align-items:baseline}
+.msg-h b{font-weight:600}
+.msg-h span{color:var(--muted)}
+.msg p{margin:0;color:var(--ink-2)}
+.msg.a .msg-b{padding:12px 14px;background:var(--canvas);border-radius:var(--r-ctl)}
+.composer{border-top:1px solid var(--line-soft);padding:12px var(--in) 14px;display:flex;flex-direction:column;gap:10px}
+.sugs{display:flex;gap:6px;flex-wrap:wrap}
+.sug-q{height:28px;padding:0 12px;border-radius:99px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.sug-q:hover{background:var(--fill)}
+.ask{display:flex;gap:8px;align-items:flex-end;padding:6px 6px 6px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+.ask:focus-within{border-color:var(--signal)}
+.ask textarea{flex:1;min-width:0;border:0;outline:none;resize:none;background:none;font-size:13px;line-height:20px;padding:4px 0;max-height:120px}
+.ask .btn{height:30px}
+
+/* Tracker and intake */
+.pipe{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.pipe-c{display:flex;flex-direction:column;gap:6px;padding:14px var(--in) 18px;box-shadow:1px 0 0 var(--line-soft),0 1px 0 var(--line-soft);min-width:0}
+.pipe-c label{color:var(--muted)}
+.pipe-c b{font-size:24px;font-weight:400;letter-spacing:-.03em;line-height:1.1}
+.pipe-c .meterbar i{background:var(--s1)}
+.pipe{overflow:hidden;border-radius:0 0 11px 11px}
+.stage-c{display:flex;flex-direction:column;gap:6px}
+tr.trk-cur td:first-child{box-shadow:inset 2px 0 0 var(--accent)}
+.mtr{display:inline-flex;align-items:center;gap:2px;white-space:nowrap}
+.mtr em{font-style:normal;color:var(--muted);width:72px}
+.mtr i{width:12px;height:6px;border-radius:2px;background:var(--line-soft)}
+.mtr i.on{background:var(--s1)}
+.itk .stack{gap:6px}
+.lien td .sub + .sub{margin-top:2px}
+.scores .bar{height:6px;border-radius:99px}
+.scores .bar i{border-radius:99px;background:var(--s1)}
+.app.split .drivers{grid-template-columns:minmax(0,1fr)}
+.app.split .drivers > div + div{box-shadow:0 -1px 0 var(--line-soft)}
+@media (max-width:860px){.head-tools{width:100%;margin-left:0}.head-tools .csearch{flex:1 1 200px;width:auto}}
+@media (max-width:600px){.jump{display:none}.kpi b{white-space:normal;font-size:22px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
 
@@ -627,6 +798,8 @@ body,.main{background:var(--canvas)}
   <symbol id="i-redo" viewBox="0 0 24 24"><path d="m15 7 4 4-4 4"/><path d="M19 11h-9a5 5 0 0 0 0 10h2"/></symbol>
   <symbol id="i-ul" viewBox="0 0 24 24"><path d="M9.5 7H20M9.5 12H20M9.5 17H20"/><circle cx="5" cy="7" r="1.1" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="5" cy="17" r="1.1" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-ol" viewBox="0 0 24 24"><path d="M10 7h10M10 12h10M10 17h10"/><path d="M4 5.5h1.4V9.5M4 9.5h2.8M4 14.6c.3-.7 2.6-.8 2.6.5 0 1-2.6 1.7-2.6 2.9h2.8"/></symbol>
+  <symbol id="i-track" viewBox="0 0 24 24"><path d="M5 19V11M10 19V5M15 19v-6M20 19V8"/></symbol>
+  <symbol id="i-intake" viewBox="0 0 24 24"><path d="M4 13.5 6.5 5.5h11L20 13.5V18a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18z"/><path d="M4 13.5h4.5l1 2h5l1-2H20"/></symbol>
   <symbol id="i-cite" viewBox="0 0 24 24"><path d="M7 4.5h10a1 1 0 0 1 1 1V20l-6-3.6L6 20V5.5a1 1 0 0 1 1-1z"/></symbol>
 </svg>
 
@@ -642,7 +815,10 @@ body,.main{background:var(--canvas)}
       <input id="cq" type="search" placeholder="Search cases" autocomplete="off">
     </label>
     <nav class="group" aria-label="Workspace">
+      <div class="group-label"><span>Firm</span></div>
       <button class="nav-item has-attn" id="revNav" data-go="review" data-tip="Review queue" data-key="G R"><svg class="ic"><use href="#i-review"/></svg><span class="lbl">Review queue</span><span class="meta attn" id="revCount">5</span></button>
+      <button class="nav-item" data-go="tracker" data-tip="Case tracker" data-key="G T"><svg class="ic"><use href="#i-track"/></svg><span class="lbl">Case tracker</span><span class="meta">42</span></button>
+      <button class="nav-item" data-go="intake" data-tip="Intake triage" data-key="G N"><svg class="ic"><use href="#i-intake"/></svg><span class="lbl">Intake triage</span><span class="meta">5</span></button>
     </nav>
     <nav class="group" aria-label="Cases">
       <div class="group-label"><span>Cases</span><span>42 active</span></div>
@@ -667,7 +843,21 @@ body,.main{background:var(--canvas)}
     </div>
 
     <header class="head" id="head">
-      <div class="crumbs"><span id="crumbA">Cases</span><span class="sep">/</span><span class="case" id="crumbB">Alvarez v. Sunline Freight, LLC</span><span class="tag">Sample case</span></div>
+      <div class="head-top">
+        <div class="crumbs"><span id="crumbA">Cases</span><span class="sep">/</span><span class="case" id="crumbB">Alvarez v. Sunline Freight, LLC</span><span class="tag">Sample case</span></div>
+        <div class="head-tools">
+          <label class="csearch" id="csearch"><svg class="ic sm"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Search this case" autocomplete="off"><kbd>⌘K</kbd></label>
+          <div class="actions" data-for="chronology"><button class="btn" data-toast="Uploading records is not available in this preview.">Add records</button><button class="btn" data-toast="Exporting is not available in this preview.">Export</button></div>
+          <div class="actions" data-for="demand" hidden><button class="btn" data-toast="Exporting is not available in this preview.">Export</button></div>
+          <div class="actions" data-for="ledger" hidden><button class="btn" data-toast="Bill requests are not available in this preview.">Request bills</button><button class="btn" data-toast="Exporting is not available in this preview.">Export</button></div>
+          <div class="actions" data-for="signals" hidden><button class="btn" data-toast="Exporting is not available in this preview.">Export</button></div>
+          <div class="actions" data-for="litigation" hidden><button class="btn" data-toast="Exporting is not available in this preview.">Export package</button></div>
+          <div class="actions" data-for="negotiation" hidden><button class="btn" data-toast="Logging offers is not available in this preview.">Log an offer</button></div>
+          <div class="actions" data-for="chat" hidden><button class="btn" data-toast="Exporting is not available in this preview.">Export chat</button></div>
+          <div class="actions" data-for="tracker" hidden><button class="btn" data-toast="Opening matters is not available in this preview.">New matter</button></div>
+          <div class="actions" data-for="intake" hidden><button class="btn" data-toast="Adding inquiries is not available in this preview.">Add inquiry</button></div>
+        </div>
+      </div>
       <h1 id="pTitle">Alvarez v. Sunline Freight, LLC</h1>
       <p class="meta-line" id="pSub"></p>
       <dl class="facts" id="facts">
@@ -675,66 +865,40 @@ body,.main{background:var(--canvas)}
         <div><dt>Statute of limitations</dt><dd>Mar 14, 2028<small id="solDays"></small></dd></div>
         <div><dt>Policy limits</dt><dd>$1,000,000 <span class="cite" role="button" tabindex="0" data-cite="ex9p1">Ex. 9, p. 1</span></dd></div>
         <div><dt>Specials to date</dt><dd>$181,360.00</dd></div>
-        <div><dt>Case stage</dt><dd>Demand drafting</dd></div>
+        <div><dt>Case stage</dt><dd class="stage-dd"><span class="steps" data-tip="Intake · Treatment · Demand · Negotiation · Litigation · Resolution" data-tip-always data-tip-pos="below"><i class="done"></i><i class="done"></i><i class="cur"></i><i></i><i></i><i></i></span>Demand, 3 of 6</dd></div>
       </dl>
     </header>
     <div class="tabbar" id="tabbar">
       <div class="tabs" role="tablist" aria-label="Products">
-        <button data-go="chronology" role="tab"><span class="t">Medical Chronology</span><span class="n" data-n="chronology"></span></button>
-        <button data-go="signals" role="tab"><span class="t">Case Insights</span><span class="n" data-n="signals"></span></button>
-        <button data-go="ledger" role="tab"><span class="t">Bills &amp; Ledger</span><span class="n" data-n="ledger"></span></button>
-        <button data-go="demand" role="tab"><span class="t">Demand Draft</span><span class="n" data-n="demand"></span></button>
-      </div>
-      <div class="tab-tools">
-        <label class="csearch"><svg class="ic sm"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Search this case" autocomplete="off"><kbd>⌘K</kbd></label>
-        <div class="actions" data-for="chronology"><button class="btn" data-toast="Uploading records is not available in this preview.">Add records</button><button class="btn" data-toast="Exporting is not available in this preview.">Export</button></div>
-        <div class="actions" data-for="signals" hidden><button class="btn" data-toast="Exporting is not available in this preview.">Export</button></div>
-        <div class="actions" data-for="ledger" hidden><button class="btn" data-toast="Bill requests are not available in this preview.">Request bills</button><button class="btn" data-toast="Exporting is not available in this preview.">Export</button></div>
-        <div class="actions" data-for="demand" hidden><button class="btn" data-toast="Exporting is not available in this preview.">Export</button></div>
+        <button data-go="chronology" role="tab"><span class="t">Medical chronology</span><span class="n" data-n="chronology"></span></button>
+        <button data-go="demand" role="tab"><span class="t">Demand draft</span><span class="n" data-n="demand"></span></button>
+        <button data-go="ledger" role="tab"><span class="t">Lien strategy</span><span class="n" data-n="ledger"></span></button>
+        <span class="tab-sep" aria-hidden="true"></span>
+        <button data-go="signals" role="tab"><span class="t">Case insights</span><span class="n" data-n="signals"></span></button>
+        <button data-go="litigation" role="tab"><span class="t">Litigation package</span><span class="n" data-n="litigation"></span></button>
+        <button data-go="negotiation" role="tab"><span class="t">Negotiation</span><span class="n" data-n="negotiation"></span></button>
+        <button data-go="chat" role="tab"><span class="t">Case chat</span><span class="n" data-n="chat"></span></button>
       </div>
     </div>
 
     <!-- MEDICAL CHRONOLOGY -->
     <section class="view" id="v-chronology" hidden>
-      <div class="box exec">
+      <div class="kpis">
+        <div class="kpi"><label>Verified visits</label><b>47</b><span>With five treating providers and an ambulance transport</span></div>
+        <div class="kpi"><label>Under care</label><b>200 days</b><span>From March 14 to September 30, 2026</span></div>
+        <div class="kpi attn"><label>Longest gap in care</label><b>41 days</b><span>May 2 to June 12, explained by childcare</span></div>
+        <div class="kpi"><label>Surgery</label><b>Recommended</b><span>Day 159, estimated at $98,000</span></div>
+        <div class="kpi"><label>Records reviewed</label><b>312 pages</b><span>27 pages cited in this chronology</span></div>
+      </div>
+      <nav class="jump" aria-label="On this page"><span>On this page</span><button data-jump="s-exec">Summary</button><button data-jump="s-enc">Visits</button><button data-jump="s-time">Timeline</button><button data-jump="s-prov">Providers</button><button data-jump="s-inj">Injuries</button><button data-jump="s-med">Medications</button><button data-jump="s-miss">Missed appointments</button><button data-jump="s-prior">Prior history</button><button data-jump="s-read">Pages to read</button></nav>
+
+      <div class="box exec" id="s-exec">
         <div class="box-h"><h3>Executive summary</h3><span class="note">Written from 312 pages of records. Every statement is cited to its page.</span><div class="acts"><button class="btn quiet" id="execCopy">Copy with citations</button></div></div>
         <dl id="execList"></dl>
       </div>
 
-      <div class="box">
-        <div class="box-h"><h3>Injuries</h3><span class="note">Each diagnosis, when it was first recorded and how it relates to the collision</span></div>
-        <div class="table-wrap scroll"><table class="tbl inj">
-          <thead><tr><th class="w-name">Injury</th><th class="w-date c-first">First recorded</th><th>Clinical picture</th><th class="w-st">Causation</th><th class="w-src">Source</th></tr></thead>
-          <tbody id="injRows"></tbody>
-        </table></div>
-      </div>
-
-      <div class="box">
-        <div class="box-h"><h3>Providers</h3><span class="note">Records and billing status for every treating provider</span></div>
-        <div class="table-wrap scroll"><table class="tbl prv">
-          <thead><tr><th class="w-name">Provider</th><th class="w-range c-hide">Dates of service</th><th>Role in the case</th><th class="w-st">Records and bills</th><th class="w-src">Source</th></tr></thead>
-          <tbody id="prvRows"></tbody>
-        </table></div>
-      </div>
-
-      <div class="box">
-        <div class="box-h"><h3>Treatment timeline</h3><span class="note">Every treating provider from the collision to today, with billed charges and time off work. Select an event to open its record.</span></div>
-        <div class="tl-facts">
-          <div><b>Same day</b><span>First treatment, by ambulance</span></div>
-          <div><b>200 days</b><span>Under care, Mar 14 to Sep 30</span></div>
-          <div><b>47 visits</b><span>With 5 treating providers</span></div>
-          <div class="attn"><b>41 days</b><span>Longest gap in care, explained</span></div>
-          <div><b>Day 159</b><span>Surgery recommended</span></div>
-        </div>
-        <div class="tmap-scroll scroll"><div class="tmap" id="tmap"></div></div>
-        <div class="box-f tmap-legend">
-          <span><i class="lg c"></i>Visit</span><span><i class="lg sq"></i>Imaging</span><span><i class="lg dm"></i>Injection</span><span><i class="lg ol"></i>Diagnostic test</span><span><i class="lg ring"></i>Surgery recommended</span><span><i class="lg span"></i>Course of treatment</span><span><i class="lg band"></i>Off work</span><span><i class="lg gap"></i>Gap over 30 days</span>
-        </div>
-        <div class="box-f tl-prior">Before the collision: a lumbar strain in November 2019 that resolved within two weeks, with no leg symptoms and no imaging. <span class="cite" role="button" tabindex="0" data-cite="ex8p4">Ex. 8, p. 4</span></div>
-      </div>
-
-      <div class="box" style="overflow:visible">
-        <div class="box-h"><h3>Encounters</h3><span class="note">The 10 key encounters from 47 visits. Open a row to see the full record.</span><div class="acts"><button class="btn quiet" id="expandAll">Expand all</button></div></div>
+      <div class="box" id="s-enc" style="overflow:visible">
+        <div class="box-h"><h3>Visits</h3><span class="note" id="encNote">Every verified visit in date order, with its findings and the page it comes from</span><div class="acts"><div class="mseg" id="visSeg" role="group" aria-label="Which visits"><button data-vis="key" class="on">Key visits</button><button data-vis="all">All 47 visits</button></div><button class="btn quiet" id="expandAll">Expand all</button></div></div>
         <div class="box-t">
           <div class="chips" id="chips"></div>
           <div class="tools">
@@ -746,68 +910,67 @@ body,.main{background:var(--canvas)}
         </div>
         <div class="table-wrap scroll">
           <table class="chrono">
-            <thead><tr><th class="w-tg tg"><span class="sr">Details</span></th><th class="w-date">Date</th><th class="w-prov">Provider</th><th>Summary</th><th class="w-met c-met">Pain / function</th><th class="w-src c-src">Source</th></tr></thead>
+            <thead><tr><th class="w-tg tg"><span class="sr">Details</span></th><th class="w-date">Date</th><th class="w-prov">Provider</th><th>Summary</th><th class="w-met c-met">Pain and function</th><th class="w-src c-src">Source</th></tr></thead>
             <tbody id="chronoRows"></tbody>
           </table>
         </div>
       </div>
-    </section>
 
-    <!-- CASE INSIGHTS -->
-    <section class="view" id="v-signals" hidden>
-      <div class="box">
-        <div class="box-h"><h3>Case assessment</h3><span class="note">Scored from the liability, damages and insurance records in the file</span></div>
-        <div class="scores">
-          <div class="score"><label>Liability</label><b>92<small>/ 100</small></b><div class="bar"><i style="width:92%"></i></div><p>The police report places fault on the defendant driver, who admitted looking at his dispatch tablet.</p></div>
-          <div class="score"><label>Damages</label><b>81<small>/ 100</small></b><div class="bar"><i style="width:81%"></i></div><p>An objective MRI finding, a surgical recommendation and a causation opinion from the treating surgeon.</p></div>
-          <div class="score"><label>Collectability</label><b>95<small>/ 100</small></b><div class="bar"><i style="width:95%"></i></div><p>A commercial policy with $1,000,000 in limits, confirmed in writing by the carrier.</p></div>
+      <div class="box" id="s-time">
+        <div class="box-h"><h3>Treatment timeline</h3><span class="note">Every treating provider from the collision to today, with billed charges and time off work. Select an event to open its record.</span></div>
+        <div class="tmap-scroll scroll"><div class="tmap" id="tmap"></div></div>
+        <div class="box-f tmap-legend">
+          <span><i class="lg c"></i>Visit</span><span><i class="lg sq"></i>Imaging</span><span><i class="lg dm"></i>Injection</span><span><i class="lg ol"></i>Diagnostic test</span><span><i class="lg ring"></i>Surgery recommended</span><span><i class="lg span"></i>Course of treatment</span><span><i class="lg band"></i>Off work</span><span><i class="lg gap"></i>Gap over 30 days</span>
         </div>
       </div>
-      <div class="box">
-        <div class="box-h"><h3>Findings</h3><span class="note">Strengths, risks and outstanding items, each cited to the record</span></div>
-        <div class="box-t"><div class="chips" id="sigFilter"></div></div>
-        <div class="table-wrap scroll">
-          <table class="items">
-            <thead><tr><th class="w-type c-type">Type</th><th>Finding</th><th class="w-act">Open in</th><th class="w-src">Source</th></tr></thead>
-            <tbody id="sigRows"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
 
-    <!-- BILLS & LEDGER -->
-    <section class="view" id="v-ledger" hidden>
-      <div class="box">
-        <div class="box-h"><h3>Medical bills</h3><span class="note">Itemized charges from five provider statements. Totals are calculated from the line items, not estimated.</span><div class="acts"><button class="btn quiet" id="ledExpand">Expand all</button></div></div>
-        <div class="table-wrap scroll">
-          <table class="ledger">
-            <thead><tr><th class="w-tg tg"><span class="sr">Line items</span></th><th class="w-date">Date</th><th>Description</th><th class="w-st c-hide">Status</th><th class="w-money r">Billed</th><th class="w-money r c-hide">Paid</th><th class="w-money r c-hide">Adjusted</th><th class="w-money r">Balance</th><th class="w-src c-src">Source</th></tr></thead>
-            <tbody id="ledRows"></tbody>
-            <tfoot id="ledFoot"></tfoot>
-          </table>
-        </div>
-      </div>
-      <div class="box">
-        <div class="box-h"><h3>Special damages</h3><span class="note">Carried into Section V of the demand</span></div>
-        <div class="table-wrap scroll"><table class="tbl">
-          <thead><tr><th class="w-name">Category</th><th>Basis</th><th class="w-money r">Amount</th><th class="w-src">Source</th></tr></thead>
-          <tbody>
-            <tr><td>Past medical expenses</td><td>Itemized statements from five providers for treatment between March 14 and September 30, 2026</td><td class="r">$68,760.00</td><td><span class="cite" role="button" tabindex="0" data-cite="ex10p1">Ex. 10, p. 1</span></td></tr>
-            <tr><td>Future medical expenses</td><td>Left L4-L5 microdiscectomy recommended on August 20, at the treating surgeon’s estimate</td><td class="r">$98,000.00</td><td><span class="cite" role="button" tabindex="0" data-cite="ex4p135">Ex. 4, p. 135</span></td></tr>
-            <tr><td>Lost wages</td><td>16 weeks off work, from March 16 to July 5, 2026, at $912.50 per week</td><td class="r">$14,600.00</td><td><span class="cite" role="button" tabindex="0" data-cite="ex11p1">Ex. 11, p. 1</span></td></tr>
-          </tbody>
-          <tfoot><tr><td>Total special damages</td><td></td><td class="r">$181,360.00</td><td></td></tr></tfoot>
+      <div class="box" id="s-prov">
+        <div class="box-h"><h3>Providers</h3><span class="note">Every treating provider, in order of first visit, with the status of their records and bills</span></div>
+        <div class="table-wrap scroll"><table class="tbl prv">
+          <thead><tr><th class="w-name">Provider</th><th class="w-range c-hide">Dates of service</th><th>Role in the case</th><th class="w-st">Records and bills</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="prvRows"></tbody>
         </table></div>
       </div>
-      <div class="box">
-        <div class="box-h"><h3>Liens</h3><span class="note">To be resolved from any recovery before disbursement</span></div>
+
+      <div class="box" id="s-inj">
+        <div class="box-h"><h3>Injuries</h3><span class="note">Each diagnosis, when it was first recorded and how it relates to the collision</span></div>
+        <div class="table-wrap scroll"><table class="tbl inj">
+          <thead><tr><th class="w-name">Injury</th><th class="w-date c-first">First recorded</th><th>Clinical picture</th><th class="w-st">Causation</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="injRows"></tbody>
+        </table></div>
+      </div>
+
+      <div class="box" id="s-med">
+        <div class="box-h"><h3>Medications</h3><span class="note">Every medication prescribed or given since the collision, from the treatment notes and the pharmacy's dispensing history</span></div>
+        <div class="tmap-scroll scroll"><div class="tmap mmap" id="mmap"></div></div>
         <div class="table-wrap scroll"><table class="tbl">
-          <thead><tr><th class="w-name">Lienholder</th><th>Details</th><th class="w-st c-hide">Status</th><th class="w-money r">Amount</th><th class="w-src">Source</th></tr></thead>
-          <tbody>
-            <tr><td>Sycamore Spine &amp; Orthopedics<span class="sub">Medical lien</span></td><td>Orthopedic treatment provided on a lien dated March 18, 2026. The full balance is payable from any recovery.</td><td class="c-hide"><span class="st watch">Open</span></td><td class="r">$9,050.00</td><td><span class="cite" role="button" tabindex="0" data-cite="ex10p3">Ex. 10, p. 3</span></td></tr>
-            <tr><td>Health plan<span class="sub">Reimbursement claim</span></td><td>The health plan paid toward her treatment and is expected to claim reimbursement. A lien notice has been requested.</td><td class="c-hide"><span class="st attn">Lien notice requested</span></td><td class="r">$20,410.00</td><td><span class="cite plain">Awaiting notice</span></td></tr>
-          </tbody>
-          <tfoot><tr><td>Total liens</td><td></td><td class="c-hide"></td><td class="r">$29,460.00</td><td></td></tr></tfoot>
+          <thead><tr><th class="w-name">Medication</th><th class="w-range c-hide">Dates</th><th>Why it was prescribed</th><th class="w-st">Prescribed by</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="medRows"></tbody>
+        </table></div>
+      </div>
+
+      <div class="box" id="s-miss">
+        <div class="box-h"><h3>Missed appointments</h3><span class="note">Cancellations and no-shows, and whether the record explains them. Defense counsel will look for these.</span></div>
+        <div class="table-wrap scroll"><table class="tbl">
+          <thead><tr><th class="w-range">Dates</th><th class="w-name c-hide">Provider</th><th>What happened</th><th class="w-st">Explained</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="missRows"></tbody>
+        </table></div>
+        <div class="box-f">No missed appointments appear in the records of the other four providers.</div>
+      </div>
+
+      <div class="box" id="s-prior">
+        <div class="box-h"><h3>Prior history</h3><span class="note">Earlier injuries, treatment and claims that touch the same body parts</span></div>
+        <div class="table-wrap scroll"><table class="tbl">
+          <thead><tr><th class="w-range">Dates</th><th class="w-name c-hide">Source of the record</th><th>What it shows</th><th class="w-st">Relevance</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="priorRows"></tbody>
+        </table></div>
+      </div>
+
+      <div class="box" id="s-read">
+        <div class="box-h"><h3>Pages to read directly</h3><span class="note">The pages the case turns on. Read them yourself before you rely on the summary.</span><div class="acts"><span class="note" id="readCount"></span></div></div>
+        <div class="table-wrap scroll"><table class="tbl">
+          <thead><tr><th class="w-name">Page</th><th>Why it matters</th><th class="w-st">Your review</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="readRows"></tbody>
         </table></div>
       </div>
     </section>
@@ -816,7 +979,7 @@ body,.main{background:var(--canvas)}
     <section class="view" id="v-demand" hidden>
       <div class="box dem-box">
         <div class="box-h">
-          <h3>Demand letter</h3><span class="note">Draft v3 · 7 of 9 sections drafted</span>
+          <h3>Demand letter</h3><span class="note" id="demNote">Draft v3</span>
           <div class="acts">
             <div class="menu-wrap"><button class="btn" id="secBtn" aria-expanded="false" aria-haspopup="true" data-tip="Go to a section" data-tip-always data-tip-pos="below"><span class="st dot attn" id="secDot"></span><span id="secLabel">I. Introduction</span><svg class="ic"><use href="#i-down"/></svg></button><div class="pop" id="secPop" hidden role="menu" style="left:auto;right:0"></div></div>
             <div class="mseg" id="paneSeg" hidden><button data-pane="paneEdit" class="on">Your draft</button><button data-pane="paneOrig">Original</button></div>
@@ -824,6 +987,7 @@ body,.main{background:var(--canvas)}
             <button class="btn" id="srcBtn" aria-pressed="false" data-tip="Open the cited page for each citation" data-key="]" data-tip-always data-tip-pos="below">Check citations</button>
           </div>
         </div>
+        <div class="box-t segrow"><div class="segbar" id="segbar" role="group" aria-label="Sections"></div><span class="seglegend" id="segLegend"></span></div>
         <div class="dem-panes solo" id="demPanes">
           <section class="pane orig" id="paneOrig" aria-label="Original generated draft">
             <header class="pane-h"><b>Original</b><span class="sub">Generated draft v3 · Read-only</span><span class="spacer"></span><button class="tgl" id="syncBtn" aria-pressed="true" data-tip="Keep both drafts at the same paragraph" data-tip-always data-tip-pos="below">Linked scrolling<i></i></button></header>
@@ -859,6 +1023,206 @@ body,.main{background:var(--canvas)}
       </div>
     </section>
 
+    <!-- LIEN STRATEGY -->
+    <section class="view" id="v-ledger" hidden>
+      <div class="kpis" id="lienKpis"></div>
+      <nav class="jump" aria-label="On this page"><span>On this page</span><button data-jump="s-arith">Settlement arithmetic</button><button data-jump="s-liens">Liens</button><button data-jump="s-disp">Lines to dispute</button><button data-jump="s-screen">Lien screening</button><button data-jump="s-bills">Medical bills</button><button data-jump="s-spec">Special damages</button></nav>
+
+      <div class="box" id="s-arith">
+        <div class="box-h"><h3>Settlement arithmetic</h3><span class="note">What Ms. Alvarez would receive at a given settlement, after fees, costs, liens and unpaid bills</span></div>
+        <div class="box-t">
+          <div class="ctl"><span class="ctl-l">Gross settlement</span><div class="mseg" id="grossSeg" role="group" aria-label="Gross settlement"></div></div>
+          <div class="ctl"><span class="ctl-l">Attorney's fee</span><div class="mseg" id="feeSeg" role="group" aria-label="Attorney's fee"><button data-fee="0.3333333333" class="on">33⅓%, before filing</button><button data-fee="0.4">40%, after filing</button></div></div>
+        </div>
+        <div class="wf" id="wf"></div>
+        <div class="table-wrap scroll"><table class="tbl">
+          <thead><tr><th class="w-name">Item</th><th>Basis</th><th class="w-money r">Amount</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="arithRows"></tbody>
+          <tfoot id="arithFoot"></tfoot>
+        </table></div>
+      </div>
+
+      <div class="box" id="s-liens">
+        <div class="box-h"><h3>Liens</h3><span class="note">Each lien with its holder, its type and what decides how much of it must be repaid</span></div>
+        <div class="table-wrap scroll"><table class="tbl lien">
+          <thead><tr><th class="w-name">Lienholder</th><th>Priority and notes</th><th class="w-st c-hide">Status</th><th class="w-money r c-hide">Claimed</th><th class="w-money r">Proposed</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="lienRows"></tbody>
+          <tfoot id="lienFoot"></tfoot>
+        </table></div>
+      </div>
+
+      <div class="box" id="s-disp">
+        <div class="box-h"><h3>Lines to dispute</h3><span class="note">Charges and claims that should come off or be reduced before anything is paid</span></div>
+        <div class="table-wrap scroll"><table class="tbl">
+          <thead><tr><th class="w-name">Line</th><th>Why it should change</th><th class="w-st c-hide">Next step</th><th class="w-money r">Amount</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="dispRows"></tbody>
+        </table></div>
+      </div>
+
+      <div class="box" id="s-screen">
+        <div class="box-h"><h3>Lien screening</h3><span class="note">Every kind of lien that can attach to a personal injury recovery, and what the file shows for each</span></div>
+        <div class="table-wrap scroll"><table class="tbl">
+          <thead><tr><th class="w-name">Type</th><th>What was checked</th><th class="w-st">Result</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="screenRows"></tbody>
+        </table></div>
+      </div>
+
+      <div class="box" id="s-bills">
+        <div class="box-h"><h3>Medical bills</h3><span class="note">Itemized charges from five provider statements. Totals are calculated from the line items, not estimated.</span><div class="acts"><button class="btn quiet" id="ledExpand">Expand all</button></div></div>
+        <div class="table-wrap scroll">
+          <table class="ledger">
+            <thead><tr><th class="w-tg tg"><span class="sr">Line items</span></th><th class="w-date">Date</th><th>Description</th><th class="w-st c-hide">Status</th><th class="w-money r">Billed</th><th class="w-money r c-hide">Paid</th><th class="w-money r c-hide">Adjusted</th><th class="w-money r">Balance</th><th class="w-src c-src">Source</th></tr></thead>
+            <tbody id="ledRows"></tbody>
+            <tfoot id="ledFoot"></tfoot>
+          </table>
+        </div>
+      </div>
+
+      <div class="box" id="s-spec">
+        <div class="box-h"><h3>Special damages</h3><span class="note">Carried into Section VIII of the demand</span></div>
+        <div class="table-wrap scroll"><table class="tbl">
+          <thead><tr><th class="w-name">Category</th><th>Basis</th><th class="w-money r">Amount</th><th class="w-src">Source</th></tr></thead>
+          <tbody>
+            <tr><td>Past medical expenses</td><td>Itemized statements from five providers for treatment between March 14 and September 30, 2026</td><td class="r">$68,760.00</td><td><span class="cite" role="button" tabindex="0" data-cite="ex10p1">Ex. 10, p. 1</span></td></tr>
+            <tr><td>Future medical expenses</td><td>Left L4-L5 microdiscectomy recommended on August 20, at the treating surgeon’s estimate</td><td class="r">$98,000.00</td><td><span class="cite" role="button" tabindex="0" data-cite="ex4p135">Ex. 4, p. 135</span></td></tr>
+            <tr><td>Lost wages</td><td>16 weeks off work, from March 16 to July 5, 2026, at $912.50 per week</td><td class="r">$14,600.00</td><td><span class="cite" role="button" tabindex="0" data-cite="ex11p1">Ex. 11, p. 1</span></td></tr>
+          </tbody>
+          <tfoot><tr><td>Total special damages</td><td></td><td class="r">$181,360.00</td><td></td></tr></tfoot>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- CASE INSIGHTS -->
+    <section class="view" id="v-signals" hidden>
+      <div class="box">
+        <div class="box-h"><h3>Case assessment</h3><span class="note">Scored from the liability, damages and insurance records in the file</span></div>
+        <div class="scores">
+          <div class="score"><label>Liability</label><b>92<small>/ 100</small></b><div class="bar"><i style="width:92%"></i></div><p>The police report places fault on the defendant driver, who admitted looking at his dispatch tablet.</p></div>
+          <div class="score"><label>Damages</label><b>81<small>/ 100</small></b><div class="bar"><i style="width:81%"></i></div><p>An objective MRI finding, a surgical recommendation and a causation opinion from the treating surgeon.</p></div>
+          <div class="score"><label>Collectability</label><b>95<small>/ 100</small></b><div class="bar"><i style="width:95%"></i></div><p>A commercial policy with $1,000,000 in limits, confirmed in writing by the carrier.</p></div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="box-h"><h3>Findings</h3><span class="note">Strengths, risks and outstanding items, each cited to the record</span></div>
+        <div class="box-t"><div class="chips" id="sigFilter"></div></div>
+        <div class="table-wrap scroll">
+          <table class="items">
+            <thead><tr><th class="w-type c-type">Type</th><th>Finding</th><th class="w-act">Open in</th><th class="w-src">Source</th></tr></thead>
+            <tbody id="sigRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- LITIGATION PACKAGE -->
+    <section class="view" id="v-litigation" hidden>
+      <div class="kpis" id="litKpis"></div>
+      <div class="box">
+        <div class="box-h"><h3>Package contents</h3><span class="note">Everything litigation counsel needs if the claim does not settle, assembled from the same verified record</span></div>
+        <div class="table-wrap scroll"><table class="tbl">
+          <thead><tr><th class="w-name">Item</th><th>What it contains</th><th class="w-st">Status</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="pkgRows"></tbody>
+        </table></div>
+      </div>
+      <div class="box">
+        <div class="box-h"><h3>Witnesses</h3><span class="note">Who can testify to liability, injuries and damages, and what each one can say</span></div>
+        <div class="table-wrap scroll"><table class="tbl">
+          <thead><tr><th class="w-name">Witness</th><th>What they can say</th><th class="w-st">Role at trial</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="witRows"></tbody>
+        </table></div>
+      </div>
+      <div class="box">
+        <div class="box-h"><h3>Key dates</h3><span class="note">Deadlines that decide when the case must be filed</span></div>
+        <div class="table-wrap scroll"><table class="tbl">
+          <thead><tr><th class="w-date">Date</th><th>What happens</th><th class="w-st">Status</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="dateRows"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- NEGOTIATION -->
+    <section class="view" id="v-negotiation" hidden>
+      <div class="kpis">
+        <div class="kpi"><label>Specials to date</label><b>$181,360</b><span>Past and future medical expenses and lost wages</span></div>
+        <div class="kpi"><label>Policy limits</label><b>$1,000,000</b><span>Confirmed in writing by Westbridge on July 22</span></div>
+        <div class="kpi"><label>Working range</label><b>$450k – $700k</b><span>Set by Daniel Reyes on October 14</span></div>
+        <div class="kpi attn"><label>Response due</label><b>Nov 20, 2026</b><span>If the demand goes out by email on October 21</span></div>
+      </div>
+      <div class="box">
+        <div class="box-h"><h3>Valuation</h3><span class="note">Where the specials, the working range and the policy limits sit against each other</span></div>
+        <div class="val" id="val"></div>
+        <div class="drivers">
+          <div><h5>What raises the value</h5><ul id="upList"></ul></div>
+          <div><h5>What lowers the value</h5><ul id="downList"></ul></div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="box-h"><h3>Time-limited demand requirements</h3><span class="note">A policy-limits demand in California must meet Code of Civil Procedure sections 999 to 999.5. Each requirement is checked against the draft.</span></div>
+        <div class="table-wrap scroll"><table class="tbl">
+          <thead><tr><th class="w-name">Requirement</th><th>How the draft meets it</th><th class="w-st">Status</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="tldRows"></tbody>
+        </table></div>
+      </div>
+      <div class="box">
+        <div class="box-h"><h3>Negotiation log</h3><span class="note">Demands, offers and deadlines, in date order</span></div>
+        <div class="table-wrap scroll"><table class="tbl">
+          <thead><tr><th class="w-date">Date</th><th>Event</th><th class="w-money r">Amount</th><th class="w-st">Status</th><th class="w-src">Source</th></tr></thead>
+          <tbody id="logRows"></tbody>
+        </table></div>
+        <div class="box-f">Offers and counteroffers are logged here as they arrive, with the letter they came in.</div>
+      </div>
+    </section>
+
+    <!-- CASE CHAT -->
+    <section class="view" id="v-chat" hidden>
+      <div class="box chat-box">
+        <div class="box-h"><h3>Case chat</h3><span class="note">Answers come only from the verified case record, with a citation for every statement</span></div>
+        <div class="thread scroll" id="thread"></div>
+        <div class="composer">
+          <div class="sugs" id="sugs"></div>
+          <form class="ask" id="askForm"><textarea id="askQ" rows="1" placeholder="Ask about this case" aria-label="Ask about this case"></textarea><button class="btn primary" type="submit">Ask</button></form>
+        </div>
+      </div>
+    </section>
+
+    <!-- CASE TRACKER (workspace) -->
+    <section class="view" id="v-tracker" hidden>
+      <div class="kpis">
+        <div class="kpi"><label>Active cases</label><b>42</b><span>Across three attorneys and two case managers</span></div>
+        <div class="kpi attn"><label>Statutes within six months</label><b>2</b><span>Patel on Dec 2, 2026 and Brennan on Jan 9, 2027</span></div>
+        <div class="kpi"><label>Demands out</label><b>3</b><span>Responses due by November 20</span></div>
+        <div class="kpi"><label>Mediations scheduled</label><b>1</b><span>Patel v. Riverside Grocers on November 6</span></div>
+      </div>
+      <div class="box">
+        <div class="box-h"><h3>Cases by stage</h3><span class="note">How the 42 open matters are spread across the life of a case</span></div>
+        <div class="pipe" id="pipe"></div>
+      </div>
+      <div class="box">
+        <div class="box-h"><h3>Caseload</h3><span class="note">Each matter with its stage, its next step and its statute of limitations</span></div>
+        <div class="table-wrap scroll"><table class="tbl trk">
+          <thead><tr><th class="w-name">Case</th><th class="w-st">Stage</th><th>Next step</th><th class="w-date">Statute</th><th class="w-money r c-hide">Specials</th><th class="w-src">Owner</th></tr></thead>
+          <tbody id="trkRows"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- INTAKE TRIAGE (workspace) -->
+    <section class="view" id="v-intake" hidden>
+      <div class="kpis">
+        <div class="kpi"><label>New inquiries</label><b>5</b><span>Received October 9 to 13</span></div>
+        <div class="kpi"><label>Recommend accepting</label><b>2</b><span>Clear liability, treated injuries and insurance in place</span></div>
+        <div class="kpi attn"><label>Need more information</label><b>2</b><span>Evidence to secure before it is lost</span></div>
+        <div class="kpi"><label>Recommend declining</label><b>1</b><span>Damages likely below the firm’s minimum</span></div>
+      </div>
+      <div class="box">
+        <div class="box-h"><h3>Inquiries</h3><span class="note">Each new inquiry scored on liability, injuries and insurance, with the reason for the recommendation</span></div>
+        <div class="table-wrap scroll"><table class="tbl itk">
+          <thead><tr><th class="w-name">Inquiry</th><th>What happened and why</th><th class="w-met">Assessment</th><th class="w-st">Recommendation</th></tr></thead>
+          <tbody id="itkRows"></tbody>
+        </table></div>
+      </div>
+    </section>
+
     <!-- REVIEW QUEUE -->
     <section class="view" id="v-review" hidden>
       <div class="box">
@@ -878,7 +1242,7 @@ body,.main{background:var(--canvas)}
             <tbody>
               <tr><td class="num">Oct 14, 2026</td><td>Chronology updated with 12 new pages from Northgate Pain Institute</td><td>CaseEdge</td></tr>
               <tr><td class="num">Oct 14, 2026</td><td>Ambulance records marked as outstanding in the chronology</td><td>CaseEdge</td></tr>
-              <tr><td class="num">Oct 14, 2026</td><td>Cervical MRI bill marked as outstanding in Bills &amp; Ledger</td><td>CaseEdge</td></tr>
+              <tr><td class="num">Oct 14, 2026</td><td>Cervical MRI bill marked as outstanding in Lien strategy</td><td>CaseEdge</td></tr>
               <tr><td class="num">Oct 13, 2026</td><td>Section III of the demand, Liability, approved</td><td>Priya Shah</td></tr>
               <tr><td class="num">Oct 12, 2026</td><td>Halden Physical Therapy payments reconciled against the explanations of benefits</td><td>Marco Vela</td></tr>
             </tbody>
@@ -913,11 +1277,16 @@ body,.main{background:var(--canvas)}
     <div class="keys">
       <span>Search this case</span><span><kbd>⌘</kbd><kbd>K</kbd></span>
       <span>Collapse or expand the sidebar</span><span><kbd>⌘</kbd><kbd>\</kbd></span>
-      <span>Medical Chronology</span><span><kbd>G</kbd><kbd>C</kbd></span>
-      <span>Case Insights</span><span><kbd>G</kbd><kbd>I</kbd></span>
-      <span>Bills &amp; Ledger</span><span><kbd>G</kbd><kbd>L</kbd></span>
-      <span>Demand Draft</span><span><kbd>G</kbd><kbd>D</kbd></span>
+      <span>Medical chronology</span><span><kbd>G</kbd><kbd>C</kbd></span>
+      <span>Demand draft</span><span><kbd>G</kbd><kbd>D</kbd></span>
+      <span>Lien strategy</span><span><kbd>G</kbd><kbd>L</kbd></span>
+      <span>Case insights</span><span><kbd>G</kbd><kbd>I</kbd></span>
+      <span>Litigation package</span><span><kbd>G</kbd><kbd>P</kbd></span>
+      <span>Negotiation</span><span><kbd>G</kbd><kbd>O</kbd></span>
+      <span>Case chat</span><span><kbd>G</kbd><kbd>A</kbd></span>
       <span>Review queue</span><span><kbd>G</kbd><kbd>R</kbd></span>
+      <span>Case tracker</span><span><kbd>G</kbd><kbd>T</kbd></span>
+      <span>Intake triage</span><span><kbd>G</kbd><kbd>N</kbd></span>
       <span>Previous or next citation</span><span><kbd>[</kbd><kbd>]</kbd></span>
       <span>Close the source document</span><span><kbd>Esc</kbd></span>
       <span>Show keyboard shortcuts</span><span><kbd>?</kbd></span>
@@ -940,7 +1309,8 @@ const fmtLong=s=>day(s).toLocaleDateString('en-US',{month:'short',day:'numeric',
 const chip=k=>PDF.keys[k]?`<span class="cite" role="button" tabindex="0" contenteditable="false" data-cite="${k}">${PDF.keys[k].label}</span>`:'';
 const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const fmtD=s=>{const r=s.split('-').map(x=>x.split('/').map(Number)),y=r[0][2]?2000+r[0][2]:2026,f=a=>`${MON[a[0]-1]} ${a[1]}`;return r.length>1?`${f(r[0])} – ${f(r[1])}, ${y}`:`${f(r[0])}, ${y}`};
-const PRODUCT={chronology:'Medical Chronology',signals:'Case Insights',ledger:'Bills & Ledger',demand:'Demand Draft'};
+const PRODUCT={chronology:'Medical chronology',demand:'Demand draft',ledger:'Lien strategy',signals:'Case insights',litigation:'Litigation package',negotiation:'Negotiation',chat:'Case chat',review:'Review queue',tracker:'Case tracker',intake:'Intake triage'};
+const WS=['review','tracker','intake'];
 const solDays=Math.ceil((day('2028-03-14')-new Date())/864e5);
 const main=$('#main');
 
@@ -1050,12 +1420,11 @@ const INJ=[
 const REL={acc:['','Related to the collision'],unc:['attn','Possibly degenerative'],pre:['open','Pre-existing, resolved']};
 const PRV=[
  ['Arlington Valley Medical Center','Emergency','Mar 14, 2026','1','Emergency care on the day of the collision. She arrived by ambulance and was discharged the same day.',[['','Records received'],['','Bills received']],'ex10p1'],
- ['Sycamore Spine & Orthopedics','Orthopedics','Mar 18 – Aug 20, 2026','6','Her treating orthopedic surgeon. Ordered imaging and therapy, and recommended surgery on August 20.',[['','Records received'],['watch','Bills under lien']],'ex10p3'],
- ['Canyon Ridge Imaging','Imaging','Apr 2, 2026','2','Lumbar and cervical MRI on April 2. Only the lumbar study has been billed so far.',[['','Records received'],['attn','1 of 2 bills received',1]],'ex10p2'],
+ ['Ambulance transport','Emergency medical services','Mar 14, 2026','—','Transport from the scene to the emergency department, recorded in the ED note. The provider has not yet been identified.',[['attn','Records outstanding',1],['attn','Bills outstanding',1]],'ex2p14m'],
+ ['Sycamore Spine & Orthopedics','Orthopedics','Mar 18 – Aug 20, 2026','6','Her treating orthopedic surgeon. Ordered imaging and therapy, prescribed gabapentin and recommended surgery on August 20.',[['','Records received'],['watch','Bills under lien']],'ex10p3'],
  ['Halden Physical Therapy','Physical therapy','Mar 24 – Sep 30, 2026','36','Physical therapy from March 24, paused for 41 days for childcare, and discharged on September 30 after 36 visits.',[['','Records received'],['','Bills received']],'ex10p4'],
- ['Northgate Pain Institute','Pain management','Apr 21 – Jul 9, 2026','2','Two lumbar epidural steroid injections, on April 21 and July 9, each with only temporary relief.',[['','Records received'],['','Bills received']],'ex10p5'],
- ['Ambulance transport','Emergency medical services','Mar 14, 2026','—','Transport to the emergency department, recorded in the ED note. The provider has not yet been identified.',[['attn','Records outstanding',1],['attn','Bills outstanding',1]],'ex2p14m'],
- ['Valley Crossroads Urgent Care','Urgent care, before the collision','Nov 18 – Dec 2, 2019','2','Urgent care for a 2019 lumbar strain at work, which resolved within two weeks.',[['','Records received'],['open','Bills not required']],'ex8p4']
+ ['Canyon Ridge Imaging','Imaging','Apr 2, 2026','2','Lumbar and cervical MRI on April 2. Only the lumbar study has been billed so far.',[['','Records received'],['attn','1 of 2 bills received',1]],'ex10p2'],
+ ['Northgate Pain Institute','Pain management','Apr 21 – Jul 9, 2026','2','Two lumbar epidural steroid injections, on April 21 and July 9, each with only temporary relief.',[['','Records received'],['','Bills received']],'ex10p5']
 ];
 const SIGNALS=[
  {k:'strength',cat:'Liability',title:'Police report places fault on the defendant driver',detail:'The investigating officer named following too closely, Vehicle Code §21703, as the primary collision factor. The Sunline driver admitted he was looking at his dispatch tablet and did not see traffic stop.',key:'ex1p3'},
@@ -1078,26 +1447,26 @@ const LEDGER=[
  {prov:'Northgate Pain Institute',type:'Pain management',dos:'Apr 21 – Jul 9, 2026',visits:2,key:'ex10p5',status:['','Verified']}
 ];
 const REVIEW=[
- {type:'Approval',title:'Approve the explanation for the treatment gap',why:'Draft v3 adds a sentence to Section IV explaining the 41-day gap. It relies on the May 2 therapy note, which records that she had no childcare for her two children.',key:'ex5p61',go:'demand'},
+ {type:'Approval',title:'Approve the explanation for the treatment gap',why:'Draft v3 adds a sentence to Section V explaining the 41-day gap. It relies on the May 2 therapy note, which records that she had no childcare for her two children.',key:'ex5p61',go:'demand'},
  {type:'Records request',title:'Request the ambulance records and bill',why:'The emergency department note confirms she arrived by ambulance, but there is no EMS run report or bill in the file. Both are needed to complete the chronology and the specials.',key:'ex2p14m',go:'chronology'},
  {type:'Missing bill',title:'Obtain the cervical MRI bill',why:'Canyon Ridge Imaging performed two MRI studies on April 2 but billed only the lumbar study. The cervical bill was requested on September 28 and has not arrived.',key:'ex10p2',go:'ledger'},
  {type:'Confirmation',title:'Confirm the 2019 strain is unrelated',why:'The 2019 lumbar strain resolved by December 2, 2019. Confirm with Ms. Alvarez that she had no back treatment between then and the collision.',key:'ex8p4',go:'signals'},
  {type:'Verification',title:'Verify the handwritten relief duration',why:'The relief duration after the second injection, “less than two weeks,” is handwritten on Ex. 6, p. 29 and is partly illegible. Confirm it before the chronology or the demand relies on it.',key:'ex6p27',go:'chronology',row:7}
 ];
-const SECTIONS=[['I','Introduction','final'],['II','Facts of loss','final'],['III','Liability','final'],['IV','Injuries and treatment','review'],['V','Medical specials','draft'],['VI','Future medical care','draft'],['VII','Wage loss','draft'],['VIII','General damages','todo'],['IX','Demand and time limit','todo']];
+const SECTIONS=[['I','Introduction','final'],['II','Facts of loss','final'],['III','Liability','final'],['IV','Treating providers','draft'],['V','Injuries, diagnoses and procedures','review'],['VI','Causation','draft'],['VII','Future medical care','draft'],['VIII','Medical specials','draft'],['IX','Wage loss','draft'],['X','Damages and daily life','todo'],['XI','Demand and time limit','todo']];
+const SINJ=4;
 const SECST={final:['','Approved'],review:['attn','Needs review'],draft:['watch','Drafted'],todo:['open','Not started']};
 const CASES=[['AS','Alvarez v. Sunline Freight',`Demand · SOL in ${solDays} days`,1,1],['OM','Okonkwo v. Metro Transit','Treatment · SOL in 16 months'],['BH','Brennan v. Harlow Markets','Negotiation · Offer pending'],['WC','Whitaker v. Coastal Rideshare','Treatment · Records requested'],['NA','Nguyen v. Ardent Logistics','Demand · Sent Oct 2'],['PR','Patel v. Riverside Grocers','Negotiation · Mediation Nov 6'],['MP','Moreau v. Pinecrest HOA','Intake · Retained Oct 9'],['TD','Tran v. Delgado','Intake · Retained Oct 11']];
 const PAGES={
- chronology:['Medical Chronology'],
- signals:['Case Insights'],
- ledger:['Bills & Ledger'],
- demand:['Demand Draft'],
- review:['Review queue','Items CaseEdge could not verify from the records alone. Each one needs a decision from your team before it is relied on.']
+ chronology:['Medical chronology'],demand:['Demand draft'],ledger:['Lien strategy'],signals:['Case insights'],litigation:['Litigation package'],negotiation:['Negotiation'],chat:['Case chat'],
+ review:['Review queue','Items CaseEdge could not verify from the records alone. Each one needs a decision from your team before it is relied on.'],
+ tracker:['Case tracker','Every open matter with its stage, its next step and its statute of limitations.'],
+ intake:['Intake triage','New inquiries scored on liability, injuries and insurance, with a recommendation for each.']
 };
 const SORTS=[['date-asc','Date, oldest first'],['date-desc','Date, newest first'],['provider','Provider, A to Z'],['type','Visit type']];
 
 const VIEWS=Object.keys(PAGES);
-const state={type:'all',open:new Set(),kind:'all',q:'',ledOpen:new Set(),focus:null,view:null,sort:'date-asc',group:false,flag:false,pain:true};
+const state={all:false,type:'all',open:new Set(),kind:'all',q:'',ledOpen:new Set(),focus:null,view:null,sort:'date-asc',group:false,flag:false,pain:true};
 
 /* ---------- Toast ---------- */
 let toastT;
@@ -1145,7 +1514,7 @@ function caseList(){
   $('#caseList').innerHTML=CASES.filter(c=>c[1].toLowerCase().includes(q)).map(c=>`<button class="nav-item case-row${c[3]?' cur':''}${c[4]?' has-attn':''}" ${c[3]?'data-opencase':'data-matter'} data-tip="${esc(c[1])} · ${c[2]}"><span class="case-av">${c[0]}</span><span class="case-txt"><b>${esc(c[1])}</b><small>${esc(c[2])}</small></span></button>`).join('')||'<div class="side-empty">No cases match your search.</div>';
   markCase();
 }
-function markCase(){$$('.case-row.cur').forEach(b=>b.classList.toggle('on',state.view!=='review'))}
+function markCase(){$$('.case-row.cur').forEach(b=>b.classList.toggle('on',!WS.includes(state.view)))}
 $('#cq').addEventListener('input',caseList);
 $('#cq').addEventListener('focus',()=>{if(isRail()) setRail(false)});
 
@@ -1155,16 +1524,18 @@ function go(v,opts={}){
   const changed=state.view!==v;state.view=v;
   $$('.view').forEach(s=>s.hidden=s.id!=='v-'+v);
   $$('.sidebar [data-go], .tabs [data-go]').forEach(b=>{const on=b.dataset.go===v;b.classList.toggle('on',on);on?b.setAttribute(b.closest('.tabs')?'aria-selected':'aria-current',b.closest('.tabs')?'true':'page'):(b.removeAttribute('aria-current'),b.removeAttribute('aria-selected'))});
-  const ws=v==='review';if(!ws) state.lastProd=v;
-  $('#tabbar').hidden=ws;$('#facts').hidden=ws;$('.crumbs .tag').hidden=ws;
-  $('#crumbA').textContent=ws?'Workspace':'Cases';$('#crumbB').textContent=ws?'Review queue':'Alvarez v. Sunline Freight, LLC';
-  $('#pTitle').textContent=ws?'Review queue':'Alvarez v. Sunline Freight, LLC';$('#pSub').textContent=ws?PAGES.review[1]:CASE_SUB;
-  $$('.tab-tools .actions').forEach(a=>a.hidden=a.dataset.for!==v);
+  const ws=WS.includes(v);if(!ws) state.lastProd=v;
+  $('#tabbar').hidden=ws;$('#facts').hidden=ws;$('.crumbs .tag').hidden=ws;$('#csearch').hidden=ws;
+  $('#crumbA').textContent=ws?'Firm':'Cases';$('#crumbB').textContent=ws?PAGES[v][0]:'Alvarez v. Sunline Freight, LLC';
+  $('#pTitle').textContent=ws?PAGES[v][0]:'Alvarez v. Sunline Freight, LLC';$('#pSub').textContent=ws?PAGES[v][1]:CASE_SUB;
+  $$('.head-tools .actions').forEach(a=>a.hidden=a.dataset.for!==v);
   markCase();
   try{localStorage.setItem('ce-view',v)}catch(e){}
   closeMenu();
   if(changed&&!opts.keepScroll) main.scrollTo({top:0});
-  if(v==='chronology') requestAnimationFrame(renderMap);
+  if(v==='chronology') requestAnimationFrame(()=>{renderMap();renderMeds()});
+  if(v==='negotiation') requestAnimationFrame(renderVal);
+  if(v==='chat') requestAnimationFrame(chat);
   if(v==='demand') enterDemand();
   focusMode();markChips();updateStep();
 }
@@ -1236,11 +1607,13 @@ function renderMap(){
   box.style.height=H+'px';box.innerHTML=h;
 }
 new ResizeObserver(()=>{if(state.view==='chronology') renderMap()}).observe($('#tmap'));
+new ResizeObserver(()=>{if(state.view==='chronology') renderMeds()}).observe($('#s-med'));
+new ResizeObserver(()=>{if(state.view==='negotiation') renderVal()}).observe($('#v-negotiation'));
 
 /* ---------- Medical Chronology: table ---------- */
 function chips(){
-  const counts={};CHRONO.forEach(c=>counts[c.t]=(counts[c.t]||0)+1);
-  $('#chips').innerHTML=`<button class="${state.type==='all'?'on':''}" data-type="all">All<span class="n">${CHRONO.length}</span></button>`+
+  const base=state.all?[...CHRONO,...ALLV]:CHRONO,counts={};base.forEach(c=>counts[c.t]=(counts[c.t]||0)+1);
+  $('#chips').innerHTML=`<button class="${state.type==='all'?'on':''}" data-type="all">All<span class="n">${base.length}</span></button>`+
     Object.entries(TYPES).map(([k,v])=>`<button class="${state.type===k?'on':''}" data-type="${k}">${v}<span class="n">${counts[k]||0}</span></button>`).join('');
 }
 const matches=c=>(state.type==='all'||c.t===state.type)&&(!state.flag||c.flag||c.review)&&(!state.q||[c.prov,c.sum,c.dx.join(' '),TYPES[c.t],c.d,c.clin||'',c.findings||''].join(' ').toLowerCase().includes(state.q));
@@ -1254,7 +1627,8 @@ function detail(c,i){
     <div class="enc-act"><button class="btn" data-adddem="${i}">Add to demand</button><button class="btn quiet" data-copy="${i}">Copy with citation</button></div>
   </div>`;
 }
-function rowHTML(c,i){
+function rowHTML(c,i,syn){
+  if(syn) return `<tr class="vrow"><td class="tg"></td><td class="c-date">${fmtLong(c.d)}</td><td>${esc(c.prov)}<span class="sub">${TYPES[c.t]}</span></td><td class="c-sum">${esc(c.sum)}<span class="sub">${esc(c.v)}</span><span class="in-src"> ${chip(c.key)}</span></td><td class="c-met dim">—</td><td class="c-src">${chip(c.key)}</td></tr>`;
   const open=state.open.has(i);
   let h=`<tr class="row${open?' open':''}" data-r="${i}">
     <td class="tg"><button class="plus" aria-expanded="${open}" aria-label="${open?'Hide':'Show'} the entry for ${fmtLong(c.d)}"><svg class="ic"><use href="#i-plus"/></svg></button></td>
@@ -1267,7 +1641,9 @@ function rowHTML(c,i){
   return h;
 }
 function rows(){
-  let list=CHRONO.map((c,i)=>({c,i})).filter(x=>matches(x.c));
+  let list=CHRONO.map((c,i)=>({c,i}));
+  if(state.all) list=list.concat(ALLV.map((c,j)=>({c,i:1000+j,syn:1})));
+  list=list.filter(x=>matches(x.c));
   const byDate=(a,b)=>a.c.d.localeCompare(b.c.d)||a.i-b.i;
   if(state.sort==='date-desc') list.sort((a,b)=>-byDate(a,b));
   else if(state.sort==='provider') list.sort((a,b)=>a.c.prov.localeCompare(b.c.prov)||byDate(a,b));
@@ -1279,11 +1655,13 @@ function rows(){
     const groups=[];list.forEach(x=>{let g=groups.find(g=>g.p===x.c.prov);if(!g){g={p:x.c.prov,items:[]};groups.push(g)}g.items.push(x)});
     groups.forEach(g=>{const L=LEDGER.find(l=>l.prov===g.p),b=L&&PDF.bills[L.key];
       h+=`<tr class="grp"><td colspan="6"><b>${esc(g.p)}</b>${L?`<span class="g-meta">${L.type} · ${L.visits} visit${L.visits>1?'s':''} · ${L.dos} · ${money(b.total)} billed</span>${chip(L.key)}`:''}</td></tr>`;
-      g.items.forEach(x=>h+=rowHTML(x.c,x.i));
+      g.items.forEach(x=>h+=rowHTML(x.c,x.i,x.syn));
     });
-  }else list.forEach(x=>{h+=rowHTML(x.c,x.i);if(showGap&&x.i===GAP.after) h+=`<tr class="gap-row"><td colspan="6">A 41-day gap in treatment, from May 2 to June 12, 2026. The reason is recorded in the therapy note ${chip('ex5p61')}</td></tr>`});
+  }else{let prev=null;list.forEach(x=>{if(showGap&&prev&&prev.c.d<=GAP.from&&x.c.d>=GAP.to) h+=`<tr class="gap-row"><td colspan="6">A 41-day gap in treatment, from May 2 to June 12, 2026. The reason is recorded in the therapy note ${chip('ex5p61')} and the attendance log ${chip('ex5p62')}</td></tr>`;h+=rowHTML(x.c,x.i,x.syn);prev=x})}
   $('#chronoRows').innerHTML=list.length?h:`<tr class="empty"><td colspan="6">No encounters match these filters.</td></tr>`;
   $('#expandAll').textContent=state.open.size>=CHRONO.length?'Collapse all':'Expand all';
+  $('#encNote').textContent=state.all?'Every verified visit in date order. The 10 key visits open to the full record.':'The 10 key visits from 47 verified visits, in date order. Open a row to see the full record.';
+  $$('#visSeg button').forEach(b=>b.classList.toggle('on',(b.dataset.vis==='all')===state.all));
   $('#sortLabel').textContent=SORTS.find(s=>s[0]===state.sort)[1];
   markChips();
 }
@@ -1367,7 +1745,282 @@ function counts(){
   });
 }
 function dropReview(key){const i=REVIEW.findIndex(r=>r.key===key);if(i>=0){REVIEW.splice(i,1);review()}}
-function renderAll(){rows();signals();ledger()}
+function renderAll(){rows();signals();ledger();liens();lienExtras()}
+
+/* ---------- Shared pieces ---------- */
+const ST=(cls,label)=>`<span class="st ${cls}">${label}</span>`;
+const cites=ks=>(Array.isArray(ks)?ks:[ks]).filter((k,i,a)=>!k||k.startsWith('plain:')||a.findIndex(x=>x&&PDF.keys[x]&&PDF.keys[x].label===PDF.keys[k].label)===i).map(k=>k&&k.startsWith('plain:')?`<span class="cite plain">${esc(k.slice(6))}</span>`:chip(k)).join(' ');
+const kpi=(label,value,sub,attn)=>`<div class="kpi${attn?' attn':''}"><label>${label}</label><b>${value}</b><span>${sub}</span></div>`;
+const tableRows=(id,list,fn,cols)=>{$(id).innerHTML=list.length?list.map(fn).join(''):`<tr class="empty"><td colspan="${cols}">Nothing to show.</td></tr>`};
+const short=d=>day(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+
+/* ---------- Medical Chronology: every visit, medications, missed visits, prior history, pages to read ---------- */
+const ALLV=(()=>{const o=[],has=(d,t)=>CHRONO.some(c=>c.d===d&&c.t===t);
+  o.push({d:'2026-03-14',prov:'Ambulance transport',t:'er',dx:[],met:'—',key:'ex2p14m',sum:'Ambulance transport from the scene to the emergency department. The provider, run report and bill have not been identified yet.',v:'Verified from the emergency department note'});
+  [['2026-04-15','Orthopedic follow-up. Dr. Rhee started gabapentin for nerve pain the same day.','ex7p1g','Verified from the pharmacy record and the itemized statement'],
+   ['2026-04-29','EMG and nerve conduction studies of both lower extremities.','ex10p3','Verified from the itemized statement'],
+   ['2026-07-24','Orthopedic follow-up between the second injection and the surgical consultation.','ex10p3','Verified from the itemized statement']]
+   .forEach(([d,sum,key,v])=>o.push({d,prov:'Sycamore Spine & Orthopedics',t:'ortho',dx:[],met:'—',key,sum,v}));
+  PTV.forEach((d,n)=>{if(!has(d,'pt')) o.push({d,prov:'Halden Physical Therapy',t:'pt',dx:[],met:'—',key:'ex10p4',sum:`Physical therapy visit ${n+1} of 36: therapeutic exercise and manual therapy.`,v:'Verified from the itemized statement and the attendance log'})});
+  return o})();
+const MEDS=[
+ {n:'Ketorolac 15 mg',how:'One intramuscular injection',why:'Pain in the emergency department on the day of the collision',by:'K. Moreno, MD',doses:['2026-03-14'],m:'c',key:'ex2p14k'},
+ {n:'Cyclobenzaprine 5 mg',how:'Three times a day as needed',why:'Muscle spasm in the neck and low back',by:'K. Moreno, MD',fills:['2026-03-14','2026-04-10'],days:10,key:'ex7p1c'},
+ {n:'Ibuprofen 600 mg',how:'Every 8 hours with food',why:'Pain and inflammation',by:'K. Moreno, MD, then J. Rhee, MD',fills:['2026-03-14','2026-04-15','2026-05-20'],days:30,key:'ex7p1i'},
+ {n:'Gabapentin 300 mg',how:'Three times a day, ongoing',why:'Nerve pain down the left leg from the L4-L5 protrusion',by:'J. Rhee, MD',fills:['2026-04-15','2026-05-15','2026-06-15','2026-07-15','2026-08-15','2026-09-15'],days:30,key:'ex7p1g'},
+ {n:'Triamcinolone 80 mg',how:'Epidural steroid injection at L4-L5',why:'Radicular pain that did not respond to therapy',by:'S. Banerjee, MD',doses:['2026-04-21','2026-07-09'],m:'dm',key:'ex6p12',key2:'ex6p27'}
+];
+const addDays=(d,n)=>iso(new Date(+day(d)+n*864e5));
+function renderMeds(){
+  const box=$('#mmap'),W=box.clientWidth;if(!W) return;
+  const nar=W<760,LBL=nar?170:276,PR=nar?18:36,pw=W-LBL-PR;
+  const S=day('2026-03-07'),E=day('2026-10-20'),X=d=>LBL+(day(d)-S)/(E-S)*pw;
+  const LH=48,top=8,axisY=top+MEDS.length*LH+4,H=axisY+30;let h='';
+  MEDS.forEach((m,i)=>{if(i%2) h+=`<div class="tm-zebra" style="top:${top+i*LH}px;height:${LH}px"></div>`});
+  for(let mo=new Date(S.getFullYear(),S.getMonth()+1,1);mo<=E;mo=new Date(mo.getFullYear(),mo.getMonth()+1,1)){const x=X(iso(mo));h+=`<div class="tm-grid" style="left:${x}px;top:${top}px;height:${axisY-top}px"></div><div class="tm-axis" style="left:${x}px;top:${axisY+6}px">${mo.toLocaleDateString('en-US',{month:'short'})}</div>`}
+  const tx=X('2026-10-14');h+=`<div class="tm-vline dash" style="left:${tx}px;top:${top}px;height:${axisY-top}px"></div>`;
+  MEDS.forEach((m,i)=>{
+    const y=top+i*LH+LH/2;
+    h+=`<div class="tm-lane-l" style="top:${y-16}px;width:${LBL-(nar?24:36)}px"><b>${esc(m.n)}</b><span>${esc(m.how)}</span></div><div class="tm-base" style="left:${LBL}px;width:${pw}px;top:${y}px"></div>`;
+    (m.fills||[]).forEach((f,k)=>{const e=addDays(f,m.days),last=k===m.fills.length-1&&m.n.startsWith('Gabapentin');const end=last?'2026-10-14':e;
+      h+=`<span class="md-sup${last?' on':''}" style="left:${X(f)}px;width:${Math.max(4,X(end)-X(f)-2)}px;top:${y-5}px" data-tip="${short(f)} · Fill ${k+1} of ${m.fills.length}, a ${m.days}-day supply${last?', still taking':''}" data-tip-always data-tip-pos="above"></span><span class="mk c md-fill" style="left:${X(f)}px;top:${y}px"></span>`});
+    (m.doses||[]).forEach(d=>{h+=`<span class="mk ${m.m}" style="left:${X(d)}px;top:${y}px" data-tip="${short(d)} · ${esc(m.n)}, ${esc(m.how.toLowerCase())}" data-tip-always data-tip-pos="above"></span>`});
+  });
+  box.style.height=H+'px';box.innerHTML=h;
+}
+function medTable(){
+  tableRows('#medRows',MEDS,m=>{const ds=m.fills||m.doses,last=m.fills?addDays(ds[ds.length-1],m.days):ds[ds.length-1];
+    const range=m.n.startsWith('Gabapentin')?`${fmtLong(ds[0])} to today`:ds.length>1?`${short(ds[0])} – ${fmtLong(last)}`:fmtLong(ds[0]);
+    return `<tr><td>${esc(m.n)}<span class="sub">${esc(m.how)}</span></td><td class="num c-hide">${range}<span class="sub">${m.fills?m.fills.length+' fill'+(m.fills.length>1?'s':''):m.doses.length+' dose'+(m.doses.length>1?'s':'')}</span></td><td>${esc(m.why)}</td><td>${esc(m.by)}</td><td>${chip(m.key)}${m.key2?' '+chip(m.key2):''}</td></tr>`},5);
+}
+const MISS=[
+ {d:'May 4 – Jun 10, 2026',p:'Halden Physical Therapy',w:'Ms. Alvarez cancelled 17 scheduled therapy visits. She told the clinic she had no childcare for her two children, and she called on June 11 to resume.',st:['','Explained in the record'],src:['ex5p62','ex5p61']},
+ {d:'Aug 11, 2026',p:'Halden Physical Therapy',w:'A single no-show with no reason recorded. The visit was rescheduled and she attended two days later.',st:['attn','Not explained'],src:['ex5p62n']}
+];
+const PRIOR=[
+ {d:'Nov 18 – Dec 2, 2019',p:'Valley Crossroads Urgent Care',w:'A lumbar strain from lifting boxes at work. There were no leg symptoms and no imaging, and she was released to full duty after two weeks.',st:['','Resolved before the collision'],src:['ex8p4']},
+ {d:'2019',p:'Insurance claims history',w:'One prior workers’ compensation claim for the same 2019 strain, closed with medical treatment only. No earlier injury claims.',st:['','Consistent with the record'],src:['plain:Claims search, Sep 9']},
+ {d:'2018 – 2026',p:'Inland Family Medicine',w:'Primary care records requested on September 12 to confirm she had no back complaints between December 2019 and the collision.',st:['attn','Records outstanding'],src:['plain:Requested Sep 12']}
+];
+const READ=[
+ ['ex4p135c','The causation opinion in the treating surgeon’s own words. The demand and any trial rest on it.'],
+ ['ex6p27','The relief after the second injection is handwritten on the follow-up page and partly illegible.'],
+ ['ex5p61','The only note written at the time that explains the 41-day gap in care.'],
+ ['ex3p42','The objective MRI finding that ties her leg symptoms to the L4-L5 protrusion.'],
+ ['ex1p3','The Sunline driver’s admission that he was looking at his dispatch tablet.'],
+ ['ex12p2c','The hospital confirms it was paid under its contract with the health plan, which is the basis for disputing its lien.']
+];
+let readSet=new Set();try{readSet=new Set(JSON.parse(localStorage.getItem('ce-read')||'[]'))}catch(e){}
+function chronoExtras(){
+  medTable();
+  tableRows('#missRows',MISS,r=>`<tr><td class="num">${r.d}<span class="sub in-type">${esc(r.p)}</span></td><td class="c-hide">${esc(r.p)}</td><td>${esc(r.w)}</td><td>${ST(...r.st)}</td><td>${cites(r.src)}</td></tr>`,5);
+  tableRows('#priorRows',PRIOR,r=>`<tr><td class="num">${r.d}<span class="sub in-type">${esc(r.p)}</span></td><td class="c-hide">${esc(r.p)}</td><td>${esc(r.w)}</td><td>${ST(...r.st)}</td><td>${cites(r.src)}</td></tr>`,5);
+  readRows();
+}
+function readRows(){
+  tableRows('#readRows',READ,([k,why])=>{const m=PDF.meta[PDF.keys[k].page-1],on=readSet.has(k);
+    return `<tr><td>${esc(PDF.keys[k].label)}<span class="sub">${esc(m.doc)}</span></td><td>${esc(why)}</td><td><button class="readbtn${on?' on':''}" data-read="${k}" aria-pressed="${on}">${on?'Read':'Mark as read'}</button></td><td>${chip(k)}</td></tr>`},4);
+  $('#readCount').textContent=`${READ.filter(r=>readSet.has(r[0])).length} of ${READ.length} read`;
+}
+
+/* ---------- Lien strategy ---------- */
+const COSTS=6840,BAL=21090;
+const LIENS=[
+ {who:'Pacific Crest Health Plan',type:'Health plan · fully insured group plan',claimed:20410,rule:'prorata',st:['','Claim received'],
+  note:'The plan is fully insured, so ERISA does not preempt state law and Civil Code section 3040 applies. Repayment is capped and reduced by a pro rata share of fees and costs. Ask for the reduction in writing before disbursement.',src:['ex12p1','ex12p1f']},
+ {who:'Arlington Valley Medical Center',type:'Hospital lien · Civil Code §3045.1',claimed:7510,rule:'zero',st:['attn','Dispute'],
+  note:'The hospital was paid by Pacific Crest under its contract. Under Parnell v. Adventist Health System/West (2005) 35 Cal.4th 595, it generally cannot lien the balance above her cost share. Ask it to withdraw the lien.',src:['ex12p2','ex12p2c']},
+ {who:'Sycamore Spine & Orthopedics',type:'Medical lien · signed lien agreement',claimed:9050,rule:'pct',pct:.3,st:['watch','Negotiate'],
+  note:'A contractual lien, paid in full from the recovery unless the provider agrees to reduce it. Propose a 30% reduction, in line with the share of the recovery that goes to fees and costs.',src:['ex10p3']},
+ {who:'Cascade Mutual Insurance',type:'MedPay reimbursement',claimed:5000,rule:'prorata',st:['','Claim received'],
+  note:'Repayment comes from the reimbursement clause in her own auto policy. Ask for a pro rata reduction for fees and costs under the common fund doctrine.',src:['ex12p3']}
+];
+const GROSS=[350000,500000,750000,1000000];
+Object.assign(state,{gross:750000,fee:1/3});
+function settle(g=state.gross,f=state.fee){
+  const fee=g*f,share=(fee+COSTS)/g;
+  const liens=LIENS.map(l=>({...l,prop:l.rule==='prorata'?l.claimed*(1-share):l.rule==='zero'?0:l.claimed*(1-l.pct)}));
+  const lienTot=liens.reduce((a,l)=>a+l.prop,0),claimTot=LIENS.reduce((a,l)=>a+l.claimed,0);
+  return {g,fee,share,liens,lienTot,claimTot,net:g-fee-COSTS-lienTot-BAL};
+}
+function liens(){
+  const R=settle();
+  $('#lienKpis').innerHTML=kpi('Liens claimed',dollars(R.claimTot),'Four lienholders have asserted a claim')+kpi('After proposed reductions',dollars(R.lienTot),`${dollars(R.claimTot-R.lienTot)} less than claimed, at this settlement`)+kpi('Unpaid provider balances',dollars(BAL),'Three providers not under lien',1)+kpi('Net to Ms. Alvarez',dollars(R.net),`At a ${dollars(R.g)} settlement, ${Math.round(R.net/R.g*100)}% of the gross`);
+  $('#grossSeg').innerHTML=GROSS.map(g=>`<button data-gross="${g}" class="${g===state.gross?'on':''}">${g>=1e6?'$1M':'$'+g/1000+'k'}${g===1e6?' (limits)':''}</button>`).join('');
+  $$('#feeSeg button').forEach(b=>b.classList.toggle('on',Math.abs(+b.dataset.fee-state.fee)<1e-6));
+  const segs=[['Attorney’s fee',R.fee,'s1'],['Case costs',COSTS,'s2'],['Liens, as proposed',R.lienTot,'s3'],['Unpaid provider balances',BAL,'s4'],['Net to Ms. Alvarez',R.net,'s5']];
+  $('#wf').innerHTML=`<div class="wf-bar">${segs.map(([l,v,c])=>`<i class="${c}" style="flex:${v} 1 0" data-tip="${l} · ${dollars(v)} · ${(v/R.g*100).toFixed(1)}%" data-tip-always data-tip-pos="above"></i>`).join('')}</div>
+    <div class="wf-leg">${segs.map(([l,v,c])=>`<span><i class="sw ${c}"></i><span class="wl">${l}</span><b class="num">${dollars(v)}</b></span>`).join('')}</div>`;
+  const pct=Math.round(state.fee*1000)/10;
+  $('#arithRows').innerHTML=[
+    ['Gross settlement','The amount paid by Westbridge on behalf of Sunline Freight',R.g,'plain:Assumed'],
+    ['Attorney’s fee',`${state.fee>.35?'40%':'33⅓%'} of the gross, under the retainer agreement`,-R.fee,'plain:Retainer, Mar 16'],
+    ['Case costs advanced','Records, reports and filing costs advanced by the firm to date',-COSTS,'plain:Cost ledger'],
+    ...R.liens.map(l=>[l.who,l.rule==='prorata'?`Claimed ${dollars(l.claimed)}, reduced by the ${(R.share*100).toFixed(1)}% share that went to fees and costs`:l.rule==='zero'?`Claimed ${dollars(l.claimed)}, disputed in full`:`Claimed ${dollars(l.claimed)}, with a ${l.pct*100}% reduction proposed`,-l.prop,l.src[0]]),
+    ['Unpaid provider balances','Canyon Ridge Imaging, Halden Physical Therapy and Northgate Pain Institute, until their network status is confirmed',-BAL,'ex10p4']
+  ].map(([a,b,v,s])=>`<tr><td>${esc(a)}</td><td>${esc(b)}</td><td class="r">${v<0?'−':''}${money(Math.abs(v))}</td><td>${cites(s)}</td></tr>`).join('');
+  $('#arithFoot').innerHTML=`<tr><td>Net to Ms. Alvarez</td><td>Before the $98,000 surgery she still needs, which she pays for from this amount</td><td class="r">${money(R.net)}</td><td></td></tr>`;
+  $('#lienRows').innerHTML=R.liens.map(l=>`<tr><td>${esc(l.who)}<span class="sub">${esc(l.type)}</span><span class="sub in-st">${ST(...l.st)}</span></td><td>${esc(l.note)}</td><td class="c-hide">${ST(...l.st)}</td><td class="r c-hide">${money(l.claimed)}</td><td class="r">${money(l.prop)}</td><td>${cites(l.src)}</td></tr>`).join('');
+  $('#lienFoot').innerHTML=`<tr><td>Total liens</td><td></td><td class="c-hide"></td><td class="r c-hide">${money(R.claimTot)}</td><td class="r">${money(R.lienTot)}</td><td></td></tr>`;
+  markChips();
+}
+const DISPUTE=[
+ {l:'Arlington Valley lien',s:'Hospital balance after the plan’s contract payment',w:'The hospital accepted Pacific Crest’s contract payment and adjustment, then liened the remaining balance. That balance should come off except for any cost share shown on the plan’s explanation of benefits.',st:['attn','Letter drafted'],a:7510,src:['ex12p2c']},
+ {l:'Lumbar X-ray, Mar 18',s:'Sycamore Spine · code 72110',w:'Billed on the statement, but there is no X-ray report anywhere in the orthopedic records. Ask for the report or remove the charge.',st:['watch','Ask the provider'],a:380,src:['ex10p3']},
+ {l:'Three provider balances',s:'Canyon Ridge, Halden and Northgate',w:'Each balance remains after a Pacific Crest payment and adjustment. If these providers are in the plan’s network, she owes only her cost share. Confirm network status before paying them in full.',st:['watch','Confirm network'],a:21090,src:['ex10p2','ex10p4','ex10p5']},
+ {l:'Cervical MRI',s:'Canyon Ridge · code 72141',w:'Not yet billed. When the bill arrives, check that the plan paid it before accepting a balance or a new lien.',st:['open','Waiting for bill'],a:null,src:['ex3p42']}
+];
+const SCREEN=[
+ ['Medicare','Age 38 with no disability benefits, so she is not a Medicare beneficiary. No conditional payment letter is needed.',['','None'],['plain:Intake, Mar 16']],
+ ['Medicaid (Medi-Cal)','Not enrolled at any time since the collision, according to the client and the health plan’s coverage dates.',['','None'],['plain:Intake, Mar 16']],
+ ['ERISA plan','Her employer’s group plan is fully insured, not self-funded, so ERISA does not override California’s lien limits.',['','Not applicable'],['ex12p1f']],
+ ['Hospital','Arlington Valley served a notice of lien under Civil Code section 3045.1.',['attn','Lien asserted'],['ex12p2']],
+ ['Health plan','Pacific Crest Health Plan claims reimbursement of the $20,410 it paid.',['attn','Lien asserted'],['ex12p1']],
+ ['Workers’ compensation','She was not working on the day of the collision, a Saturday, as her employer confirms. No workers’ compensation lien can arise.',['','None'],['ex11p1n']],
+ ['MedPay','Cascade Mutual paid the full $5,000 medical payments limit and requests repayment.',['attn','Lien asserted'],['ex12p3']],
+ ['Provider lien','Sycamore Spine treated her under a signed lien agreement dated March 18, 2026.',['attn','Lien asserted'],['ex10p3']]
+];
+function lienExtras(){
+  tableRows('#dispRows',DISPUTE,r=>`<tr><td>${esc(r.l)}<span class="sub">${esc(r.s)}</span><span class="sub in-st">${ST(...r.st)}</span></td><td>${esc(r.w)}</td><td class="c-hide">${ST(...r.st)}</td><td class="r">${r.a==null?'<span class="dim">—</span>':money(r.a)}</td><td>${cites(r.src)}</td></tr>`,5);
+  tableRows('#screenRows',SCREEN,r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${ST(...r[2])}</td><td>${cites(r[3])}</td></tr>`,4);
+}
+
+/* ---------- Litigation package ---------- */
+const PKG=[
+ ['Case summary','The incident, liability, injuries and damages in one page, from the executive summary.',['','Ready'],['ex1p3']],
+ ['Medical chronology','All 47 verified visits with findings, medications, missed appointments and prior history, cited to the page.',['','Ready'],['ex4p135']],
+ ['Exhibit binder','Exhibits 1 to 13, Bates-numbered from ALVAREZ-0000 to ALVAREZ-EX13-0001.',['','Ready'],['plain:27 pages']],
+ ['Complaint facts','Negligence, negligence per se under Vehicle Code section 21703, and Sunline’s liability for its driver. Negligent hiring and supervision depends on the driver’s file.',['watch','Draft'],['ex1p3']],
+ ['Witness list','Eight witnesses, from the investigating officer to her employer.',['','Ready'],['ex1p3']],
+ ['Treating physicians as experts','Dr. Rhee and Dr. Banerjee, designated as non-retained experts on causation, treatment and future care.',['watch','Draft'],['ex4p135c']],
+ ['Retained experts','Whether to retain a life care planner for future care and a trucking safety expert on the tablet use.',['open','Your decision'],['plain:Attorney']],
+ ['Preservation letter','Sent to Sunline on March 20 for the logging device, engine and camera data, dispatch tablet records and the driver’s files.',['','Sent Mar 20'],['ex13p1']],
+ ['First discovery to Sunline','Driver qualification and hours-of-service files, logging device and engine data, dispatch tablet messages and Sunline’s device-use policy.',['watch','Draft'],['ex13p1']],
+ ['Damages summary','Specials of $181,360 with the itemized statements, wage verification and surgical estimate.',['','Ready'],['ex10p1']],
+ ['Lien summary','Four liens with the proposed reductions, from Lien strategy.',['','Ready'],['ex12p1']],
+ ['Policy limits confirmation','Westbridge’s letter confirming $1,000,000 in bodily injury limits.',['','Ready'],['ex9p1']],
+ ['Outstanding records','The ambulance run report and bill, the cervical MRI bill and the primary care records.',['attn','3 outstanding'],['ex2p14m']]
+];
+const WIT=[
+ ['Ofc. T. Duarte','Investigating officer, Inland Valley Traffic Division','Found the Sunline driver at fault for following too closely and recorded his admission about the dispatch tablet.',['','Subpoena for trial'],['ex1p3']],
+ ['R. Haines','Sunline Freight driver','Told the officer he looked down at his dispatch tablet and did not see traffic stop.',['attn','Adverse, depose first'],['ex1p3']],
+ ['James Rhee, MD','Treating orthopedic surgeon','The positive straight-leg raise, the failed conservative care, the need for surgery and causation.',['','Non-retained expert'],['ex4p135c']],
+ ['S. Banerjee, MD','Interventional pain physician','Both injections and the temporary relief each one gave.',['','Non-retained expert'],['ex6p12r']],
+ ['L. Ortega, DPT','Treating physical therapist','Her disability scores, 36 visits, the plateau and why care paused for 41 days.',['','Percipient witness'],['ex5p61']],
+ ['K. Moreno, MD','Emergency physician','Her complaints and condition on the day of the collision.',['','Percipient witness'],['ex2p14']],
+ ['Dana Whitford','Practice administrator, Brightline Family Dental','Her wage, her 16 weeks off work and why the practice could not accommodate her restrictions.',['','Percipient witness'],['ex11p1']],
+ ['Maria Alvarez','Plaintiff','The collision, her pain, her care for her two children and how her daily life has changed.',['','Plaintiff'],['plain:Client']]
+];
+const DATES=[
+ ['2026-10-21','Time-limited policy-limits demand goes to Westbridge by email and certified mail.',['watch','Planned'],['ex9p1']],
+ ['2026-11-20','Last day for Westbridge to accept the demand, 30 days after it is sent.',['watch','Planned'],['plain:CCP §999.1']],
+ ['2027-01-15','Suggested filing date if the claim has not settled, leaving time to serve and begin discovery before trial setting.',['open','Your decision'],['plain:Attorney']],
+ ['2028-03-14','Statute of limitations. Two years from the injury under Code of Civil Procedure section 335.1.',['attn',`${solDays} days left`],['plain:CCP §335.1']]
+];
+function litigation(){
+  const ready=PKG.filter(p=>p[2][1]==='Ready'||p[2][1].startsWith('Sent')).length;
+  $('#litKpis').innerHTML=`<div class="kpi"><label>Package ready</label><b>${ready} of ${PKG.length}</b><span class="meterbar"><i style="width:${ready/PKG.length*100}%"></i></span></div>`+kpi('Witnesses','8','Three treating physicians among them')+kpi('Exhibits','13','Bates-numbered, 27 cited pages')+kpi('Statute of limitations','Mar 14, 2028',`${solDays} days left`,1);
+  tableRows('#pkgRows',PKG,r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${ST(...r[2])}</td><td>${cites(r[3])}</td></tr>`,4);
+  tableRows('#witRows',WIT,r=>`<tr><td>${esc(r[0])}<span class="sub">${esc(r[1])}</span></td><td>${esc(r[2])}</td><td>${ST(...r[3])}</td><td>${cites(r[4])}</td></tr>`,4);
+  tableRows('#dateRows',DATES,r=>`<tr><td class="num">${fmtLong(r[0])}</td><td>${esc(r[1])}</td><td>${ST(...r[2])}</td><td>${cites(r[3])}</td></tr>`,4);
+}
+
+/* ---------- Negotiation ---------- */
+const UP=[['Liability is clear: a rear-end impact with the driver admitting he was looking at a device.','ex1p3'],['An objective MRI finding that matches the leg symptoms found four days after the collision.','ex3p42'],['Surgery recommended after five months of failed conservative care, with a treating-surgeon causation opinion.','ex4p135c'],['A commercial defendant with $1,000,000 in confirmed limits.','ex9p1']];
+const DOWN=[['A 41-day gap in care, explained by childcare in the therapy note written at the time.','ex5p61'],['A 2019 lumbar strain at work, resolved in two weeks with no leg symptoms.','ex8p4'],['The surgery has been recommended but not yet performed.','ex4p135p']];
+const TLD=[
+ ['In writing and labeled','Section XI must call the letter a time-limited demand and refer to section 999.1.',['open','Your decision'],['plain:Section XI']],
+ ['Time to accept','At least 30 days when sent by email, fax or certified mail, or 33 days by regular mail. Planned for email and certified mail on October 21, with a November 20 deadline.',['','Meets it'],['plain:CCP §999.1']],
+ ['Settles all claims within limits','An offer to settle every claim within the $1,000,000 limit, including satisfaction of the liens listed in Lien strategy.',['','Meets it'],['ex9p1']],
+ ['Release of the insured','A complete release of Sunline Freight and its driver. Confirm the release terms before sending.',['watch','Confirm terms'],['plain:Section XI']],
+ ['Date and place of the loss','March 14, 2026, on I-215 North at Box Springs Road, in Section II.',['','Meets it'],['ex1p3']],
+ ['Claim number','Westbridge claim WB-26-0418832, in the letterhead.',['','Meets it'],['ex9p1']],
+ ['Known injuries','The L4-L5 protrusion with radiculopathy, the cervical sprain and the lumbar strain, in Section V.',['','Meets it'],['ex3p42']],
+ ['Proof of the claim','The medical records and itemized bills in Exhibits 2 to 7 and 10 go with the letter.',['','Meets it'],['ex10p1']],
+ ['Where it is sent','Check whether Westbridge has designated an address for time-limited demands with the Department of Insurance.',['attn','Check before sending'],['plain:CCP §999.2']]
+];
+const NLOG=[['2026-03-20','Preservation letter sent to Sunline Freight',null,['','Sent'],['ex13p1']],['2026-07-22','Westbridge confirmed $1,000,000 in bodily injury limits',null,['','Received'],['ex9p1']],['2026-10-21','Time-limited policy-limits demand to Westbridge',1000000,['watch','Planned'],['plain:Demand draft']],['2026-11-20','Deadline for Westbridge to accept',null,['watch','Planned'],['plain:CCP §999.1']]];
+function negotiation(){
+  $('#upList').innerHTML=UP.map(([t,k])=>`<li>${esc(t)} ${chip(k)}</li>`).join('');
+  $('#downList').innerHTML=DOWN.map(([t,k])=>`<li>${esc(t)} ${chip(k)}</li>`).join('');
+  tableRows('#tldRows',TLD,r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${ST(...r[2])}</td><td>${cites(r[3])}</td></tr>`,4);
+  tableRows('#logRows',NLOG,r=>`<tr><td class="num">${fmtLong(r[0])}</td><td>${esc(r[1])}</td><td class="r">${r[2]?money(r[2]):'<span class="dim">—</span>'}</td><td>${ST(...r[3])}</td><td>${cites(r[4])}</td></tr>`,5);
+  renderVal();
+}
+function renderVal(){
+  const box=$('#val'),W=box.clientWidth;if(!W) return;
+  const P=Math.min(48,W*.06),M=1.1e6,X=v=>P+v/M*(W-2*P),y=64;
+  let h=`<div class="v-track" style="left:${P}px;width:${W-2*P}px;top:${y}px"></div>`;
+  [0,250000,500000,750000,1000000].forEach(v=>{h+=`<div class="v-tick" style="left:${X(v)}px;top:${y}px"></div><div class="v-ax num" style="left:${X(v)}px;top:${y+14}px">${v?'$'+(v>=1e6?'1M':v/1000+'k'):'$0'}</div>`});
+  h+=`<div class="v-band" style="left:${X(450000)}px;width:${X(700000)-X(450000)}px;top:${y-9}px" data-tip="Working range · $450,000 to $700,000" data-tip-always data-tip-pos="above"></div><div class="v-bl" style="left:${X(575000)}px;top:${y+36}px"><b>Working range</b><span>$450,000 to $700,000</span></div>`;
+  h+=`<div class="v-mk" style="left:${X(181360)}px;top:${y}px"></div><div class="v-lab" style="left:${X(181360)}px;top:8px"><b>Specials</b><span>$181,360</span></div>`;
+  h+=`<div class="v-line" style="left:${X(1e6)}px;top:6px;height:${y-6+10}px"></div><div class="v-lab rt" style="left:${X(1e6)}px;top:8px"><b>Policy limits and opening demand</b><span>$1,000,000</span></div>`;
+  box.innerHTML=h;
+}
+
+/* ---------- Case chat ---------- */
+const ANS=[
+ {re:/caus|surgeon|rhee|opinion/i,q:'What did the treating surgeon say about causation?',a:[['Dr. James Rhee, her treating orthopedic surgeon, wrote on August 20 that within reasonable medical probability the L4-L5 injury and the need for surgery are the result of the collision.','ex4p135c'],['He first recorded the collision as the start of her symptoms at the March 18 consultation, four days after it happened.','ex4p103c']]},
+ {re:/gap|missed|childcare|cancel/i,q:'How do we explain the gap in treatment?',a:[['Her therapy paused from May 2 to June 12. At the May 2 visit she told her therapist she would miss sessions because she had no childcare for her two children.','ex5p61'],['The clinic’s attendance log shows 17 visits cancelled for the same reason, and she called to resume on June 11.','ex5p62']]},
+ {re:/bill|outstanding|missing|records/i,q:'Which bills are still outstanding?',a:[['Canyon Ridge Imaging billed only the lumbar MRI, although it performed a cervical MRI the same day.','ex10p2'],['There is no run report or bill for the ambulance transport recorded in the emergency department note.','ex2p14m']]},
+ {re:/lien|repay|reimburs|medpay|net/i,q:'What liens need to be paid from a settlement?',a:[['Pacific Crest Health Plan claims $20,410. Its plan is fully insured, so California’s lien limits apply.','ex12p1f'],['Arlington Valley claims a $7,510 hospital lien, but it was paid under its health plan contract, which is grounds to dispute it.','ex12p2c'],['Cascade Mutual asks for the $5,000 it paid under her MedPay coverage, and Sycamore Spine holds a $9,050 lien.','ex12p3']]},
+ {re:/work|job|wage|employ|comp/i,q:'Was she working when it happened?',a:[['No. Her employer confirms she does not work weekends and was not working on Saturday, March 14, 2026, so workers’ compensation does not apply.','ex11p1n'],['She was off work for 16 weeks afterwards, from March 16 to July 5, at $912.50 a week.','ex11p1']]},
+ {re:/medic|drug|prescri|gabapentin|pill|pharm/i,q:'What medication was she prescribed?',a:[['She was sent home from the emergency department on cyclobenzaprine and ibuprofen.','ex2p21m'],['Dr. Rhee started gabapentin for nerve pain on April 15, and she has filled it every month since.','ex7p1g']]}
+];
+const THREAD=[];
+function msgHTML(m){
+  if(m.q) return `<div class="msg q"><span class="who-av">${m.av}</span><div class="msg-b"><div class="msg-h"><b>${esc(m.by)}</b><span>${m.at}</span></div><p>${esc(m.q)}</p></div></div>`;
+  if(m.wait) return `<div class="msg a"><span class="who-av ce">CE</span><div class="msg-b"><div class="msg-h"><b>CaseEdge</b><span>Reading the record…</span></div><p class="dim">Checking the cited pages</p></div></div>`;
+  return `<div class="msg a"><span class="who-av ce">CE</span><div class="msg-b"><div class="msg-h"><b>CaseEdge</b><span>${m.a.length?`Answered from ${new Set(m.a.map(x=>x[1])).size} pages`:'No answer in the record'}</span></div>${m.a.length?m.a.map(([t,k])=>`<p>${esc(t)} ${chip(k)}</p>`).join(''):`<p>${esc(m.none)}</p>`}</div></div>`;
+}
+function chat(){
+  $('#thread').innerHTML=THREAD.map(msgHTML).join('');
+  const asked=new Set(THREAD.filter(m=>m.q).map(m=>m.q));
+  $('#sugs').innerHTML=ANS.filter(a=>!asked.has(a.q)).slice(0,4).map(a=>`<button class="sug-q" data-ask="${esc(a.q)}">${esc(a.q)}</button>`).join('');
+  const t=$('#thread');t.scrollTop=t.scrollHeight;markChips();
+}
+function ask(q){
+  q=q.trim();if(!q) return;
+  THREAD.push({q,by:'Daniel Reyes',av:'DR',at:'Just now'},{wait:1});chat();
+  setTimeout(()=>{THREAD.pop();const hit=ANS.find(a=>a.q===q)||ANS.find(a=>a.re.test(q));
+    THREAD.push(hit?{a:hit.a}:{a:[],none:'I could not find that in the verified record for this case. In this preview, ask about causation, the treatment gap, outstanding bills, liens, work or medications.'});chat();updateStep()},650);
+}
+THREAD.push({q:ANS[0].q,by:'Priya Shah',av:'PS',at:'Oct 14, 3:12 PM'},{a:ANS[0].a},{q:ANS[1].q,by:'Priya Shah',av:'PS',at:'Oct 14, 3:14 PM'},{a:ANS[1].a});
+
+/* ---------- Case tracker (workspace) ---------- */
+const STAGES=['Intake','Treatment','Demand','Negotiation','Litigation','Resolution'];
+const PIPE=[6,15,9,7,4,1];
+const TRK=[
+ ['Alvarez v. Sunline Freight','Rear-end collision, commercial truck',2,'Send the time-limited policy-limits demand on October 21.','2028-03-14',181360,'D. Reyes',1],
+ ['Patel v. Riverside Grocers','Slip and fall, grocery store',3,'Mediation on November 6. File by December 2 if it does not settle.','2026-12-02',138700,'D. Reyes'],
+ ['Brennan v. Harlow Markets','Trip and fall, parking lot',3,'Respond to the $85,000 offer by October 24.','2027-01-09',64200,'P. Shah'],
+ ['Nguyen v. Ardent Logistics','Sideswipe, delivery truck',2,'Demand sent October 2. Response due November 1.','2027-06-18',96450,'D. Reyes'],
+ ['Whitaker v. Coastal Rideshare','Rideshare passenger, intersection collision',1,'Records requested from three providers on October 1.','2027-08-30',22900,'M. Vela'],
+ ['Okonkwo v. Metro Transit','Bus collision, public entity',1,'Government claim accepted for review. Follow up on treatment monthly.','2028-02-10',41300,'P. Shah'],
+ ['Moreau v. Pinecrest HOA','Fall on an HOA walkway',0,'Retained October 9. Order records and photograph the walkway.','2028-09-28',null,'P. Shah'],
+ ['Tran v. Delgado','Left-turn collision',0,'Retained October 11. Open claims with both carriers.','2028-10-02',null,'M. Vela']
+];
+const steps=n=>`<span class="steps">${STAGES.map((s,i)=>`<i class="${i<n?'done':i===n?'cur':''}"></i>`).join('')}</span>`;
+function tracker(){
+  const mx=Math.max(...PIPE);
+  $('#pipe').innerHTML=STAGES.map((s,i)=>`<div class="pipe-c"><label>${s}</label><b class="num">${PIPE[i]}</b><span class="meterbar"><i style="width:${PIPE[i]/mx*100}%"></i></span></div>`).join('');
+  tableRows('#trkRows',TRK,r=>{const dd=Math.ceil((day(r[4])-new Date())/864e5),soon=dd<183;
+    return `<tr class="row${r[7]?' trk-cur':''}" ${r[7]?'data-opencase':'data-matter'}><td>${esc(r[0])}<span class="sub">${esc(r[1])}</span></td><td><span class="stage-c">${steps(r[2])}${STAGES[r[2]]}</span></td><td>${esc(r[3])}</td><td class="num">${fmtLong(r[4])}<span class="sub">${soon?`<span class="st attn">${dd} days left</span>`:`${Math.round(dd/30.4)} months left`}</span></td><td class="r c-hide">${r[5]?money(r[5]):'<span class="dim">—</span>'}</td><td>${esc(r[6])}</td></tr>`},6);
+}
+
+/* ---------- Intake triage (workspace) ---------- */
+const ITK=[
+ ['Joon Kim','Received Oct 13 · Corona','Rear-ended at a red light on SR-91 by a delivery van. Neck and back pain, seen in the emergency department, starting physical therapy. The van’s owner carries commercial coverage.',[5,3,5],['','Accept'],'Clear liability, treated injuries and commercial coverage.'],
+ ['Omar Hassan','Received Oct 12 · Riverside','Rideshare passenger in a broadside collision when the other driver ran a red light. Concussion with headaches that continue a month later.',[5,4,4],['','Accept'],'Rideshare coverage applies while a passenger is on a trip.'],
+ ['Lucia Ortiz','Received Oct 12 · Moreno Valley','Tripped on a torn entrance mat at a big-box store and fractured her wrist, which needed surgery. Liability turns on whether the store knew about the mat.',[3,5,5],['attn','Need information'],'Send a preservation letter for the incident report and video today. Stores often overwrite video within 30 days.'],
+ ['Daniel Ruiz','Received Oct 9 · Perris','Fell from a ladder on a job site and broke his heel. His employer’s workers’ compensation carrier is paying for treatment.',[2,5,3],['attn','Need information'],'Likely workers’ compensation only. Check for a third-party claim against the site owner or the ladder maker before declining.'],
+ ['Teresa Bell','Received Oct 10 · Jurupa Valley','Bitten by a neighbor’s dog. Minor puncture wounds treated at urgent care, healed within two weeks.',[5,1,3],['open','Decline and refer'],'Strict liability for dog bites, but the damages are likely below the firm’s minimum. Refer to a colleague.']
+];
+const meter=(label,n)=>`<span class="mtr" data-tip="${label}: ${['','weak','limited','moderate','strong','very strong'][n]}" data-tip-always data-tip-pos="above"><em>${label}</em>${[1,2,3,4,5].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')}</span>`;
+function intake(){
+  tableRows('#itkRows',ITK,r=>`<tr><td>${esc(r[0])}<span class="sub">${esc(r[1])}</span></td><td>${esc(r[2])}<span class="sub">${esc(r[5])}</span></td><td><div class="stack">${meter('Liability',r[3][0])}${meter('Injuries',r[3][1])}${meter('Insurance',r[3][2])}</div></td><td>${ST(...r[4])}</td></tr>`,4);
+}
+
 
 /* ---------- Demand Draft ---------- */
 const SUGTAG='<span class="sug-tag" contenteditable="false">Suggested edit · review required</span>';
@@ -1381,27 +2034,35 @@ function docHTML(mode,withEdits=true){
 <p data-b="b2">Ms. Alvarez was stopped in northbound traffic when the Sunline tractor-trailer failed to slow and struck the rear of her vehicle ${chip('ex1p3')}. The driver told the investigating officer he had looked down at his dispatch tablet and did not see traffic stop ${chip('ex1p3')}.</p>
 <h4 data-sec="2">III. Liability</h4>
 <p data-b="b3">The officer found the Sunline driver at fault for following too closely under Vehicle Code section 21703 ${chip('ex1p3')}. A driver who strikes a stopped vehicle from behind while looking at a device is negligent, and Sunline is responsible for its driver’s conduct in the course of his work.</p>
-<h4 data-sec="3">IV. Injuries and treatment</h4>
-<p data-b="b4">Ms. Alvarez was taken by ambulance from the scene to Arlington Valley Medical Center, where she reported neck and low back pain rated 7/10 with tingling down her left leg ${chip('ex2p14')}. A CT of the cervical spine ruled out fracture, and she was discharged with cervical and lumbar strain ${chip('ex2p21')}.</p>
-<p data-b="b5">Four days later, orthopedic surgeon Dr. James Rhee found a positive straight-leg raise at 40 degrees on the left and ordered MRI studies ${chip('ex4p103')}. The April 2 lumbar MRI showed a 5 mm posterior disc protrusion at L4-L5 pressing on the left L5 nerve root ${chip('ex3p42')}. This is an objective structural injury, consistent with a high-energy rear impact.</p>
-<p data-b="b6">Ms. Alvarez completed 36 sessions of physical therapy and two transforaminal epidural steroid injections ${chip('ex5p140')} ${chip('ex6p12')}${X?' '+chip('ex6p27'):''}. <span class="sug" data-sug="gap">Her care paused between May 2 and June 12 while she arranged childcare for her two children, a reason her therapist recorded at the time ${chip('ex5p61')}.</span>${E?SUGACT:SUGTAG} When she returned, her leg symptoms had not resolved ${chip('ex4p119')}.</p>
-<p data-b="b7">On August 20, after five months of failed conservative care, Dr. Rhee recommended a left L4-L5 microdiscectomy at an estimated cost of $98,000 ${chip('ex4p135')}.</p>
-<h4 data-sec="4">V. Medical specials</h4>
+<h4 data-sec="3">IV. Treating providers</h4>
+<p data-b="b14">Since the collision, Ms. Alvarez has been treated by five providers, each of whose records and itemized statements are enclosed:</p>
+<ul data-b="b15"><li>Arlington Valley Medical Center, emergency care on March 14, 2026 ${chip('ex2p14')}</li><li>Sycamore Spine &amp; Orthopedics, Dr. James Rhee, six visits from March 18 to August 20 ${chip('ex4p103')}</li><li>Halden Physical Therapy, 36 visits from March 24 to September 30 ${chip('ex5p140')}</li><li>Canyon Ridge Imaging, lumbar and cervical MRI on April 2 ${chip('ex3p42')}</li><li>Northgate Pain Institute, Dr. S. Banerjee, two injections on April 21 and July 9 ${chip('ex6p12')}</li></ul>
+<h4 data-sec="4">V. Injuries, diagnoses and procedures</h4>
+<p data-b="b4">At Arlington Valley Medical Center she reported neck and low back pain rated 7/10 with tingling down her left leg ${chip('ex2p14')}. A CT of the cervical spine ruled out fracture, and she was discharged with cervical sprain and lumbar strain ${chip('ex2p21')}.</p>
+<p data-b="b5">Four days later, Dr. Rhee found a positive straight-leg raise at 40 degrees on the left and ordered MRI studies ${chip('ex4p103')}. The April 2 lumbar MRI showed a 5 mm posterior disc protrusion at L4-L5 pressing on the left L5 nerve root ${chip('ex3p42')}, diagnosed as lumbar disc displacement with radiculopathy. This is an objective structural injury, consistent with a high-energy rear impact.</p>
+<p data-b="b6">Ms. Alvarez completed 36 sessions of physical therapy and two transforaminal epidural steroid injections at L4-L5 ${chip('ex5p140')} ${chip('ex6p12')}${X?' '+chip('ex6p27'):''}. <span class="sug" data-sug="gap">Her care paused between May 2 and June 12 while she arranged childcare for her two children, a reason her therapist recorded at the time ${chip('ex5p61')}.</span>${E?SUGACT:SUGTAG} When she returned, her leg symptoms had not resolved ${chip('ex4p119')}.</p>
+<p data-b="b7">On August 20, after five months of failed conservative care, Dr. Rhee recommended a left L4-L5 microdiscectomy ${chip('ex4p135')}.</p>
+<h4 data-sec="5">VI. Causation</h4>
+<p data-b="b16">Every opinion in this section comes from a treating provider. The emergency physician recorded the mechanism of injury on the day of the collision ${chip('ex2p14m')}, and Dr. Rhee recorded the collision as the onset of her symptoms four days later ${chip('ex4p103c')}. On August 20 he stated that, within reasonable medical probability, the L4-L5 injury and the need for surgery are the result of the collision ${chip('ex4p135c')}.</p>
+<p data-b="b17">Her only earlier back complaint, a lifting strain at work in 2019, involved no leg symptoms and no imaging and resolved within two weeks ${chip('ex8p4')}.</p>
+<h4 data-sec="6">VII. Future medical care</h4>
+<p data-b="b10">Dr. Rhee estimates the cost of the recommended surgery, including the facility, the surgeon and anesthesia, at $98,000 ${chip('ex4p135')}.${X?` She wishes to proceed once she is cleared ${chip('ex4p135p')}.`:''}</p>
+<h4 data-sec="7">VIII. Medical specials</h4>
 <table class="spec" data-b="b8"><tbody><tr><td>Past medical expenses</td><td>$68,760.00</td></tr><tr><td>Future medical expenses</td><td>$98,000.00</td></tr><tr><td>Lost wages, 16 weeks at $912.50</td><td>$14,600.00</td></tr><tr><td>Total economic damages</td><td>$181,360.00</td></tr></tbody></table>
 <p data-b="b9">Itemized statements from each provider are attached as Exhibit 10 ${chip('ex10p1')}.</p>
-<h4 data-sec="5">VI. Future medical care</h4>
-<p data-b="b10">Dr. Rhee has recommended surgery at an estimated cost of $98,000 and has stated that the injury and the need for surgery result from this collision ${chip('ex4p135c')}.${X?` She wishes to proceed once she is cleared ${chip('ex4p135p')}.`:''}</p>
-<h4 data-sec="6">VII. Wage loss</h4>
+<h4 data-sec="8">IX. Wage loss</h4>
 <p data-b="b11">Ms. Alvarez, an office manager at Brightline Family Dental, could not work from March 16 through July 5, 2026, a period of 16 weeks at her regular wage of $912.50 per week, for a total of $14,600 ${chip('ex11p1')}.</p>
-<h4 data-sec="7">VIII. General damages</h4>
-${E?'<p data-b="b12" class="ph" data-ph="Describe Ms. Alvarez’s pain, her physical limitations and the effect on her daily life since the collision."></p>':'<p data-b="b12" class="todo">Not yet drafted.</p>'}
-<h4 data-sec="8">IX. Demand and time limit</h4>
-${E?'<p data-b="b13" class="ph" data-ph="State the amount demanded and the deadline for a response."></p>':'<p data-b="b13" class="todo">Not yet drafted.</p>'}`;
+<h4 data-sec="9">X. Damages and daily life</h4>
+<div class="hint" contenteditable="false"><b>From the record</b><span>Could not sit for more than 20 minutes or lift a laundry basket ${chip('ex5p3')}</span><span>Still needed help with lifting when therapy ended ${chip('ex5p140')}</span><span>Missed six weeks of care because she had no childcare for her two children ${chip('ex5p61')}</span><span>Nerve pain medication every day since April ${chip('ex7p1g')}</span></div>
+${E?'<p data-b="b12" class="ph" data-ph="Describe Ms. Alvarez’s pain, her physical limitations and the effect on her daily life and her family since the collision."></p>':'<p data-b="b12" class="todo">Not yet drafted.</p>'}
+<h4 data-sec="10">XI. Demand and time limit</h4>
+<div class="decide" contenteditable="false"><b>Your decision</b><span>The amount to demand. Policy limits are $1,000,000 ${chip('ex9p1')}</span><span>The deadline, at least 30 days from sending by email or certified mail</span><span>The release terms for Sunline Freight and its driver</span></div>
+${E?'<p data-b="b13" class="ph" data-ph="State that this is a time-limited demand under Code of Civil Procedure section 999.1, the amount demanded and the deadline for acceptance."></p>':'<p data-b="b13" class="todo">Not yet drafted.</p>'}`;
 }
 const ed=$('#editor'),origDoc=$('#origDoc'),edBody=$('#edBody'),origBody=$('#origBody');
 function loadDocs(){
   origDoc.innerHTML=docHTML('orig');
-  let saved=null;try{saved=localStorage.getItem('ce-draft-v4')}catch(e){}
+  let saved=null;try{saved=localStorage.getItem('ce-draft-v5')}catch(e){}
   ed.innerHTML=saved||docHTML('edit');
   ed.querySelectorAll('.on,.edited').forEach(x=>x.classList.remove('on','edited'));
 }
@@ -1412,13 +2073,13 @@ function diff(){
   ed.querySelectorAll('[data-b]').forEach(b=>b.classList.toggle('edited',changed.has(b.dataset.b)));
   origDoc.querySelectorAll('[data-b]').forEach(b=>b.classList.toggle('changed',changed.has(b.dataset.b)));
   const n=changed.size;$('#edEdits').textContent=n?`${n} paragraph${n>1?'s':''} edited`:'No edits';
-  const c=ed.cloneNode(true);c.querySelectorAll('.sug-act,.lh').forEach(x=>x.remove());
+  const c=ed.cloneNode(true);c.querySelectorAll('.sug-act,.lh,.hint,.decide').forEach(x=>x.remove());
   $('#edWords').textContent=(c.textContent.trim().split(/\s+/).filter(Boolean).length).toLocaleString()+' words';
 }
 let saveT;
 function save(){
   const s=$('#edSaved');s.textContent='Saving…';s.classList.add('busy');clearTimeout(saveT);
-  saveT=setTimeout(()=>{try{localStorage.setItem('ce-draft-v4',ed.innerHTML)}catch(e){}s.textContent='Saved';s.classList.remove('busy');diff()},500);
+  saveT=setTimeout(()=>{try{localStorage.setItem('ce-draft-v5',ed.innerHTML)}catch(e){}s.textContent='Saved';s.classList.remove('busy');diff()},500);
 }
 ed.addEventListener('input',save);
 ed.addEventListener('click',e=>{
@@ -1426,7 +2087,7 @@ ed.addEventListener('click',e=>{
   const s=ed.querySelector('[data-sug="gap"]'),act=ed.querySelector('.sug-act');
   if(a.dataset.sugact==='accept'){if(s) s.replaceWith(...s.childNodes);toast('Suggestion accepted and added to your draft.')}
   else{if(s) s.remove();toast('Suggestion rejected and removed from your draft.')}
-  act&&act.remove();SECTIONS[3][2]='draft';secPop();save();dropReview('ex5p61');
+  act&&act.remove();SECTIONS[SINJ][2]='draft';secPop();save();dropReview('ex5p61');
 });
 $('.tb').addEventListener('mousedown',e=>{if(e.target.closest('button')) e.preventDefault()});
 $('.tb').addEventListener('click',e=>{
@@ -1463,13 +2124,18 @@ $('#revertBtn').addEventListener('click',()=>{
   const b=$('#revertBtn');
   if(!revertArm){b.textContent='Click again to confirm';b.classList.add('warn');revertArm=setTimeout(()=>{revertArm=null;b.textContent='Revert to original';b.classList.remove('warn')},3000);return}
   clearTimeout(revertArm);revertArm=null;b.textContent='Revert to original';b.classList.remove('warn');
-  ed.innerHTML=docHTML('edit',false);SECTIONS[3][2]='review';secPop();save();toast('Your draft has been reverted to the original.');
+  ed.innerHTML=docHTML('edit',false);SECTIONS[SINJ][2]='review';secPop();save();toast('Your draft has been reverted to the original.');
 });
 function secPop(){
+  const n={final:0,review:0,draft:0,todo:0};SECTIONS.forEach(x=>n[x[2]]++);
+  $('#segbar').innerHTML=SECTIONS.map((x,i)=>`<button class="seg ${x[2]}" data-sec="${i}" data-tip="${x[0]}. ${esc(x[1])} · ${SECST[x[2]][1]}" data-tip-always data-tip-pos="below" aria-label="${x[0]}. ${esc(x[1])}, ${SECST[x[2]][1]}"><span>${x[0]}</span></button>`).join('');
+  $('#segLegend').innerHTML=`<span class="st">${n.final} approved</span><span class="st attn">${n.review} needs review</span><span class="st watch">${n.draft} drafted</span><span class="st open">${n.todo} need your decision</span>`;
+  $('#demNote').textContent=`Draft v3 · ${SECTIONS.length-n.todo} of ${SECTIONS.length} sections drafted`;
   $('#secPop').innerHTML=SECTIONS.map((s,i)=>`<button class="pop-item" role="menuitem" data-sec="${i}"><span class="n">${s[0]}</span>${esc(s[1])}<span class="s">${SECST[s[2]][1]}</span><span class="st ${SECST[s[2]][0]}"></span></button>`).join('');
   spy();
 }
 $('#secBtn').addEventListener('click',e=>{e.stopPropagation();const p=$('#secPop');p.hidden=!p.hidden;$('#secBtn').setAttribute('aria-expanded',String(!p.hidden))});
+$('#segbar').addEventListener('click',e=>{const it=e.target.closest('[data-sec]');if(!it) return;const pane=demTabbed&&activePane==='paneOrig'?origBody:edBody,h=pane.querySelector(`h4[data-sec="${it.dataset.sec}"]`);if(h) pane.scrollTo({top:h.offsetTop-16,behavior:'smooth'})});
 $('#secPop').addEventListener('click',e=>{
   const it=e.target.closest('[data-sec]');if(!it) return;
   $('#secPop').hidden=true;$('#secBtn').setAttribute('aria-expanded','false');
@@ -1481,6 +2147,7 @@ function spy(){
   const hs=[...ed.querySelectorAll('h4[data-sec]')];let cur=hs[0];
   hs.forEach(h=>{if(h.offsetTop-24<=edBody.scrollTop) cur=h});
   if(!cur) return;const s=SECTIONS[+cur.dataset.sec];if(!s) return;
+  $$('#segbar .seg').forEach((b,i)=>b.classList.toggle('here',i===+cur.dataset.sec));
   $('#secLabel').textContent=`${s[0]}. ${s[1]}`;$('#secDot').className='st dot '+SECST[s[2]][0];
 }
 let syncOn=true,syncing=false;
@@ -1549,7 +2216,7 @@ function addToDemand(i){
   const html=`<p data-b="${id}">${esc(c.dem[0])} ${c.dem[1].map(chip).join(' ')}.</p>`;
   const a=ed.querySelector('[data-b="b7"]'),h=ed.querySelector('h4[data-sec="4"]');
   if(a) a.insertAdjacentHTML('afterend',html);else if(h) h.insertAdjacentHTML('beforebegin',html);else ed.insertAdjacentHTML('beforeend',html);
-  save();toast('Added to Section IV of the demand, with its citation.');
+  save();toast('Added to Section V of the demand, with its citation.');
 }
 function copyCite(i){
   const c=CHRONO[i],txt=`${c.dem[0]} (${c.dem[1].map(k=>PDF.keys[k].label).join('; ')}).`;
@@ -1695,6 +2362,12 @@ document.addEventListener('click',e=>{
   if(t.closest('#groupBtn')){state.group=!state.group;$('#groupBtn').setAttribute('aria-pressed',String(state.group));rows();updateStep();return}
   if(t.closest('#flagBtn')){state.flag=!state.flag;$('#flagBtn').setAttribute('aria-pressed',String(state.flag));rows();updateStep();return}
   if(t.closest('#execCopy')){copyExec();return}
+  const vs=t.closest('[data-vis]');if(vs){state.all=vs.dataset.vis==='all';chips();rows();updateStep();return}
+  const rd=t.closest('[data-read]');if(rd){const k=rd.dataset.read;readSet.has(k)?readSet.delete(k):readSet.add(k);try{localStorage.setItem('ce-read',JSON.stringify([...readSet]))}catch(e){}readRows();return}
+  const gs=t.closest('[data-gross]');if(gs){state.gross=+gs.dataset.gross;liens();updateStep();return}
+  const fs=t.closest('[data-fee]');if(fs){state.fee=+fs.dataset.fee;liens();updateStep();return}
+  const jp=t.closest('[data-jump]');if(jp){const el=document.getElementById(jp.dataset.jump);if(el) main.scrollTo({top:el.offsetTop-$('#tabbar').offsetHeight-16,behavior:'smooth'});return}
+  const aq=t.closest('[data-ask]');if(aq){ask(aq.dataset.ask);return}
   if(t.closest('#expandAll')){const all=state.open.size>=CHRONO.length;state.open=all?new Set():new Set(CHRONO.map((_,i)=>i));rows();updateStep();return}
   const ts=t.closest('[data-toast]');if(ts){toast(ts.dataset.toast);return}
   if(t.closest('[data-matter]')){toast('Only the Alvarez case is available in this preview.');return}
@@ -1708,6 +2381,8 @@ document.addEventListener('click',e=>{
   if(t.closest('#menuBtn')){$('#sidebar').classList.add('open');$('#scrim').hidden=false;$('#menuBtn').setAttribute('aria-expanded','true');return}
   if(t.closest('#scrim')){closeMenu();return}
 });
+$('#askForm').addEventListener('submit',e=>{e.preventDefault();const q=$('#askQ');ask(q.value);q.value=''});
+$('#askQ').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('#askForm').requestSubmit()}});
 $('#q').addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();renderAll();updateStep()});
 let gArm=0;
 document.addEventListener('keydown',e=>{
@@ -1726,15 +2401,15 @@ document.addEventListener('keydown',e=>{
   if(e.key===']'){if(cp.open) step(1);else if(state.view==='demand'){const f=ed.querySelector('[data-cite]');if(f) openCite(f.dataset.cite,f)}return}
   const k=e.key.toLowerCase();
   if(k==='g'){gArm=Date.now();return}
-  if(Date.now()-gArm<1200){const m={c:'chronology',i:'signals',l:'ledger',d:'demand',r:'review'}[k];gArm=0;if(m) go(m)}
+  if(Date.now()-gArm<1200){const m={c:'chronology',d:'demand',l:'ledger',i:'signals',p:'litigation',o:'negotiation',a:'chat',r:'review',t:'tracker',n:'intake'}[k];gArm=0;if(m) go(m)}
 });
 
 /* ---------- Init ---------- */
 (function(){
   $('#solDays').textContent=`${solDays} days remaining`;
   loadDocs();
-  if(!ed.querySelector('[data-sug="gap"]')){SECTIONS[3][2]='draft';const i=REVIEW.findIndex(r=>r.key==='ex5p61');if(i>=0) REVIEW.splice(i,1)}
-  caseList();overview();chips();renderAll();review();secPop();diff();
+  if(!ed.querySelector('[data-sug="gap"]')){SECTIONS[SINJ][2]='draft';const i=REVIEW.findIndex(r=>r.key==='ex5p61');if(i>=0) REVIEW.splice(i,1)}
+  caseList();overview();chronoExtras();chips();renderAll();litigation();negotiation();tracker();intake();chat();review();secPop();diff();
   let v=(location.hash||'').slice(1);
   if(!VIEWS.includes(v)){try{v=localStorage.getItem('ce-view')||'chronology'}catch(e){v='chronology'}}
   go(VIEWS.includes(v)?v:'chronology');

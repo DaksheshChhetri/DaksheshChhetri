@@ -16,7 +16,8 @@ DOCS = {'Ed Physician Note': 'Emergency physician note', 'Ed Disposition Summary
         'Physical Therapy Initial Evaluation': 'Physical therapy initial evaluation',
         'Physical Therapy Progress Note · Visit 18': 'Physical therapy progress note, visit 18',
         'Physical Therapy Discharge Summary': 'Physical therapy discharge summary', 'Procedure Note': 'Procedure note',
-        'Urgent Care Visit': 'Urgent care visit note'}
+        'Urgent Care Visit': 'Urgent care visit note',
+        'Dispensing History': 'Pharmacy dispensing history', 'Attendance Log': 'Therapy attendance log'}
 
 t = open(p('src', 'template.html')).read()
 idx = json.load(open(p('src', 'index2.json')))

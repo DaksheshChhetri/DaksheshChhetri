@@ -9,7 +9,7 @@ const S = process.argv[2], FILE = process.argv[3];
     await p.route('**/cdnjs.cloudflare.com/**', r => r.fulfill({ path: S + '/vendor/' + (r.request().url().includes('worker') ? 'pdf.worker.min.js' : 'pdf.min.js'), contentType: 'application/javascript' }));
     await p.route('**/fonts.*/**', r => r.abort());
     await p.goto('file://' + FILE); await p.evaluate(() => localStorage.clear()); await p.reload(); await p.waitForTimeout(300);
-    for (const v of ['chronology', 'signals', 'ledger', 'demand', 'review']) {
+    for (const v of await p.evaluate(() => VIEWS)) {
       await p.evaluate(v => go(v), v); await p.waitForTimeout(250);
       if (tag === 'split') {
         await p.evaluate(() => { const c = document.querySelector('.view:not([hidden]) [data-cite]'); c && c.click(); });

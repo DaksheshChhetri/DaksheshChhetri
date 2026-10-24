@@ -1,11 +1,12 @@
 # CaseEdge workspace prototype
 
-A single-page workspace for plaintiff personal injury firms with four products:
-**Medical Chronology, Case Insights, Bills & Ledger and Demand Draft**, plus a Review queue.
+A single-page workspace for plaintiff personal injury firms. Each case has seven products, in two groups:
+**Medical chronology, Demand draft and Lien strategy**, then **Case insights, Litigation package, Negotiation and Case chat**
+(views of the same verified case record). The firm level has a **Review queue, Case tracker and Intake triage**.
 Every citation opens the real source PDF in a pane beside the work.
 
-- Live artifact: https://claude.ai/artifact/NdpGhNPPrM4p4a7LBuUvMo (private; latest published is v19)
-- Saved snapshots: `../CaseEdge-Workspace-v*.html` at the repo root (v19 is the current one)
+- Live artifact: https://claude.ai/artifact/NdpGhNPPrM4p4a7LBuUvMo (private; latest published is v20)
+- Saved snapshots: `../CaseEdge-Workspace-v*.html` at the repo root (v20 is the current one)
 
 ## Layout of this folder
 
@@ -14,7 +15,7 @@ Every citation opens the real source PDF in a pane beside the work.
 | `src/template.html` | The whole page: CSS, markup and script. `/*__DATA__*/` is replaced at build time. All case data (encounters, injuries, providers, findings, ledger, review items, demand text) lives in the script near the top. |
 | `src/index2.json` | Citation index for the case file: highlight rectangles per citation key, page metadata, itemized bills. |
 | `src/make_pdf2.py` | Generates the fictional case file PDF and its index: `python3 src/make_pdf2.py assets/casefile.pdf src/index2.json` (reportlab, Liberation fonts). |
-| `assets/casefile.pdf` | The 21-page fictional case file (exhibits 1 to 11) that citations open. |
+| `assets/casefile.pdf` | The 27-page fictional case file (exhibits 1 to 13, including pharmacy records, lien notices and the preservation letter) that citations open. |
 | `build.py` | Embeds the index and PDF, writes `dist/casework.html` (publish this as the artifact) and `dist/CaseEdge-Workspace.html` (standalone). |
 | `tests/*.js` | Playwright checks (see below). |
 
@@ -39,7 +40,7 @@ Run each test as `NODE_PATH=$(npm root -g) node tests/<name>.js "$PWD" "$PWD/dis
 
 - `smoke.js` loads the page, opens a citation, reports errors and the PDF pane width (expect 600 at 1440).
 - `interactions.js` opens an encounter, groups by provider, accepts the suggested demand edit (review count 5 to 4, survives reload), jumps from the review queue, opens a citation.
-- `widths.js` checks for sideways scrolling in every view at 1280, 1440, 1728 and 1920, sidebar open and collapsed (expect all 0).
+- `widths.js` checks for sideways scrolling in every view (all ten, read from `VIEWS`) at 1280, 1440, 1728 and 1920, sidebar open and collapsed (expect all 0).
 - `split.js` checks the 50/50 source view and phone width (main 600 / pane 600, no page scroll).
 - `typescan.js` lists the font size and family of all body text in every view (expect only `13px Inter`).
 - `shoot.js <dir> <file> <name> <width> <views>` writes full-page screenshots to `<dir>/shots/`.
@@ -55,6 +56,13 @@ Run each test as `NODE_PATH=$(npm root -g) node tests/<name>.js "$PWD" "$PWD/dis
 - **Tables all follow the encounter table's pattern:** fixed lead columns, one descriptive column that takes the spare width, a fixed status column, Source last. Shared widths: date 144, name 232, status 176, money 10%, source 124.
 - **Source PDF pane** takes exactly 50% of the space right of the sidebar, with a left shadow, and opens directly on the cited page with the passage highlighted. Every citation in every product opens it.
 - **Demand Draft** has a premium editor; the original, the draft and the citations can all be on screen together.
+
+- **Structure (v20):** every case page shares one header (crumbs and actions, title, facts with a stage stepper) and one tab bar.
+  Each product opens with a summary strip of four or five figures, then stacked panels; long pages add an "On this page" row.
+  Status is a soft pill with its dot. Charts are drawn in ink greys with the one accent for the figure that matters most
+  (net to client, today's medication, the working range).
+- Lien strategy holds the settlement arithmetic (choose the gross and the fee), the liens, the lines to dispute, the lien screening
+  (Medicare, Medi-Cal, ERISA, hospital, health plan, workers' comp, MedPay, provider) and the medical bills and specials.
 
 Directions tried and rejected: centred page column (v10), centred section headers or a centred reading column (v15),
 justified three-column reading layout (v14), entry-style lists instead of tables (v13), and clipped, raw wording (v9 and v12).

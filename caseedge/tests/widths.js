@@ -10,11 +10,11 @@ const S = process.argv[2], FILE = process.argv[3];
     await p.route('**/fonts.*/**', r => r.abort());
     await p.goto('file://' + FILE); await p.evaluate(r => { localStorage.clear(); localStorage.setItem('ce-rail', r ? '1' : '0') }, rail); await p.reload(); await p.waitForTimeout(300);
     const res = [];
-    for (const v of ['chronology', 'signals', 'ledger', 'demand', 'review']) {
+    for (const v of await p.evaluate(() => VIEWS)) {
       await p.evaluate(v => go(v), v); await p.waitForTimeout(150);
       if (v === 'ledger') { await p.click('#ledExpand'); await p.waitForTimeout(100) }
       if (v === 'chronology') { await p.click('#expandAll'); await p.waitForTimeout(100) }
-      res.push(v[0] + ':' + await p.evaluate(() => [...document.querySelectorAll('.view:not([hidden]) .table-wrap')].filter(w => w.scrollWidth > w.clientWidth + 1).length + (document.querySelector('#main').scrollWidth > document.querySelector('#main').clientWidth + 1 ? 'H' : '')));
+      res.push(v.slice(0, 4) + ':' + await p.evaluate(() => [...document.querySelectorAll('.view:not([hidden]) .table-wrap')].filter(w => w.scrollWidth > w.clientWidth + 1).length + (document.querySelector('#main').scrollWidth > document.querySelector('#main').clientWidth + 1 ? 'H' : '')));
     }
     out.push(`${W}${rail ? ' rail' : ''}  ${res.join(' ')}  errs:${errs.length}`);
     await p.close();

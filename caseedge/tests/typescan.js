@@ -7,7 +7,7 @@ const S = process.argv[2], FILE = process.argv[3];
   await p.route('**/fonts.*/**', r => r.abort());
   await p.goto('file://' + FILE); await p.evaluate(() => localStorage.clear()); await p.reload(); await p.waitForTimeout(300);
   const SKIP = 'h1,h2,h3,th,button,.btn,.cite,.tmap,.tgl,.chips,.score label,.score b,.tl-facts b,.facts dt,.doc,.pane-h,.pane-f,.tb,.crumbs,.tabbar,.mbar,.sidebar,.pop,.mseg,.box-t,kbd,.tmap-legend,.lg';
-  for (const v of ['chronology', 'signals', 'ledger', 'demand', 'review']) {
+  for (const v of await p.evaluate(() => VIEWS)) {
     await p.evaluate(x => go(x), v); await p.waitForTimeout(150);
     if (v === 'ledger') await p.click('#ledExpand');
     if (v === 'chronology') await p.evaluate(() => toggleRow(3, true));

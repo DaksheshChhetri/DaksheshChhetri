@@ -145,8 +145,9 @@ INDEX = [
  ('1','Inland Valley Traffic Division','Traffic collision report'),('2','Arlington Valley Medical Center','Emergency department records'),
  ('3','Canyon Ridge Imaging','MRI reports'),('4','Sycamore Spine & Orthopedics','Orthopedic records'),
  ('5','Halden Physical Therapy','Physical therapy records'),('6','Northgate Pain Institute','Procedure notes'),
- ('8','Valley Crossroads Urgent Care','Prior records (2019)'),('9','Westbridge Indemnity Company','Policy limits letter'),
+ ('7','Riverside Community Pharmacy','Dispensing history'),('8','Valley Crossroads Urgent Care','Prior records (2019)'),('9','Westbridge Indemnity Company','Policy limits letter'),
  ('10','Providers','Itemized statements'),('11','Brightline Family Dental','Wage verification'),
+ ('12','Lienholders','Lien and reimbursement notices'),('13','Reyes & Lin LLP','Evidence preservation letter'),
 ]
 begin(0, 0, 'CaseEdge', 'Case file index')
 c.setFillColor(INK); c.setFont('LS-B', 16); c.drawString(M, H-96, 'CASE FILE · CITED PAGES')
@@ -181,12 +182,12 @@ record(2, 14, 22, 'avmc', 'ED PHYSICIAN NOTE', '03/14/2026', 'K. Moreno, MD', [
      ('Reports neck and low back pain 7/10 with tingling down the left leg.', 'ex2p14'),
      ('No loss of consciousness. Denies head strike, chest pain or abdominal pain.', None)]),
  ('Physical exam', [('Cervical paraspinal tenderness without midline step-off. Lumbar paraspinal tenderness, left greater than right. Strength 5/5 in both lower extremities. Patient reports decreased sensation over the left lateral calf.', None)]),
- ('Plan', [('CT cervical spine without contrast per NEXUS criteria. Ketorolac 15 mg IM. Reassess after imaging.', None)]),
+ ('Plan', [('CT cervical spine without contrast per NEXUS criteria.', None), ('Ketorolac 15 mg IM given for pain. Reassess after imaging.', 'ex2p14k')]),
 ], 'Electronically signed by K. Moreno, MD · 03/14/2026 16:40')
 record(2, 21, 22, 'avmc', 'ED DISPOSITION SUMMARY', '03/14/2026', 'K. Moreno, MD', [
  ('Imaging results', [('CT cervical spine without contrast: no acute fracture or malalignment. Prevertebral soft tissues normal.', None)]),
  ('Disposition', [('Discharged home in stable condition with diagnoses of cervical sprain (S13.4XXA) and lumbar strain (S39.012A).', 'ex2p21')]),
- ('Medications', [('Cyclobenzaprine 5 mg PO TID as needed for spasm. Ibuprofen 600 mg PO every 8 hours with food.', None)]),
+ ('Medications', [('Cyclobenzaprine 5 mg PO TID as needed for spasm. Ibuprofen 600 mg PO every 8 hours with food.', 'ex2p21m')]),
  ('Follow-up and work', [('Follow up with orthopedics within one week.', None), ('Off work through 03/17/2026.', 'ex2p21w')]),
 ], 'Electronically signed by K. Moreno, MD · 03/14/2026 18:05')
 
@@ -238,6 +239,12 @@ record(5, 61, 144, 'hpt', 'PHYSICAL THERAPY PROGRESS NOTE · VISIT 18', '05/02/2
  ('Objective', [('Oswestry Disability Index 38% (previous 46%). Lumbar flexion 55 degrees.', None)]),
  ('Plan', [('Home exercise program reviewed and provided in writing to continue during absence. Resume 3x/week when able.', None)]),
 ], 'L. Ortega, DPT · 05/02/2026')
+record(5, 62, 144, 'hpt', 'ATTENDANCE LOG', '03/24/2026 - 09/30/2026', 'Front desk', [
+ ('Summary', [('Scheduled: 54 visits. Attended: 36. Cancelled by patient: 17. No-show: 1.', None)]),
+ ('Cancellations', [('05/04/2026 - 06/10/2026: 17 visits cancelled by patient. Reason given: no childcare for her two children.', 'ex5p62'),
+     ('Patient called 06/11/2026 to resume; first visit back 06/15/2026.', None)]),
+ ('No-shows', [('08/11/2026: no-show. No reason recorded. Rescheduled to 08/13/2026 and attended.', 'ex5p62n')]),
+], 'Halden Physical Therapy · front desk record')
 record(5, 140, 144, 'hpt', 'PHYSICAL THERAPY DISCHARGE SUMMARY', '09/30/2026', 'L. Ortega, DPT', [
  ('Summary', [('Patient discharged after 36 visits; progress has plateaued.', 'ex5p140'),
      ('Oswestry Disability Index 34% at discharge. Patient continues to require assistance with lifting.', None)]),
@@ -257,6 +264,14 @@ record(6, 27, 30, 'npi', 'PROCEDURE NOTE', '07/09/2026', 'S. Banerjee, MD', [
      ('Triamcinolone 80 mg with 2 mL 0.25% bupivacaine.', None)]),
  ('Post-procedure', [('Tolerated well without complication. Discharged ambulatory. Follow-up note on p. 29.', None)]),
 ], 'S. Banerjee, MD · 07/09/2026')
+
+# ---------- Ex. 7 Pharmacy ----------
+FAC['rcp']=('Riverside Community Pharmacy','3880 Main St, Riverside, CA 92501 · (951) 555-0109','RCP-604417','LS')
+record(7, 1, 2, 'rcp', 'DISPENSING HISTORY', '03/14/2026 - 10/01/2026', 'Pharmacist on duty', [
+ ('Muscle relaxant', [('Cyclobenzaprine 5 mg, #30, 1 tab three times daily as needed. Prescriber K. Moreno, MD. Filled 03/14/2026 and 04/10/2026. No further refills.', 'ex7p1c')]),
+ ('Anti-inflammatory', [('Ibuprofen 600 mg, #90, 1 tab every 8 hours with food. Prescriber K. Moreno, MD, then J. Rhee, MD. Filled 03/14, 04/15 and 05/20/2026.', 'ex7p1i')]),
+ ('Nerve pain', [('Gabapentin 300 mg, #90, 1 cap three times daily. Prescriber J. Rhee, MD. First filled 04/15/2026; refilled monthly through 09/15/2026.', 'ex7p1g')]),
+], 'Printed 10/01/2026 at patient request')
 
 # ---------- Ex. 8 Prior records ----------
 record(8, 4, 6, 'vcu', 'URGENT CARE VISIT', '11/18/2019', 'P. Nakamura, PA-C', [
@@ -303,8 +318,41 @@ letterpage(11, 1, 'Brightline Family Dental', '2250 Market St, Riverside, CA 925
  'September 3, 2026', ['Reyes & Lin LLP', '3600 Lime St, Suite 410', 'Riverside, CA 92501'], ['Re: Employment and wage verification · Maria Alvarez'],
  [('Maria Alvarez has worked for our practice as office manager since 2019, on a regular schedule of 40 hours per week.', None),
   ('Her regular weekly wage is $912.50.', 'ex11p1'),
+  ('Ms. Alvarez does not work weekends. She was not working on Saturday, March 14, 2026.', 'ex11p1n'),
   ('She was unable to work from March 16, 2026 through July 5, 2026, a period of 16 weeks. We could not accommodate the lifting restrictions in her modified-duty note.', 'ex11p1')],
  ('Dana Whitford', 'Practice Administrator'))
+
+# ---------- Ex. 12 Lien notices ----------
+letterpage(12, 1, 'Pacific Crest Health Plan', 'Recovery Unit · P.O. Box 22180, Oakland, CA 94623 · (510) 555-0172', 'Health plan reimbursement claim',
+ 'August 3, 2026', ['Reyes & Lin LLP', '3600 Lime St, Suite 410', 'Riverside, CA 92501'],
+ ['Re: Member: Maria Alvarez · Group: Brightline Family Dental', 'Recovery file PC-26-88104 · Date of loss: 03/14/2026'],
+ [('Pacific Crest Health Plan has paid claims for treatment related to the above loss and asserts a right of reimbursement from any third-party recovery.', None),
+  ('Claims paid to date: $20,410.00, itemized on the enclosed payment register.', 'ex12p1'),
+  ('This group plan is fully insured by Pacific Crest Health Plan. It is not a self-funded employee benefit plan.', 'ex12p1f'),
+  ('Please notify us before any settlement is disbursed.', None)],
+ ('M. Castellano', 'Recovery Specialist'))
+letterpage(12, 2, 'Arlington Valley Medical Center', 'Patient Financial Services · 2100 Arlington Valley Rd, Riverside, CA 92505', 'Notice of hospital lien',
+ 'April 30, 2026', ['Reyes & Lin LLP', '3600 Lime St, Suite 410', 'Riverside, CA 92501'],
+ ['Re: Patient: Maria Alvarez · Account AVM-0418832-01', 'Notice of lien under Civil Code section 3045.1'],
+ [('Arlington Valley Medical Center provided emergency services to the above patient on 03/14/2026 and claims a lien on any recovery.', None),
+  ('Amount of lien claimed: $7,510.00, the balance after health plan payment and contractual adjustment.', 'ex12p2'),
+  ('The account was billed to Pacific Crest Health Plan, which paid $4,210.00 under its contract with this hospital on 04/28/2026.', 'ex12p2c')],
+ ('J. Whitcomb', 'Lien Coordinator'))
+letterpage(12, 3, 'Cascade Mutual Insurance', 'Personal Auto Claims · P.O. Box 9120, Fresno, CA 93790', 'Medical payments reimbursement',
+ 'May 12, 2026', ['Reyes & Lin LLP', '3600 Lime St, Suite 410', 'Riverside, CA 92501'],
+ ['Re: Insured: Maria Alvarez · Policy CM-4471902', 'Medical payments claim MP-26-30117'],
+ [('We have paid $5,000.00 under the medical payments coverage of your client\'s auto policy, the full limit of that coverage.', 'ex12p3'),
+  ('Under the reimbursement provision of the policy, we request repayment from any recovery from the responsible party.', None)],
+ ('L. Brandt', 'Medical Payments Adjuster'))
+
+# ---------- Ex. 13 Preservation letter ----------
+letterpage(13, 1, 'Reyes & Lin LLP', '3600 Lime St, Suite 410, Riverside, CA 92501 · (951) 555-0150', 'Evidence preservation letter',
+ 'March 20, 2026', ['Risk Management', 'Sunline Freight, LLC', '1800 Commerce Way', 'Ontario, CA 91761'],
+ ['Re: Collision of 03/14/2026 on I-215 N · Driver R. Haines · Unit 4417', 'Demand to preserve evidence'],
+ [('We represent Maria Alvarez. Please preserve all evidence relating to this collision.', None),
+  ('This includes electronic logging device data, engine control module and event data, forward and cab camera video, dispatch tablet messages and usage logs, and the driver qualification and hours-of-service files.', 'ex13p1'),
+  ('Do not repair, sell or alter Unit 4417 or its trailer until it has been inspected.', None)],
+ ('Daniel Reyes', 'Attorney for Maria Alvarez'))
 
 c.save()
 json.dump({'w': W, 'h': H, 'keys': KEYS, 'meta': META, 'bills': BILLS}, open(OUT_JSON, 'w'))

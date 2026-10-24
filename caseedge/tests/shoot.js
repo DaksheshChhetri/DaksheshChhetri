@@ -14,7 +14,7 @@ const S = process.argv[2], FILE = process.argv[3], OUT = process.argv[4] || 'cur
   await p.evaluate(() => localStorage.clear());
   await p.reload();
   await p.waitForTimeout(400);
-  const views = (process.argv[6] || 'chronology,signals,ledger,demand,review').split(',');
+  const views = (process.argv[6] || 'chronology,demand,ledger,signals,litigation,negotiation,chat,review,tracker,intake').split(',');
   for (const v of views) {
     await p.evaluate(v => { go(v); }, v);
     await p.waitForTimeout(400);
