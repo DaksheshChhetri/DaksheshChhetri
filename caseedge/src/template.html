@@ -814,106 +814,96 @@ thead th{background:#F6F5F2;border-bottom-color:var(--line)}
 .tile-cat{color:var(--muted)}
 .sw-empty{margin:0;color:var(--muted);padding:8px 4px}
 
-/* v26, after macOS Tahoe and the Wisedocs, Supio and EvenUp screens: a light window with a floating glass sidebar,
-   one segmented control for the products, large rounded containers and no small boxes. Status is a coloured dot
-   with plain text; citations are plain blue page links. Inter throughout. Tuned for a 15-inch laptop. */
-:root{--canvas:#F5F5F7;--paper:#FFFFFF;--ink:#1D1D1F;--ink-2:#2C2C2E;--muted:#5B5B61;--faint:#6E6E73;
-  --line:#E2E2E6;--line-soft:#ECECEF;--fill:#F2F2F4;--fill-2:#E8E8EC;--stone:#C7C7CC;
-  --accent:#0A66E0;--accent-hover:#0853B8;--signal:#0A84FF;--accent-soft:rgba(10,102,224,.08);--accent-mid:rgba(10,132,255,.45);
-  --mark:linear-gradient(180deg,rgba(10,132,255,0) 60%,rgba(10,132,255,.22) 60%);
-  --ok:#28A745;--warn:#F08C00;--s1:#2C2C2E;--s2:#6E6E73;--s3:#AEAEB2;--s4:#D8D8DC;
-  --r-box:18px;--in:22px;--gut:28px;--side:256px;
-  --glass:rgba(250,250,252,.72);--edge:rgba(0,0,0,.07)}
-html,body,.app,.main{background:var(--canvas)}
-.app.split{--gut:20px}
-@media (min-width:861px){
-  .sidebar{margin:10px 0 10px 10px;height:calc(100% - 20px);border-radius:20px;background:var(--glass);
-    -webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);
-    border:1px solid var(--edge)!important;box-shadow:0 10px 30px -18px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.7)}
-  html.nav-rail{--side:78px}
-}
-.nav-item{border-radius:10px;height:32px}
-.nav-item:hover{background:rgba(0,0,0,.04)}
-.nav-item.on{background:rgba(0,0,0,.065);box-shadow:none;color:var(--ink)}
-.nav-item.on .ic{color:var(--accent)}
-.case-row.on .case-av{background:var(--accent);color:#fff}
-.search{background:rgba(0,0,0,.05);border-radius:10px}
-.csearch{background:rgba(0,0,0,.05);border-radius:99px;height:32px}
-/* Header: title, one line of case facts, then the facts as plain columns */
-.head{padding:26px var(--px) 6px}
-.head h1{font-size:28px;font-weight:600;letter-spacing:-.03em;margin-top:12px}
-.facts{margin-top:20px;padding:0;border:0;background:none;box-shadow:none;border-radius:0}
-.facts > div{border-left:1px solid var(--line)}
+/* v27, a reading layout: a white page with a modest centred column (1,040px) and generous space. Each section is a
+   heading and a short description on the page; only the table or chart under it sits in one light rounded frame.
+   The executive summary reads as prose. Figures stand on their own without boxes. Status is a dot with text;
+   citations are plain page links. */
+:root{--canvas:#FAFAFA;--paper:#FFFFFF;--ink:#18181B;--ink-2:#27272A;--muted:#52525B;--faint:#71717A;
+  --line:#E4E4E7;--line-soft:#EFEFF1;--fill:#F4F4F5;--fill-2:#E9E9EC;--stone:#C8C8CD;
+  --accent:#2457D6;--accent-hover:#1D47B0;--signal:#3B82F6;--accent-soft:rgba(36,87,214,.08);--accent-mid:rgba(59,130,246,.45);
+  --mark:linear-gradient(180deg,rgba(59,130,246,0) 60%,rgba(59,130,246,.2) 60%);
+  --ok:#22A06B;--warn:#E8890C;--s1:#27272A;--s2:#71717A;--s3:#A1A1AA;--s4:#D4D4D8;
+  --col:1040px;--in:18px;--gut:32px}
+html,body,.app,.main,.tabbar{background:var(--paper)}
+.main{--px:max(var(--gut),calc((100% - var(--col)) / 2))}
+.app.split{--gut:24px}
+.sidebar{background:var(--canvas);border-right:1px solid var(--line)!important}
+.nav-item{border-radius:8px}
+.nav-item.on{background:var(--paper);box-shadow:0 0 0 1px var(--line);color:var(--ink)}
+.nav-item.on .ic{color:var(--ink)}
+.case-row.on .case-av{background:var(--ink);color:#fff}
+.search{background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);border-radius:8px}
+.csearch{background:var(--fill);border-radius:8px}
+/* Header */
+.head{padding:40px var(--px) 0}
+.head h1{font-size:32px;font-weight:600;letter-spacing:-.035em;margin-top:18px}
+.meta-line.docmeta{margin-top:10px;font-size:14px}
+.facts{margin-top:28px;padding:0;border:0;display:flex;flex-wrap:wrap;gap:20px 48px}
+.facts > div,.facts > div:first-child{padding:0;border:0}
 .facts dt{font-size:12px;color:var(--faint)}
-.facts dd{font-size:14px;font-weight:500;color:var(--ink)}
-.facts dd small{font-weight:400}
+.facts dd{font-size:15px;font-weight:500;color:var(--ink);margin-top:4px}
 .crumbs .tag{background:none;padding:0;color:var(--faint)}
-/* Products: one segmented control */
-.tabbar{background:var(--canvas);border:0;min-height:60px;padding-top:12px;padding-bottom:8px}
-.tabs{gap:2px;align-self:center;padding:3px;border-radius:12px;background:rgba(0,0,0,.055);flex:0 1 auto}
-.tabs button{min-height:32px;padding:0 16px;border-radius:9px;color:var(--ink-2);font-weight:500}
-.tabs button:hover{background:rgba(255,255,255,.5)}
-.tabs button.on{background:var(--paper);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12),0 0 0 .5px rgba(0,0,0,.06)}
-.tabs button.on::after{display:none}
-.tabs .n{color:var(--muted)}
-/* Large containers only */
-.view{padding:14px var(--px) 56px;gap:22px}
+/* Product tabs: plain text tabs on a hairline */
+.tabbar{padding:0 var(--px);min-height:0;border:0;margin-top:32px}
+.tabs{gap:32px;border-bottom:1px solid var(--line);flex:1 1 auto;padding:0;background:none;border-radius:0}
+.tabs button{min-height:44px;padding:0;border-radius:0;font-size:14px;color:var(--faint);font-weight:400;background:none!important;box-shadow:none!important}
+.tabs button:hover{color:var(--ink)}
+.tabs button.on{color:var(--ink);font-weight:500}
+.tabs button.on::after{display:block;content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--ink);border-radius:2px}
+/* Sections */
+.view{padding:40px var(--px) 96px;gap:64px}
 .jump{display:none}
-.box,.kpis{border:1px solid var(--edge);border-radius:var(--r-box);background:var(--paper);box-shadow:0 1px 2px rgba(0,0,0,.03)}
-.box-h{padding:18px var(--in) 14px;min-height:0;border-bottom:1px solid var(--line-soft);align-items:baseline}
-.box-h h3{font-size:16px;font-weight:600;letter-spacing:-.01em}
-.box-t{border-bottom:1px solid var(--line-soft);padding:8px var(--in)}
+.box{border:0!important;border-radius:0!important;box-shadow:none!important;background:none;container-type:inline-size}
+.box-h{display:block;padding:0 0 18px;min-height:0;border:0}
+.box-h h3{display:block;font-size:20px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
+.box-h .note{display:block;font-size:14px;color:var(--muted);max-width:72ch}
+.box-h .acts{margin:14px 0 0}
+.box > *:not(.box-h){border-left:1px solid var(--line);border-right:1px solid var(--line);background:var(--paper)}
+.box > .box-h + *{border-top:1px solid var(--line);border-radius:14px 14px 0 0}
+.box > *:last-child{border-bottom:1px solid var(--line);border-radius:0 0 14px 14px}
+.box > .box-h + *:last-child{border-radius:14px}
+.box-t{padding:10px var(--in);border-bottom:1px solid var(--line-soft)}
 .box-f{border-top:1px solid var(--line-soft)}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0;overflow:hidden}
-.kpi{background:none;border:0;border-radius:0;box-shadow:1px 0 0 var(--line-soft),0 1px 0 var(--line-soft);padding:20px var(--in) 22px}
-.kpi b{font-size:26px;font-weight:600;letter-spacing:-.03em}
+thead th,.ledger thead th,.chrono thead th,.box thead th{background:var(--canvas);color:var(--faint);font-weight:500;font-size:12px;border-top:0;border-bottom:1px solid var(--line)}
+td{padding:16px 12px;border-bottom-color:var(--line-soft)}
+tr.row:hover td,tr.row.open td,tr.detail > td,.ledger tr.ln td{background:var(--canvas)}
+/* Executive summary as prose */
+.exec > dl{display:block;border:0!important;background:none!important;border-radius:0!important}
+.exec dt{display:block;padding:0 0 6px!important;border:0!important;font-size:13px;font-weight:600;color:var(--ink)}
+.exec dd{display:block;padding:0 0 28px!important;border:0!important;font-size:15px;line-height:1.75;color:var(--ink-2);max-width:72ch}
+/* Figures without boxes */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:28px 36px;border:0;background:none;box-shadow:none;padding:0;overflow:visible}
+.kpi{padding:0;border:0;box-shadow:none;background:none;gap:6px;min-width:0}
+.kpi b{font-size:26px;font-weight:600;letter-spacing:-.035em;white-space:normal}
 .kpi label{font-size:12px;color:var(--faint)}
-.app.split .kpi b{font-size:22px}
-/* Tables read as lists */
-thead th,.ledger thead th,.chrono thead th,.box thead th{background:none;color:var(--faint);font-weight:500;font-size:12px;border-top:0;border-bottom:1px solid var(--line)}
-td{padding:15px 12px;border-bottom-color:var(--line-soft)}
-tr.row:hover td,tr.row.open td,tr.detail > td,.ledger tr.ln td{background:#FAFAFB}
-tfoot td{border-top:1px solid var(--line)}
-/* Status: a dot and plain text */
+/* Status, citations, controls */
 .st,.st.attn,.st.watch,.st.open{background:none!important;box-shadow:none!important;padding:0;border-radius:0;color:var(--ink-2)}
 .st::before{width:7px;height:7px;background:var(--ok)}
 .st.attn::before{background:var(--warn)}
 .st.watch::before{background:var(--signal);box-shadow:none}
 .st.open{color:var(--faint)}
 .st.open::before{background:transparent;box-shadow:inset 0 0 0 1.5px var(--stone)}
-.kpi.attn b::before,.tabs .n::before,.nav-item .meta.attn::before,.exec dt.attn::after,.tl-facts .attn b::before,.case-row.has-attn .case-txt b::after{background:var(--warn)}
-/* Citations: plain page links */
-.cite{background:none;color:var(--accent);padding:0 1px;border-radius:3px;font-size:12px}
+.kpi.attn b::before,.tabs .n::before,.nav-item .meta.attn::before,.exec dt.attn::after,.case-row.has-attn .case-txt b::after{background:var(--warn)}
+.cite{background:none;color:var(--accent);padding:0 1px;font-size:12px}
 .cite:hover{background:none;text-decoration:underline;text-underline-offset:3px}
-.cite.on,.cite.on:hover{background:var(--accent);color:#fff;text-decoration:none;padding:0 4px}
+.cite.on,.cite.on:hover{background:var(--accent);color:#fff;text-decoration:none;padding:0 4px;border-radius:3px}
 .cite.plain{background:none;color:var(--faint)}
 .cite + .cite{margin-left:8px}
-/* Controls: capsules */
-.btn{background:rgba(0,0,0,.055);box-shadow:none;border-radius:99px;height:30px;padding:0 14px}
-.btn:hover{background:rgba(0,0,0,.09)}
-.btn.quiet{background:none}
-.btn.quiet:hover{background:rgba(0,0,0,.05)}
-.btn.primary{background:var(--accent);color:#fff}
-.mseg{background:rgba(0,0,0,.055);border-radius:10px}
-.mseg button.on{box-shadow:0 1px 3px rgba(0,0,0,.12)}
-.readbtn{border-radius:99px;border-color:var(--line)}
-/* Strengths and risks: two lists, not tiles */
-.sw-cols{padding:6px var(--in) 10px;gap:0 36px}
-.sw-col{background:none;padding:0;border-radius:0;gap:0}
+.btn{background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);border-radius:8px;height:32px}
+.btn:hover{background:var(--fill)}
+.btn.quiet{box-shadow:none;background:none}
+.mseg{background:var(--fill);border-radius:8px}
+.sw-cols{padding:8px var(--in) 12px;gap:0 40px}
+.sw-col{background:none;padding:0}
 .sw-h{padding:14px 0 10px;border-bottom:1px solid var(--line)}
-.sw-sub{padding-left:30px}
 .tile{border:0;border-bottom:1px solid var(--line-soft);border-radius:0;padding:16px 0;box-shadow:none!important}
 .tile:last-child{border-bottom:0}
 .sw-mark.up{background:var(--ok)}
 .sw-mark.down{background:var(--warn)}
-/* Charts in the new palette */
-.wf-bar i{border-radius:3px}
-.meterbar i,.scores .bar i{background:var(--ink)}
-.dem-box{overflow:hidden}
-.seg.final{background:var(--ink)}
 .seg.review{background:var(--warn)}
-.cpane{background:var(--canvas);border-left:1px solid var(--line)}
-.cp-bar{background:var(--paper)}
+.meterbar i,.scores .bar i{background:var(--ink)}
+.cpane{border-left:1px solid var(--line)}
+@media (max-width:860px){.head{padding-top:24px}.view{gap:48px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
 
