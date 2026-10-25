@@ -4,6 +4,11 @@ A single-page workspace for plaintiff personal injury firms with four products p
 **Medical chronology, Case insights, Bills & liens and Demand draft**, plus a firm-level Review queue.
 Every citation opens the real source PDF in a pane beside the work.
 
+**New design (in progress):** `src/v2.html`, built by `build.py` into `dist/casework-v2.html`, published at
+https://claude.ai/artifact/13ky8zAEJpMySyr9jqP2QA. It is a from-scratch page on the same
+case data and case file: top bar, a case column with the four products, a colour-coded care timeline, a visit feed and a side
+column of case facts and open decisions. Medical chronology is built; the other three products follow once the look is approved.
+
 - Live artifact: https://claude.ai/artifact/NdpGhNPPrM4p4a7LBuUvMo (private; latest published is v28)
 - v21 layout B (centred column in a sheet, not chosen): https://claude.ai/artifact/3bJKW3LjgvhA7ufii9hy2m
 - Saved snapshots: `../CaseEdge-Workspace-v*.html` at the repo root (v28 is the current one)

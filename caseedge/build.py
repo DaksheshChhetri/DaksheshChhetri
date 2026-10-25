@@ -33,4 +33,13 @@ open(p('dist', 'CaseEdge-Workspace.html'), 'w').write(
     '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
     '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
     '<style>html,body{margin:0}</style>\n' + t + '\n</html>\n')
+# New design (v2), built from src/v2.html with the same case file and case data
+v2 = p('src', 'v2.html')
+if os.path.exists(v2):
+    src = open(p('src', 'template.html')).read()
+    data = src[src.index('const TYPES='):src.index('\n', src.index('const CASES='))]
+    w = open(v2).read().replace('/*__CASEDATA__*/', data)
+    w = w.replace('/*__DATA__*/', 'const PDF=' + json.dumps(idx, separators=(',', ':')) + ';\nconst PDF_B64="' + b64 + '";')
+    open(p('dist', 'casework-v2.html'), 'w').write(w)
+    open(p('dist', 'CaseEdge-v2.html'), 'w').write('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<style>html,body{margin:0}</style>\n' + w + '\n</html>\n')
 print('built', len(t), 'bytes')

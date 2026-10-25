@@ -1,0 +1,331 @@
+<title>CaseEdge</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap">
+<style>
+/* CaseEdge, new design (v2). Layout concept: a global top bar; a case column on the left that holds the case
+   identity and the four products; the page itself as a care timeline across the top, then a feed of visits
+   beside a column of case facts and open items. Warm paper neutrals, one deep green for actions,
+   and one soft hue per kind of care so a lawyer can read the course of treatment at a glance. */
+:root{
+  --bg:#F6F5F1;--surface:#FFFFFF;--sunk:#F1EFEA;--ink:#151513;--ink-2:#2B2A27;--muted:#62605A;--faint:#7A776F;
+  --line:#E4E1DA;--line-2:#EEECE6;--brand:#1F4D3A;--brand-ink:#FFFFFF;--brand-soft:#E8F0EC;--link:#1F5FBF;
+  --warn:#C26A00;--warn-soft:#FBF1E2;--ok:#2F7A4B;
+  --er:#3B6FD8;--ortho:#2F8F5B;--img:#C98A12;--pt:#7C5CD6;--pain:#C8458F;
+  --font:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:14px;--top:56px;--nav:264px;
+  color-scheme:light}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:400 14px/1.55 var(--font);letter-spacing:-.006em;-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px;border-radius:6px}
+.num{font-variant-numeric:tabular-nums}
+/* Shell */
+.shell{display:grid;grid-template-rows:var(--top) minmax(0,1fr);grid-template-columns:var(--nav) minmax(0,1fr) minmax(0,var(--pdf,0fr));height:100%;transition:grid-template-columns .3s cubic-bezier(.2,.8,.2,1)}
+.shell.split{--pdf:1fr}
+.topbar{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:0 20px 0 max(20px,env(safe-area-inset-left,0px));background:var(--surface);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;letter-spacing:-.02em;width:calc(var(--nav) - 40px)}
+.logo i{width:26px;height:26px;border-radius:7px;background:var(--brand);display:grid;place-items:center;color:#fff;font-style:normal;font-size:12px;font-weight:700}
+.cmd{flex:1;max-width:520px;display:flex;align-items:center;gap:10px;height:36px;padding:0 12px;border-radius:10px;background:var(--sunk);color:var(--faint)}
+.cmd input{flex:1;min-width:0;border:0;background:none;outline:none;font:inherit;color:var(--ink)}
+.cmd kbd{font:500 11px var(--font);color:var(--faint);border:1px solid var(--line);border-radius:5px;padding:1px 5px;background:var(--surface)}
+.top-r{margin-left:auto;display:flex;align-items:center;gap:8px}
+.chip-btn{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 12px;border-radius:9px;color:var(--ink-2)}
+.chip-btn:hover{background:var(--sunk)}
+.badge{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--warn);color:#fff;font-size:11px;font-weight:600;display:inline-grid;place-items:center}
+.me{width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:600}
+/* Case column */
+.casenav{grid-row:2;grid-column:1;overflow-y:auto;padding:20px 14px 24px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:22px}
+.case-id{padding:4px 8px}
+.case-id .av{width:40px;height:40px;border-radius:11px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:600;margin-bottom:12px}
+.case-id b{display:block;font-size:15px;font-weight:600;letter-spacing:-.015em;line-height:1.3}
+.case-id span{display:block;color:var(--muted);font-size:13px;margin-top:3px}
+.prod{display:flex;flex-direction:column;gap:2px}
+.prod-l{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:0 10px 6px}
+.prod button{display:flex;align-items:center;gap:12px;height:40px;padding:0 10px;border-radius:10px;color:var(--ink-2);font-weight:500}
+.prod button svg{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;color:var(--faint)}
+.prod button:hover{background:var(--sunk)}
+.prod button.on{background:var(--surface);box-shadow:0 0 0 1px var(--line),0 1px 2px rgba(0,0,0,.04);color:var(--ink)}
+.prod button.on svg{color:var(--brand)}
+.prod .ct{margin-left:auto;font-size:12px;color:var(--warn);font-weight:600}
+.others button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:8px 10px;border-radius:10px;width:100%;text-align:left}
+.others button:hover{background:var(--sunk)}
+.others b{font-weight:500;font-size:13px}
+.others span{font-size:12px;color:var(--faint)}
+/* Page */
+.page{grid-row:2;grid-column:2;overflow-y:auto;overflow-x:hidden;padding:28px max(28px,env(safe-area-inset-right,0px)) 64px 32px}
+.ph{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.ph-t{flex:1 1 420px;min-width:0}
+.crumb{font-size:13px;color:var(--faint);margin-bottom:6px}
+.ph h1{margin:0;font-size:30px;line-height:1.15;font-weight:600;letter-spacing:-.035em;text-wrap:balance}
+.ph p{margin:8px 0 0;color:var(--muted);max-width:70ch}
+.acts{display:flex;gap:8px}
+.btn{height:36px;padding:0 14px;border-radius:9px;font-weight:500;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn:hover{background:var(--sunk)}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.btn.pri:hover{background:#173D2E}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin-bottom:24px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.stat{padding:18px 20px;min-width:0}
+.stat + .stat{border-left:1px solid var(--line-2)}
+.stat label{display:block;font-size:12px;color:var(--faint)}
+.stat b{display:block;font-size:24px;font-weight:600;letter-spacing:-.03em;margin:4px 0 2px}
+.stat span{font-size:13px;color:var(--muted)}
+.stat.w b{color:var(--warn)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);min-width:0}
+.card-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:18px 20px 14px}
+.card-h h2{margin:0;font-size:16px;font-weight:600;letter-spacing:-.015em}
+.card-h p{margin:0;color:var(--muted);font-size:13px}
+.card-h .r{margin-left:auto}
+/* Care timeline */
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;padding:0 20px 14px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:9px;height:9px;border-radius:3px}
+.tl{position:relative;margin:0 20px 18px;border:1px solid var(--line-2);border-radius:10px;overflow:hidden}
+.tl-row{display:grid;grid-template-columns:200px minmax(0,1fr);min-height:44px;border-top:1px solid var(--line-2)}
+.tl-row:first-child{border-top:0}
+.tl-row.axis{min-height:34px;background:var(--sunk)}
+.tl-lab{display:flex;align-items:center;gap:9px;padding:0 14px;font-size:13px;font-weight:500;border-right:1px solid var(--line-2);background:#FCFBF9;min-width:0}
+.tl-lab i{width:8px;height:8px;border-radius:50%;flex:none}
+.tl-lab small{margin-left:auto;color:var(--faint);font-weight:400}
+.tl-track{position:relative}
+.tl-m{position:absolute;top:0;bottom:0;border-left:1px solid var(--line-2)}
+.tl-ml{position:absolute;top:9px;font-size:11px;font-weight:500;color:var(--faint);letter-spacing:.04em;text-transform:uppercase;transform:translateX(6px)}
+.tl-ev{position:absolute;top:11px;height:22px;min-width:6px;border-radius:5px;opacity:.92;cursor:pointer}
+.tl-ev:hover{opacity:1;box-shadow:0 0 0 2px var(--surface),0 0 0 4px currentColor}
+.tl-ev.sp{opacity:.22;top:17px;height:10px;cursor:default;box-shadow:none}
+.tl-gap{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(135deg,rgba(194,106,0,.10) 0 6px,rgba(194,106,0,.03) 6px 12px);border-left:1px dashed rgba(194,106,0,.5);border-right:1px dashed rgba(194,106,0,.5)}
+.tl-gapl{position:absolute;top:8px;transform:translateX(-50%);font-size:12px;font-weight:600;color:var(--warn);background:var(--warn-soft);padding:2px 8px;border-radius:6px;white-space:nowrap}
+.tl-today{position:absolute;top:0;bottom:0;border-left:1.5px solid var(--ink);opacity:.5}
+/* Body grid: feed + side column */
+.body{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start;margin-top:24px}
+.side{display:flex;flex-direction:column;gap:24px;position:sticky;top:0}
+.feed{padding:4px 20px 8px}
+.filters{display:flex;gap:6px;flex-wrap:wrap;padding:0 20px 14px}
+.filters button{height:30px;padding:0 12px;border-radius:15px;border:1px solid var(--line);font-size:13px;color:var(--muted);background:var(--surface)}
+.filters button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.ev{display:grid;grid-template-columns:96px 28px minmax(0,1fr);gap:0 12px;position:relative}
+.ev-d{padding-top:16px;font-size:13px;font-weight:500;color:var(--ink-2);text-align:right;font-variant-numeric:tabular-nums}
+.ev-d small{display:block;font-weight:400;color:var(--faint);font-size:12px}
+.ev-rail{position:relative;display:flex;justify-content:center}
+.ev-rail::before{content:"";position:absolute;top:0;bottom:0;left:50%;border-left:1.5px solid var(--line)}
+.ev:first-child .ev-rail::before{top:22px}
+.ev:last-child .ev-rail::before{bottom:calc(100% - 22px)}
+.ev-node{position:relative;margin-top:16px;width:14px;height:14px;border-radius:50%;background:var(--surface);border:3px solid currentColor}
+.ev-b{padding:12px 0 18px;border-bottom:1px solid var(--line-2);min-width:0}
+.ev:last-child .ev-b{border-bottom:0}
+.ev-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:6px;font-size:12px;font-weight:600}
+.ev-top b{font-weight:600}
+.ev-top .src{margin-left:auto}
+.ev p{margin:6px 0 0;color:var(--ink-2);max-width:78ch}
+.ev-meta{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:8px;font-size:13px;color:var(--muted)}
+.ev-meta em{font-style:normal;color:var(--faint)}
+.flag{margin-top:10px;padding:9px 12px;border-radius:9px;background:var(--warn-soft);color:#7A4300;font-size:13px}
+.gapnote{margin:4px 0 4px 136px;padding:10px 14px;border-radius:10px;background:var(--warn-soft);color:#7A4300;font-size:13px}
+.cite{color:var(--link);font-size:13px;font-weight:500;white-space:nowrap;cursor:pointer;border-radius:4px;padding:0 2px}
+.cite:hover{text-decoration:underline;text-underline-offset:3px}
+.cite.on{background:var(--link);color:#fff;text-decoration:none;padding:0 5px}
+.facts{padding:2px 20px 10px}
+.fact{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--line-2)}
+.fact:first-child{border-top:0}
+.fact dt{color:var(--muted)}
+.fact dd{margin:0;text-align:right;font-weight:500}
+.fact dd small{display:block;font-weight:400;color:var(--faint);font-size:12px}
+.todo{padding:2px 20px 12px}
+.todo li{list-style:none;display:grid;grid-template-columns:18px minmax(0,1fr);gap:10px;padding:12px 0;border-top:1px solid var(--line-2)}
+.todo li:first-child{border-top:0}
+.todo i{width:8px;height:8px;border-radius:50%;background:var(--warn);margin-top:7px}
+.todo b{display:block;font-weight:500}
+.todo span{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.todo ul{margin:0;padding:0}
+.soon{padding:40px 24px;text-align:center;color:var(--muted)}
+.soon b{display:block;color:var(--ink);font-size:16px;margin-bottom:6px}
+/* Source PDF */
+.pdf{grid-row:2;grid-column:3;min-width:0;display:flex;flex-direction:column;background:var(--sunk);border-left:1px solid var(--line);overflow:hidden}
+.pdf-h{display:flex;align-items:center;gap:10px;height:58px;padding:0 12px 0 18px;background:var(--surface);border-bottom:1px solid var(--line)}
+.pdf-h div{flex:1;min-width:0}
+.pdf-h b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pdf-h span{display:block;font-size:12px;color:var(--faint)}
+.x{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--muted);font-size:18px}
+.x:hover{background:var(--sunk)}
+.pdf-b{flex:1;overflow:auto;padding:20px}
+.pg{position:relative;margin:0 auto 16px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.05),0 6px 20px -10px rgba(0,0,0,.2);border-radius:4px;overflow:hidden}
+.pg canvas{position:absolute;inset:0;width:100%;height:100%}
+.hl{position:absolute;background:rgba(31,95,191,.28);mix-blend-mode:multiply;box-shadow:inset 0 -2px 0 var(--link)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;z-index:50}
+@media (max-width:1180px){.body{grid-template-columns:minmax(0,1fr)}.side{position:static}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat:nth-child(4){border-left:0}.stat:nth-child(n+4){border-top:1px solid var(--line-2)}}
+.shell.split .body{grid-template-columns:minmax(0,1fr)}
+.shell.split .side{position:static}
+.shell.split .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+.shell.split .stat{border-left:0!important;border-top:1px solid var(--line-2)}
+.shell.split .stat:nth-child(-n+2){border-top:0}
+.shell.split .stat:nth-child(even){border-left:1px solid var(--line-2)!important}
+.shell.split .tl-row{grid-template-columns:130px minmax(0,1fr)}
+@media (max-width:860px){
+  .shell,.shell.split{grid-template-columns:minmax(0,1fr);grid-template-rows:var(--top) auto minmax(0,1fr)}
+  .logo{width:auto}.cmd{display:none}
+  .casenav{grid-row:2;grid-column:1;flex-direction:row;overflow-x:auto;padding:10px 16px;border-right:0;border-bottom:1px solid var(--line);gap:12px}
+  .case-id,.others,.prod-l{display:none}
+  .prod{flex-direction:row}
+  .page{grid-row:3;grid-column:1;padding:20px 16px 48px}
+  .pdf{position:fixed;inset:0;z-index:40}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat{border-left:0!important;border-top:1px solid var(--line-2)}
+  .stat:nth-child(-n+2){border-top:0}
+  .tl-row{grid-template-columns:110px minmax(0,1fr)}
+  .ev{grid-template-columns:64px 20px minmax(0,1fr);gap:0 8px}
+  .gapnote{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="shell" id="shell">
+  <header class="topbar">
+    <div class="logo"><i>CE</i>CaseEdge</div>
+    <label class="cmd"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search visits, providers and records" autocomplete="off"><kbd>⌘K</kbd></label>
+    <div class="top-r">
+      <button class="chip-btn" data-toast="The review queue is in the current version.">Review <span class="badge" id="revBadge">5</span></button>
+      <span class="me" title="Daniel Reyes · Reyes &amp; Lin LLP">DR</span>
+    </div>
+  </header>
+
+  <nav class="casenav" aria-label="Case">
+    <div class="case-id"><div class="av">MA</div><b>Alvarez v. Sunline Freight, LLC</b><span>Maria Alvarez, 38 · Pre-litigation</span></div>
+    <div class="prod" id="prod">
+      <div class="prod-l">Products</div>
+      <button data-p="chronology" class="on"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h13"/></svg>Medical chronology<span class="ct">2</span></button>
+      <button data-p="insights"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M22 19H2"/></svg>Case insights<span class="ct">1</span></button>
+      <button data-p="liens"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg>Bills &amp; liens<span class="ct">1</span></button>
+      <button data-p="demand"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg>Demand draft<span class="ct">1</span></button>
+    </div>
+    <div class="others"><div class="prod-l">Other cases</div><div id="others"></div></div>
+  </nav>
+
+  <main class="page" id="page"></main>
+
+  <aside class="pdf" id="pdf" hidden aria-label="Source document">
+    <div class="pdf-h"><div><b id="pdfT">Case file</b><span id="pdfS"></span></div><button class="x" id="pdfX" aria-label="Close the source document">×</button></div>
+    <div class="pdf-b" id="pdfB"></div>
+  </aside>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<script>
+/*__DATA__*/
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const day=s=>new Date(s+'T12:00:00');
+const solDays=Math.ceil((day('2028-03-14')-new Date())/864e5);
+/*__CASEDATA__*/
+const fmt=s=>day(s).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+const yr=s=>day(s).getFullYear();
+const cite=k=>PDF.keys[k]?`<span class="cite" role="button" tabindex="0" data-cite="${k}">${PDF.keys[k].label}</span>`:'';
+const HUE={er:'var(--er)',ortho:'var(--ortho)',img:'var(--img)',pt:'var(--pt)',pain:'var(--pain)'};
+const TINT={er:'#EAF0FC',ortho:'#E6F3EC',img:'#FBF2DF',pt:'#EFEAFB',pain:'#FAE8F2'};
+let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2400)}
+let filter='all';
+
+function chronology(){
+  const S=day('2026-03-01'),E=day('2026-10-31'),pct=d=>(day(d)-S)/(E-S)*100;
+  const lanes=[['er','Emergency',[['2026-03-14',1]]],['ortho','Orthopedics',[['2026-03-18'],['2026-04-15'],['2026-04-29'],['2026-06-12'],['2026-07-24'],['2026-08-20']]],['img','Imaging',[['2026-04-02']]],['pt','Physical therapy',PTV.map(d=>[d])],['pain','Pain management',[['2026-04-21'],['2026-07-09']]]];
+  const months=[];for(let m=3;m<=10;m++) months.push(`2026-${String(m).padStart(2,'0')}-01`);
+  const grid=months.map(m=>`<span class="tl-m" style="left:${pct(m)}%"></span>`).join('');
+  const gap=`<span class="tl-gap" style="left:${pct(GAP.from)}%;width:${pct(GAP.to)-pct(GAP.from)}%"></span>`;
+  const today=`<span class="tl-today" style="left:${pct('2026-10-14')}%"></span>`;
+  const counts={};CHRONO.forEach(c=>counts[c.t]=(counts[c.t]||0)+1);
+  const rows=lanes.map(([t,name,ev])=>{
+    const key=CHRONO.find(c=>c.t===t);
+    const spans=t==='pt'?[['2026-03-24','2026-05-02'],['2026-06-15','2026-09-30']].map(([a,b])=>`<span class="tl-ev sp" style="left:${pct(a)}%;width:${pct(b)-pct(a)}%;background:${HUE[t]}"></span>`).join(''):'';
+    const marks=ev.map(([d])=>{const c=CHRONO.find(x=>x.d===d&&x.t===t);return `<span class="tl-ev" style="left:calc(${pct(d)}% - 3px);width:${t==='pt'?4:8}px;background:${HUE[t]};color:${HUE[t]}" ${c?`data-cite="${c.key}"`:''} title="${fmt(d)} · ${name}${c?' · '+esc(c.sum.split('. ')[0]):''}"></span>`}).join('');
+    return `<div class="tl-row"><div class="tl-lab"><i style="background:${HUE[t]}"></i>${name}<small>${ev.length}</small></div><div class="tl-track">${grid}${spans}${marks}</div></div>`;
+  }).join('');
+  const axis=`<div class="tl-row axis"><div class="tl-lab" style="color:var(--faint);font-weight:500">2026</div><div class="tl-track">${months.map(m=>`<span class="tl-m" style="left:${pct(m)}%"></span><span class="tl-ml" style="left:${pct(m)}%">${day(m).toLocaleDateString('en-US',{month:'short'})}</span>`).join('')}</div></div>`;
+  const overlay=`<div style="position:absolute;left:200px;right:0;top:34px;bottom:0;pointer-events:none" class="tl-ov">${gap}<span class="tl-gapl" style="left:${(pct(GAP.from)+pct(GAP.to))/2}%">41-day gap</span>${today}</div>`;
+  const list=CHRONO.map((c,i)=>({c,i})).filter(x=>filter==='all'||x.c.t===filter).filter(x=>!q||[x.c.prov,x.c.sum,TYPES[x.c.t]].join(' ').toLowerCase().includes(q));
+  let feed='',prev=null;
+  list.forEach(({c})=>{
+    if(filter==='all'&&!q&&prev&&prev.d<=GAP.from&&c.d>=GAP.to) feed+=`<div class="gapnote"><b>41 days without care</b>, May 2 to June 12. She had no childcare for her two children, recorded at the time ${cite('ex5p61')}</div>`;
+    feed+=`<article class="ev"><div class="ev-d">${fmt(c.d)}<small>${yr(c.d)}</small></div><div class="ev-rail" style="color:${HUE[c.t]}"><span class="ev-node"></span></div>
+      <div class="ev-b"><div class="ev-top"><span class="tag" style="background:${TINT[c.t]};color:${HUE[c.t]}">${TYPES[c.t]}</span><b>${esc(c.prov)}</b><span class="src">${cite(c.key)}</span></div>
+      <p>${esc(c.sum)}</p>
+      <div class="ev-meta">${c.clin?`<span><em>Clinician</em> ${esc(c.clin)}</span>`:''}${c.met&&c.met!=='—'?`<span><em>Pain and function</em> ${esc(c.met)}</span>`:''}<span><em>Diagnoses</em> ${c.dx.join(', ')}</span></div>
+      ${c.flag?`<div class="flag">${esc(c.flag)}</div>`:''}</div></article>`;
+    prev=c;
+  });
+  const types=['all',...Object.keys(TYPES)];
+  $('#page').innerHTML=`
+  <div class="ph"><div class="ph-t"><div class="crumb">Alvarez v. Sunline Freight, LLC</div><h1>Medical chronology</h1><p>Every verified visit from 312 pages of records, in date order, with the page each fact comes from.</p></div>
+    <div class="acts"><button class="btn" data-toast="Uploading records is not available in this preview.">Add records</button><button class="btn pri" data-toast="Exporting is not available in this preview.">Export chronology</button></div></div>
+  <div class="stats">
+    <div class="stat"><label>Verified visits</label><b>47</b><span>Five providers and an ambulance</span></div>
+    <div class="stat"><label>Under care</label><b>200 days</b><span>March 14 to September 30</span></div>
+    <div class="stat w"><label>Longest gap</label><b>41 days</b><span>Explained by childcare</span></div>
+    <div class="stat"><label>Surgery</label><b>Recommended</b><span>Day 159, about $98,000</span></div>
+    <div class="stat"><label>Specials to date</label><b>$181,360</b><span>Medical and lost wages</span></div>
+  </div>
+  <section class="card"><div class="card-h"><h2>Care timeline</h2><p>Each line is a kind of care. Select a mark to open its record.</p></div>
+    <div class="legend">${Object.keys(TYPES).map(t=>`<span><i style="background:${HUE[t]}"></i>${TYPES[t]}</span>`).join('')}<span><i style="background:repeating-linear-gradient(135deg,rgba(194,106,0,.5) 0 2px,transparent 2px 4px)"></i>Gap in care</span></div>
+    <div class="tl">${axis}${rows}${overlay}</div></section>
+  <div class="body">
+    <section class="card"><div class="card-h"><h2>Visits</h2><p>The 10 key visits, each cited to its page</p></div>
+      <div class="filters">${types.map(t=>`<button data-f="${t}" class="${filter===t?'on':''}">${t==='all'?'All':TYPES[t]} <span style="opacity:.6">${t==='all'?CHRONO.length:counts[t]||0}</span></button>`).join('')}</div>
+      <div class="feed">${feed||'<p class="soon">No visits match.</p>'}</div></section>
+    <div class="side">
+      <section class="card"><div class="card-h"><h2>Case facts</h2></div><dl class="facts">
+        <div class="fact"><dt>Date of incident</dt><dd>Mar 14, 2026</dd></div>
+        <div class="fact"><dt>Statute of limitations</dt><dd>Mar 14, 2028<small>${solDays} days left</small></dd></div>
+        <div class="fact"><dt>Policy limits</dt><dd>$1,000,000<small>${cite('ex9p1')}</small></dd></div>
+        <div class="fact"><dt>Specials to date</dt><dd>$181,360.00</dd></div>
+        <div class="fact"><dt>Stage</dt><dd>Demand drafting</dd></div></dl></section>
+      <section class="card"><div class="card-h"><h2>Needs a decision</h2><p>${REVIEW.length} open</p></div><ul class="todo">${REVIEW.map(r=>`<li><i></i><div><b>${esc(r.title)}</b><span>${esc(r.type)} · ${cite(r.key)}</span></div></li>`).join('')}</ul></section>
+    </div>
+  </div>`;
+}
+function soon(name){
+  $('#page').innerHTML=`<div class="ph"><div class="ph-t"><div class="crumb">Alvarez v. Sunline Freight, LLC</div><h1>${name}</h1><p>This product moves to the new design next, with the same content as the current version.</p></div></div><section class="card soon"><b>Coming next in the new design</b>Medical chronology shows the new look. Tell me if it is right and I will rebuild ${name} the same way.</section>`;
+}
+let q='',view='chronology';
+function render(){view==='chronology'?chronology():soon({insights:'Case insights',liens:'Bills & liens',demand:'Demand draft'}[view])}
+$('#others').innerHTML=CASES.slice(1,6).map(c=>`<button data-toast="Only the Alvarez case is available in this preview."><b>${esc(c[1])}</b><span>${esc(c[2])}</span></button>`).join('');
+$('#revBadge').textContent=REVIEW.length;
+
+/* Source PDF beside the work, opened on the cited page with the passage highlighted */
+let doc=null,openKey=null;
+async function openCite(k,el){
+  if(!PDF.keys[k]) return;
+  document.querySelectorAll('.cite.on').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll(`.cite[data-cite="${k}"]`).forEach(x=>x.classList.add('on'));
+  openKey=k;$('#pdf').hidden=false;$('#shell').classList.add('split');
+  const m=PDF.meta[PDF.keys[k].page-1];$('#pdfT').textContent=m.fac;$('#pdfS').textContent=`Ex. ${m.ex}, p. ${m.pg} · ${m.doc}`;
+  const box=$('#pdfB');box.innerHTML='<p style="color:var(--muted)">Loading the page…</p>';
+  try{
+    if(!doc){const bin=atob(PDF_B64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);doc=await pdfjsLib.getDocument({data:u,isEvalSupported:false}).promise}
+    await new Promise(r=>setTimeout(r,320));
+    const page=await doc.getPage(PDF.keys[k].page),w=Math.max(260,box.clientWidth-40),sc=w/PDF.w,vp=page.getViewport({scale:sc}),dpr=Math.min(2,devicePixelRatio||1);
+    const pg=document.createElement('div');pg.className='pg';pg.style.width=vp.width+'px';pg.style.height=vp.height+'px';
+    const cv=document.createElement('canvas');cv.width=vp.width*dpr;cv.height=vp.height*dpr;pg.appendChild(cv);
+    PDF.keys[k].rects.forEach(([x,y,rw,rh])=>{const h=document.createElement('div');h.className='hl';Object.assign(h.style,{left:x*sc+'px',top:(PDF.h-y-rh)*sc+'px',width:rw*sc+'px',height:rh*sc+'px'});pg.appendChild(h)});
+    box.innerHTML='';box.appendChild(pg);
+    await page.render({canvasContext:cv.getContext('2d'),viewport:vp,transform:dpr!==1?[dpr,0,0,dpr,0,0]:null}).promise;
+    const hl=pg.querySelector('.hl');if(hl) box.scrollTop=Math.max(0,hl.offsetTop-box.clientHeight*.3);
+  }catch(e){box.innerHTML=`<p style="color:var(--muted)">The page could not be shown (${esc(e.message||'error')}).</p>`}
+}
+function closePdf(){$('#shell').classList.remove('split');document.querySelectorAll('.cite.on').forEach(x=>x.classList.remove('on'));setTimeout(()=>{if(!$('#shell').classList.contains('split')) $('#pdf').hidden=true},320)}
+document.addEventListener('click',e=>{
+  const c=e.target.closest('[data-cite]');if(c){openCite(c.dataset.cite,c);return}
+  const p=e.target.closest('[data-p]');if(p){view=p.dataset.p;document.querySelectorAll('#prod [data-p]').forEach(b=>b.classList.toggle('on',b===p));render();$('#page').scrollTop=0;return}
+  const f=e.target.closest('[data-f]');if(f){filter=f.dataset.f;render();return}
+  const t=e.target.closest('[data-toast]');if(t){toast(t.dataset.toast);return}
+  if(e.target.closest('#pdfX')) closePdf();
+});
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#q').focus()}
+  if(e.key==='Escape') closePdf();
+  const c=e.target.closest&&e.target.closest('[data-cite]');if(c&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openCite(c.dataset.cite,c)}
+});
+$('#q').addEventListener('input',e=>{q=e.target.value.trim().toLowerCase();if(view==='chronology') render()});
+render();
+</script>
