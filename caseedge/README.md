@@ -4,9 +4,9 @@ A single-page workspace for plaintiff personal injury firms with four products p
 **Medical chronology, Case insights, Bills & liens and Demand draft**, plus a firm-level Review queue.
 Every citation opens the real source PDF in a pane beside the work.
 
-- Live artifact: https://claude.ai/artifact/NdpGhNPPrM4p4a7LBuUvMo (private; latest published is v24)
+- Live artifact: https://claude.ai/artifact/NdpGhNPPrM4p4a7LBuUvMo (private; latest published is v25)
 - v21 layout B (centred column in a sheet, not chosen): https://claude.ai/artifact/3bJKW3LjgvhA7ufii9hy2m
-- Saved snapshots: `../CaseEdge-Workspace-v*.html` at the repo root (v24 is the current one)
+- Saved snapshots: `../CaseEdge-Workspace-v*.html` at the repo root (v25 is the current one)
 
 ## Layout of this folder
 
@@ -65,6 +65,9 @@ Run each test as `NODE_PATH=$(npm root -g) node tests/<name>.js "$PWD" "$PWD/dis
   separated by dots), tables with a soft grey header row, and Case insights' strengths and risks as two columns of tiles.
 - **v24, after Wisedocs and Supio:** no boxes. Sections are headings on a white page with tables running edge to edge
   (grey header row, hairline rows), separated by space. Only the demand editor keeps a frame.
+- **v25 soft pass, after EvenUp, Wisedocs and Supio (replaces the one-colour, square-edged rules):** cool light-grey page,
+  white rounded cards with soft shadows, pill tabs, a calmer blue (#2563EB), and soft coloured status tags: green settled,
+  amber needs attention, blue in progress, grey not started. Checked at 1440 x 900, the owner's 15-inch laptop.
 - **Structure:** every case page shares one header (crumbs and actions, a 28px title, facts with a stage stepper) and one tab bar.
   Each product opens with summary tiles, then stacked panels; long pages add an "On this page" row. Status is a soft pill with its dot.
   Charts are drawn in ink greys with the one accent for the figure that matters most.

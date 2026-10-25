@@ -814,39 +814,72 @@ thead th{background:#F6F5F2;border-bottom-color:var(--line)}
 .tile-cat{color:var(--muted)}
 .sw-empty{margin:0;color:var(--muted);padding:8px 4px}
 
-/* v24 open page, after Wisedocs and Supio: no boxes. The page is white; each section is a heading on the
-   page with its table running edge to edge below it (grey header row, hairline rows). Sections are
-   separated by space, not frames. Only the demand editor keeps a frame, because it is a working surface. */
-html,body,.app,.main,.tabbar{background:var(--paper)}
-.sidebar{background:var(--canvas);border-right:1px solid var(--line-soft)!important}
-.head{padding:22px var(--px) 0}
-.head h1{font-size:26px;margin-top:10px}
-.facts{margin-top:18px;padding:14px 0 16px;border-top:1px solid var(--line-soft)}
-.tabbar{border-top:0;border-bottom:1px solid var(--line)}
-.view{gap:44px;padding-top:28px}
-.box{border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent;--in:14px;container-type:inline-size}
-.box > :first-child,.box > :last-child{border-radius:0!important}
-.box-h{padding:0 0 12px;min-height:0;border-bottom:0;align-items:baseline}
-.box-h h3{font-size:16px}
-.box-t{padding:0 0 12px;border-bottom:0;min-height:0}
-.box-f{padding:12px var(--in);border-top:1px solid var(--line-soft)}
-.box thead th{border-top:1px solid var(--line);background:#F6F5F2}
-.box tbody tr:last-child td{border-bottom:1px solid var(--line-soft)}
-.exec dl{border-top:1px solid var(--line);border-bottom:1px solid var(--line-soft)}
-.exec dt{padding-left:0}
-.scores{border-top:1px solid var(--line);border-bottom:1px solid var(--line-soft)}
-.score:first-child{padding-left:0}
-.tmap-scroll{border-top:1px solid var(--line)}
-.wf{padding:18px 0;border-top:1px solid var(--line)}
-.val{border-top:1px solid var(--line)}
-.drivers > div:first-child{padding-left:0}
-.sw-cols{padding:0;gap:20px}
+/* v25 soft pass, after EvenUp, Wisedocs and Supio: a cool light-grey page, white rounded cards with soft
+   shadows, pill tabs, a calmer blue, and soft coloured status tags (green settled, amber needs attention,
+   blue in progress, grey not started). Tuned for a 15-inch laptop (1440 x 900). */
+:root{--canvas:#F4F6F9;--paper:#FFFFFF;--ink:#101828;--ink-2:#1D2939;--muted:#475467;--faint:#667085;
+  --line:#E3E7ED;--line-soft:#EDF0F4;--fill:#F2F4F7;--fill-2:#EAEEF3;--stone:#C4CBD6;
+  --accent:#2563EB;--accent-hover:#1D4ED8;--signal:#3B82F6;--accent-soft:rgba(37,99,235,.08);--accent-mid:rgba(59,130,246,.45);
+  --mark:linear-gradient(180deg,rgba(59,130,246,0) 60%,rgba(59,130,246,.22) 60%);
+  --s1:#1D2939;--s2:#667085;--s3:#98A2B3;--s4:#D0D5DD;--r-box:14px;--in:20px;--gut:24px;
+  --card:0 1px 2px rgba(16,24,40,.04),0 6px 20px -12px rgba(16,24,40,.10)}
+html,body,.app,.main{background:var(--canvas)}
+.app.split{--gut:20px}
+.sidebar{background:var(--paper);border-right:1px solid var(--line)!important}
+.nav-item{border-radius:10px;color:var(--ink-2)}
+.nav-item:hover{background:var(--fill)}
+.nav-item.on{background:var(--accent-soft);box-shadow:none;color:var(--accent)}
+.nav-item.on .ic{color:var(--accent)}
+.case-row.on .case-av{background:var(--accent);color:#fff}
+.search,.csearch{background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);border-radius:10px}
+.sidebar .search{background:var(--fill);box-shadow:none}
+.head{padding:22px var(--px) 4px}
+.head h1{font-size:24px;font-weight:600;margin-top:10px}
+.facts{margin-top:16px;padding:16px 20px;border:1px solid var(--line);border-radius:var(--r-box);background:var(--paper);box-shadow:var(--card)}
+.facts > div{border-left-color:var(--line-soft)}
+.tabbar{background:var(--canvas);border:0;min-height:56px;padding-top:6px;padding-bottom:6px}
+.tabs{gap:4px;align-items:center}
+.tabs button{min-height:36px;padding:0 14px;border-radius:10px;color:var(--muted)}
+.tabs button:hover{background:rgba(16,24,40,.04);color:var(--ink)}
+.tabs button.on{background:var(--paper);color:var(--ink);font-weight:500;box-shadow:0 0 0 1px var(--line),0 1px 3px rgba(16,24,40,.06)}
+.tabs button.on::after{display:none}
+.view{padding:12px var(--px) 56px;gap:20px}
+.box{border:1px solid var(--line);border-radius:var(--r-box);background:var(--paper);box-shadow:var(--card)}
+.box-h{padding:14px var(--in);min-height:60px;border-bottom:1px solid var(--line-soft)}
+.box-h h3{font-size:15px;font-weight:600}
+.box-t{border-bottom:1px solid var(--line-soft)}
+thead th,.ledger thead th,.chrono thead th,.box thead th{background:#F9FAFB;color:var(--faint);font-weight:500;border-top:0;border-bottom:1px solid var(--line-soft)}
+td{border-bottom-color:var(--line-soft)}
+tr.row:hover td,tr.row.open td,tr.detail > td{background:#F8FAFD}
 .kpis{gap:12px}
-.kpi{background:var(--canvas);border:0;box-shadow:none}
-.dem-box{border:1px solid var(--line)!important;border-radius:12px!important;overflow:hidden}
-.dem-box .box-h{padding:12px 16px;border-bottom:1px solid var(--line-soft);align-items:center}
-.dem-box .box-t{padding:8px 16px;border-bottom:1px solid var(--line-soft)}
-.jump{margin:-20px 0 -12px}
+.kpi{background:var(--paper);border:1px solid var(--line);box-shadow:var(--card);border-radius:var(--r-box)}
+.kpi b{font-weight:500}
+.jump{margin:-4px 0 -4px}
+.jump button{border-color:var(--line);background:var(--paper)}
+.btn{background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);border-radius:10px;height:32px}
+.btn:hover{background:var(--fill)}
+.btn.quiet{box-shadow:none;background:none}
+.btn.primary{background:var(--accent);box-shadow:none}
+.mseg{background:var(--fill);border-radius:10px}
+.cite{background:rgba(37,99,235,.08);color:var(--accent);border-radius:6px;padding:2px 6px}
+.cite.plain{background:var(--fill);color:var(--muted)}
+/* Status tags: soft colours that read at a glance */
+.st{background:#ECFDF3;color:#067647}
+.st::before{background:#17B26A}
+.st.attn{background:#FFFAEB;color:#B54708}
+.st.attn::before{background:#F79009}
+.st.watch{background:#EFF6FF;color:#1D4ED8;box-shadow:none}
+.st.watch::before{background:#3B82F6;box-shadow:none}
+.st.open{background:var(--fill);color:var(--muted);box-shadow:none}
+.st.open::before{background:var(--stone);box-shadow:none}
+.st.dot{background:none}
+.kpi.attn b::before,.tabs .n::before,.nav-item .meta.attn::before,.exec dt.attn::after,.tl-facts .attn b::before,.case-row.has-attn .case-txt b::after{background:#F79009}
+.sw-col{background:var(--canvas)}
+.tile{border-color:var(--line)}
+.sw-mark.down{background:#F79009}
+.sw-mark.up{background:#17B26A}
+.dem-box{overflow:hidden}
+.cpane{background:var(--canvas)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
 
