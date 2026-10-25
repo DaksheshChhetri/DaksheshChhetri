@@ -4,9 +4,9 @@ A single-page workspace for plaintiff personal injury firms with four products p
 **Medical chronology, Case insights, Bills & liens and Demand draft**, plus a firm-level Review queue.
 Every citation opens the real source PDF in a pane beside the work.
 
-- Live artifact: https://claude.ai/artifact/NdpGhNPPrM4p4a7LBuUvMo (private; latest published is v25)
+- Live artifact: https://claude.ai/artifact/NdpGhNPPrM4p4a7LBuUvMo (private; latest published is v26)
 - v21 layout B (centred column in a sheet, not chosen): https://claude.ai/artifact/3bJKW3LjgvhA7ufii9hy2m
-- Saved snapshots: `../CaseEdge-Workspace-v*.html` at the repo root (v25 is the current one)
+- Saved snapshots: `../CaseEdge-Workspace-v*.html` at the repo root (v26 is the current one)
 
 ## Layout of this folder
 
@@ -38,10 +38,10 @@ mkdir -p vendor /tmp/pdfjs && cd /tmp/pdfjs && npm pack pdfjs-dist@3.11.174 && t
 Run each test as `NODE_PATH=$(npm root -g) node tests/<name>.js "$PWD" "$PWD/dist/casework.html"`
 (Chromium is at `/opt/pw-browsers/chromium`):
 
-- `smoke.js` loads the page, opens a citation, reports errors and the PDF pane width (expect 600 at 1440).
+- `smoke.js` loads the page, opens a citation, reports errors and the PDF pane width (expect 592 at 1440).
 - `interactions.js` opens an encounter, groups by provider, accepts the suggested demand edit (review count 5 to 4, survives reload), jumps from the review queue, opens a citation.
 - `widths.js` checks for sideways scrolling in every view (all ten, read from `VIEWS`) at 1280, 1440, 1728 and 1920, sidebar open and collapsed (expect all 0).
-- `split.js` checks the 50/50 source view and phone width (main 600 / pane 600, no page scroll).
+- `split.js` checks the 50/50 source view and phone width (main 592 / pane 592, no page scroll).
 - `typescan.js` lists the font size and family of all body text in every view (expect only `13px Inter`).
 - `shoot.js <dir> <file> <name> <width> <views>` writes full-page screenshots to `<dir>/shots/`.
 
@@ -68,6 +68,9 @@ Run each test as `NODE_PATH=$(npm root -g) node tests/<name>.js "$PWD" "$PWD/dis
 - **v25 soft pass, after EvenUp, Wisedocs and Supio (replaces the one-colour, square-edged rules):** cool light-grey page,
   white rounded cards with soft shadows, pill tabs, a calmer blue (#2563EB), and soft coloured status tags: green settled,
   amber needs attention, blue in progress, grey not started. Checked at 1440 x 900, the owner's 15-inch laptop.
+- **v26, after macOS Tahoe and the Wisedocs, Supio and EvenUp screens (current):** a light window with a floating glass sidebar,
+  one segmented control for the four products, large rounded containers and no small boxes. Status is a coloured dot with
+  plain text (green settled, orange needs attention, blue in progress, outline not started); citations are plain blue page links.
 - **Structure:** every case page shares one header (crumbs and actions, a 28px title, facts with a stage stepper) and one tab bar.
   Each product opens with summary tiles, then stacked panels; long pages add an "On this page" row. Status is a soft pill with its dot.
   Charts are drawn in ink greys with the one accent for the figure that matters most.
