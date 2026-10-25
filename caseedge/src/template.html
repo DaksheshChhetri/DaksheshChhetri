@@ -814,67 +814,71 @@ thead th{background:#F6F5F2;border-bottom-color:var(--line)}
 .tile-cat{color:var(--muted)}
 .sw-empty{margin:0;color:var(--muted);padding:8px 4px}
 
-/* v27, a reading layout: a white page with a modest centred column (1,040px) and generous space. Each section is a
-   heading and a short description on the page; only the table or chart under it sits in one light rounded frame.
-   The executive summary reads as prose. Figures stand on their own without boxes. Status is a dot with text;
-   citations are plain page links. */
-:root{--canvas:#FAFAFA;--paper:#FFFFFF;--ink:#18181B;--ink-2:#27272A;--muted:#52525B;--faint:#71717A;
-  --line:#E4E4E7;--line-soft:#EFEFF1;--fill:#F4F4F5;--fill-2:#E9E9EC;--stone:#C8C8CD;
-  --accent:#2457D6;--accent-hover:#1D47B0;--signal:#3B82F6;--accent-soft:rgba(36,87,214,.08);--accent-mid:rgba(59,130,246,.45);
+/* v28, enterprise layout after Wisedocs and Legora: an icon rail on the left, a slim case header with the four
+   products as tabs, a case-file card fixed on the left of every case page (facts, stage, statute), and the work on the
+   right in bordered panels. White page, one blue, status as dots, citations as page links. */
+:root{--canvas:#F7F8FA;--paper:#FFFFFF;--ink:#111827;--ink-2:#1F2937;--muted:#4B5563;--faint:#6B7280;
+  --line:#E5E7EB;--line-soft:#F0F1F4;--fill:#F3F4F6;--fill-2:#E9EBEF;--stone:#CBD0D8;
+  --accent:#1F6FEB;--accent-hover:#1858C2;--signal:#3B82F6;--accent-soft:rgba(31,111,235,.08);--accent-mid:rgba(59,130,246,.45);
   --mark:linear-gradient(180deg,rgba(59,130,246,0) 60%,rgba(59,130,246,.2) 60%);
-  --ok:#22A06B;--warn:#E8890C;--s1:#27272A;--s2:#71717A;--s3:#A1A1AA;--s4:#D4D4D8;
-  --col:1040px;--in:18px;--gut:32px}
-html,body,.app,.main,.tabbar{background:var(--paper)}
-.main{--px:max(var(--gut),calc((100% - var(--col)) / 2))}
-.app.split{--gut:24px}
-.sidebar{background:var(--canvas);border-right:1px solid var(--line)!important}
-.nav-item{border-radius:8px}
-.nav-item.on{background:var(--paper);box-shadow:0 0 0 1px var(--line);color:var(--ink)}
-.nav-item.on .ic{color:var(--ink)}
-.case-row.on .case-av{background:var(--ink);color:#fff}
-.search{background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);border-radius:8px}
-.csearch{background:var(--fill);border-radius:8px}
-/* Header */
-.head{padding:40px var(--px) 0}
-.head h1{font-size:32px;font-weight:600;letter-spacing:-.035em;margin-top:18px}
-.meta-line.docmeta{margin-top:10px;font-size:14px}
-.facts{margin-top:28px;padding:0;border:0;display:flex;flex-wrap:wrap;gap:20px 48px}
-.facts > div,.facts > div:first-child{padding:0;border:0}
-.facts dt{font-size:12px;color:var(--faint)}
-.facts dd{font-size:15px;font-weight:500;color:var(--ink);margin-top:4px}
-.crumbs .tag{background:none;padding:0;color:var(--faint)}
-/* Product tabs: plain text tabs on a hairline */
-.tabbar{padding:0 var(--px);min-height:0;border:0;margin-top:32px}
-.tabs{gap:32px;border-bottom:1px solid var(--line);flex:1 1 auto;padding:0;background:none;border-radius:0}
-.tabs button{min-height:44px;padding:0;border-radius:0;font-size:14px;color:var(--faint);font-weight:400;background:none!important;box-shadow:none!important}
-.tabs button:hover{color:var(--ink)}
+  --ok:#16A34A;--warn:#EA8A00;--s1:#1F2937;--s2:#6B7280;--s3:#A3A9B3;--s4:#D5D9E0;--in:18px;--gut:28px}
+html,body,.app,.main{background:var(--paper)}
+.side-toggle{display:none}
+@media (min-width:861px){
+  html.nav-rail{--side:72px}
+  .sidebar{background:var(--paper);border-right:1px solid var(--line)!important;padding:16px 10px}
+  html.nav-rail .side-top .wordmark{display:none}
+  html.nav-rail .side-top::before{content:"CE";width:36px;height:36px;border-radius:10px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:600;font-size:13px;margin:0 auto}
+  .nav-item{border-radius:10px;height:40px;justify-content:center}
+  .nav-item.on{background:var(--accent-soft);box-shadow:none}
+  .nav-item.on .ic{color:var(--accent)}
+  .case-row .case-av{width:28px;height:28px;font-size:10px}
+  .case-row.on .case-av{background:var(--accent);color:#fff}
+}
+/* Main: header across the top, case card on the left, work on the right */
+.main{display:grid;grid-template-columns:272px minmax(0,1fr);grid-auto-rows:max-content;align-content:start;column-gap:28px;padding:0 var(--gut) 72px}
+.main > *{grid-column:1/-1}
+.head{display:contents}
+.head-top{grid-column:1/-1;padding-top:20px}
+.head h1{grid-column:1/-1;font-size:26px;font-weight:600;letter-spacing:-.03em;margin:12px 0 0}
+.meta-line{grid-column:1/-1;margin:6px 0 0}
+.tabbar{grid-column:1/-1;margin:20px 0 24px;padding:0;border:0;border-bottom:1px solid var(--line);background:var(--paper);min-height:0}
+.tabs{gap:28px}
+.tabs button{min-height:44px;color:var(--faint);font-size:14px}
 .tabs button.on{color:var(--ink);font-weight:500}
-.tabs button.on::after{display:block;content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--ink);border-radius:2px}
-/* Sections */
-.view{padding:40px var(--px) 96px;gap:64px}
+.tabs button.on .t{background:none}
+.tabs button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--accent);border-radius:2px}
+#facts{grid-column:1;align-self:start;position:sticky;top:70px;margin:0;display:flex;flex-direction:column;gap:0;padding:6px 18px;border:1px solid var(--line);border-radius:14px;background:var(--canvas)}
+#facts > div{padding:14px 0!important;border:0!important;border-bottom:1px solid var(--line)!important}
+#facts > div:last-child{border-bottom:0!important}
+#facts dt{font-size:12px;color:var(--faint)}
+#facts dd{font-size:15px;font-weight:500;margin-top:3px;color:var(--ink)}
+#facts dd small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin:2px 0 0!important}
+.view{grid-column:2;padding:0;gap:24px}
+#v-review{grid-column:1/-1}
+.app.split .main{grid-template-columns:minmax(0,1fr);padding:0 20px 56px}
+.app.split #facts{grid-column:1;position:static;flex-direction:row;flex-wrap:wrap;gap:0 24px;margin-bottom:20px}
+.app.split #facts > div{border-bottom:0!important;padding:10px 0!important}
+.app.split .view{grid-column:1}
+@media (max-width:1320px){.main{grid-template-columns:minmax(0,1fr)}#facts{position:static;flex-direction:row;flex-wrap:wrap;gap:0 24px;margin-bottom:20px}#facts > div{border-bottom:0!important}.view{grid-column:1}}
+@media (max-width:860px){.main{padding:0 16px 48px}}
+/* Panels */
+.mbar{grid-row:1}.head-top{grid-row:2}.head h1{grid-row:3}.meta-line{grid-row:4}.tabbar{grid-row:5}
+#facts{grid-row:6}.view{grid-row:6}
+.app.split .view{grid-row:7}
+@media (max-width:1320px){.view{grid-row:7}}
+.tabbar{position:sticky;top:0;z-index:15}
 .jump{display:none}
-.box{border:0!important;border-radius:0!important;box-shadow:none!important;background:none;container-type:inline-size}
-.box-h{display:block;padding:0 0 18px;min-height:0;border:0}
-.box-h h3{display:block;font-size:20px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
-.box-h .note{display:block;font-size:14px;color:var(--muted);max-width:72ch}
-.box-h .acts{margin:14px 0 0}
-.box > *:not(.box-h){border-left:1px solid var(--line);border-right:1px solid var(--line);background:var(--paper)}
-.box > .box-h + *{border-top:1px solid var(--line);border-radius:14px 14px 0 0}
-.box > *:last-child{border-bottom:1px solid var(--line);border-radius:0 0 14px 14px}
-.box > .box-h + *:last-child{border-radius:14px}
-.box-t{padding:10px var(--in);border-bottom:1px solid var(--line-soft)}
-.box-f{border-top:1px solid var(--line-soft)}
+.box,.kpis{border:1px solid var(--line);border-radius:14px;background:var(--paper);box-shadow:none}
+.box-h{padding:16px var(--in);min-height:0;border-bottom:1px solid var(--line-soft)}
+.box-h h3{font-size:15px;font-weight:600}
+.box-t{border-bottom:1px solid var(--line-soft)}
 thead th,.ledger thead th,.chrono thead th,.box thead th{background:var(--canvas);color:var(--faint);font-weight:500;font-size:12px;border-top:0;border-bottom:1px solid var(--line)}
-td{padding:16px 12px;border-bottom-color:var(--line-soft)}
-tr.row:hover td,tr.row.open td,tr.detail > td,.ledger tr.ln td{background:var(--canvas)}
-/* Executive summary as prose */
-.exec > dl{display:block;border:0!important;background:none!important;border-radius:0!important}
-.exec dt{display:block;padding:0 0 6px!important;border:0!important;font-size:13px;font-weight:600;color:var(--ink)}
-.exec dd{display:block;padding:0 0 28px!important;border:0!important;font-size:15px;line-height:1.75;color:var(--ink-2);max-width:72ch}
-/* Figures without boxes */
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:28px 36px;border:0;background:none;box-shadow:none;padding:0;overflow:visible}
-.kpi{padding:0;border:0;box-shadow:none;background:none;gap:6px;min-width:0}
-.kpi b{font-size:26px;font-weight:600;letter-spacing:-.035em;white-space:normal}
+td{padding:14px 12px;border-bottom-color:var(--line-soft)}
+tr.row:hover td,tr.row.open td,tr.detail > td,.ledger tr.ln td{background:#FAFBFC}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;overflow:hidden}
+.kpi{padding:18px var(--in);border:0!important;border-radius:0!important;background:none;box-shadow:1px 0 0 var(--line-soft),0 1px 0 var(--line-soft)}
+.kpi b{font-size:24px;font-weight:600;letter-spacing:-.03em;white-space:normal}
 .kpi label{font-size:12px;color:var(--faint)}
 /* Status, citations, controls */
 .st,.st.attn,.st.watch,.st.open{background:none!important;box-shadow:none!important;padding:0;border-radius:0;color:var(--ink-2)}
@@ -883,7 +887,7 @@ tr.row:hover td,tr.row.open td,tr.detail > td,.ledger tr.ln td{background:var(--
 .st.watch::before{background:var(--signal);box-shadow:none}
 .st.open{color:var(--faint)}
 .st.open::before{background:transparent;box-shadow:inset 0 0 0 1.5px var(--stone)}
-.kpi.attn b::before,.tabs .n::before,.nav-item .meta.attn::before,.exec dt.attn::after,.case-row.has-attn .case-txt b::after{background:var(--warn)}
+.kpi.attn b::before,.tabs .n::before,.nav-item .meta.attn::before,.exec dt.attn::after,.case-row.has-attn .case-txt b::after,html.nav-rail .nav-item.has-attn::after{background:var(--warn)}
 .cite{background:none;color:var(--accent);padding:0 1px;font-size:12px}
 .cite:hover{background:none;text-decoration:underline;text-underline-offset:3px}
 .cite.on,.cite.on:hover{background:var(--accent);color:#fff;text-decoration:none;padding:0 4px;border-radius:3px}
@@ -892,18 +896,18 @@ tr.row:hover td,tr.row.open td,tr.detail > td,.ledger tr.ln td{background:var(--
 .btn{background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);border-radius:8px;height:32px}
 .btn:hover{background:var(--fill)}
 .btn.quiet{box-shadow:none;background:none}
+.csearch{background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);border-radius:8px;height:32px;width:240px}
 .mseg{background:var(--fill);border-radius:8px}
-.sw-cols{padding:8px var(--in) 12px;gap:0 40px}
+.sw-cols{padding:8px var(--in) 12px;gap:0 32px}
 .sw-col{background:none;padding:0}
-.sw-h{padding:14px 0 10px;border-bottom:1px solid var(--line)}
-.tile{border:0;border-bottom:1px solid var(--line-soft);border-radius:0;padding:16px 0;box-shadow:none!important}
+.sw-h{padding:12px 0 10px;border-bottom:1px solid var(--line)}
+.tile{border:0;border-bottom:1px solid var(--line-soft);border-radius:0;padding:14px 0;box-shadow:none!important}
 .tile:last-child{border-bottom:0}
 .sw-mark.up{background:var(--ok)}
 .sw-mark.down{background:var(--warn)}
 .seg.review{background:var(--warn)}
 .meterbar i,.scores .bar i{background:var(--ink)}
 .cpane{border-left:1px solid var(--line)}
-@media (max-width:860px){.head{padding-top:24px}.view{gap:48px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
 
@@ -927,7 +931,7 @@ tr.row:hover td,tr.row.open td,tr.detail > td,.ledger tr.ln td{background:var(--
   <symbol id="i-cite" viewBox="0 0 24 24"><path d="M7 4.5h10a1 1 0 0 1 1 1V20l-6-3.6L6 20V5.5a1 1 0 0 1 1-1z"/></symbol>
 </svg>
 
-<script>try{if(localStorage.getItem("ce-rail")==="1")document.documentElement.classList.add("nav-rail")}catch(e){}</script>
+<script>document.documentElement.classList.add("nav-rail")</script>
 <div class="app" id="app">
   <aside class="sidebar scroll" id="sidebar" aria-label="Navigation">
     <div class="side-top">
